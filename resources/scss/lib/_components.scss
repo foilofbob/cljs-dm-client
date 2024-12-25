@@ -1,0 +1,53 @@
+// Light
+$pale-sand: #FFECC6;
+$sand: #EDCDAF;
+$sable: #E0CDA9;
+$chamois: #F7AE62;
+
+// Mid
+$maple: #BB9351;
+$camel: #C19A6B;
+$taupe: #A6674C;
+
+// Dark
+$copper: #B87333;
+$mocha: #654321;
+$mahogany: #420D09;
+$umber: #3D2D13;
+
+.title {
+  font-size: 48px;
+  font-weight: normal;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 36px;
+  font-weight: normal;
+  margin: 0;
+}
+
+.nav-button {
+  border: 1px solid $mahogany;
+  color: $mahogany;
+  padding: 4px;
+  margin: 4px;
+
+  &:hover {
+    border: 1px solid $taupe;
+    color: $taupe;
+  }
+}
+
+.nav-link {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 4px;
+  color: $maple;
+  text-decoration: underline;
+
+  &:hover {
+    color: $chamois;
+  }
+}

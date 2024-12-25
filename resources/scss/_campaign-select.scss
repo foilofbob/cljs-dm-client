@@ -1,0 +1,15 @@
+@import "lib/components";
+
+.select-campaign {
+  margin: 100px auto 0;
+  width: 250px;
+  text-align: center;
+  background-color: $camel;
+  padding: 20px;
+  border: 2px solid $mahogany;
+}
+
+.campaign-list {
+  display: flex;
+  flex-direction: column;
+}

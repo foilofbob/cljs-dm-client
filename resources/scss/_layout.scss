@@ -1,0 +1,38 @@
+@import "lib/components";
+
+//////////// Header //////////////
+.header-content {
+  display: flex;
+  align-items: baseline;
+  height: 60px;
+  margin-bottom: 12px;
+  padding: 12px;
+  color: $pale-sand;
+
+  .campaign {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .current-panel {
+    @extend .title;
+    height: 100%;
+    margin: 0 auto;
+  }
+}
+
+//////////// Campaign /////////////
+.left-nav {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  width: 200px;
+  margin-left: 6px;
+}
+
+.campaign-body-content {
+  display: flex;
+  height: 100%;
+}
