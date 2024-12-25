@@ -441,8 +441,14 @@ template {
   align-items: flex-start;
 }
 .header-content .current-panel {
-  height: 100%;
+  background-image: url("/assets/png/tavern-sign.png");
+  background-size: 500px 80px;
+  width: 500px;
+  height: 80px;
   margin: 0 auto;
+  text-align: center;
+  align-content: center;
+  color: #420D09;
 }
 
 .left-nav {
@@ -468,7 +474,8 @@ html, body {
 #app {
   width: 100%;
   height: 100%;
-  background-image: url("/assets/svg/tavern.svg");
+  background-image: url("/assets/png/tavern-medieval.png");
+  background-size: cover;
   position: absolute;
 }
 

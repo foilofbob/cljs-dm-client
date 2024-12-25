@@ -18,8 +18,14 @@
 
   .current-panel {
     @extend .title;
-    height: 100%;
+    background-image: url("/assets/png/tavern-sign.png");
+    background-size: 500px 80px;
+    width: 500px;
+    height: 80px;
     margin: 0 auto;
+    text-align: center;
+    align-content: center;
+    color: $mahogany;
   }
 }
 
