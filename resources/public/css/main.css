@@ -307,10 +307,11 @@ template {
   display: none;
 }
 
-.title {
+.title, .header-content .current-panel {
   font-size: 48px;
   font-weight: normal;
   margin: 0;
+  color: #420D09;
 }
 
 .subtitle {
@@ -334,7 +335,7 @@ template {
   border: none;
   background: transparent;
   padding: 0;
-  margin: 4px;
+  margin: 4px 0;
   color: #BB9351;
   text-decoration: underline;
 }
@@ -342,39 +343,41 @@ template {
   color: #F7AE62;
 }
 
-.title {
-  font-size: 48px;
-  font-weight: normal;
-  margin: 0;
+.card {
+  margin: 12px;
+  background-color: white;
+  padding: 8px;
+  border: 2px solid #420D09;
+}
+.card:last-child {
+  margin-bottom: 0;
+}
+.card:first-child {
+  margin-top: 0;
 }
 
-.subtitle {
-  font-size: 36px;
-  font-weight: normal;
-  margin: 0;
+.md-content {
+  width: 100%;
+}
+.md-content p {
+  margin: 2px 0;
+}
+.md-content p:first-child {
+  margin-top: 0;
+}
+.md-content p:last-child {
+  margin-top: 0;
 }
 
-.nav-button {
-  border: 1px solid #420D09;
-  color: #420D09;
-  padding: 4px;
-  margin: 4px;
-}
-.nav-button:hover {
-  border: 1px solid #A6674C;
-  color: #A6674C;
-}
-
-.nav-link {
+.edit-button {
+  background-image: url("/assets/svg/pencil-mahogany.svg");
+  height: 18px;
+  width: 18px;
+  background-color: transparent;
   border: none;
-  background: transparent;
-  padding: 0;
-  margin: 4px;
-  color: #BB9351;
-  text-decoration: underline;
 }
-.nav-link:hover {
-  color: #F7AE62;
+.edit-button:hover {
+  background-image: url("/assets/svg/pencil-sable.svg");
 }
 
 .select-campaign {
@@ -389,41 +392,33 @@ template {
 .campaign-list {
   display: flex;
   flex-direction: column;
+  margin-top: 12px;
 }
 
-.title, .header-content .current-panel {
-  font-size: 48px;
-  font-weight: normal;
-  margin: 0;
+.game-day {
+  display: flex;
+  margin-right: 4px;
 }
-
-.subtitle {
-  font-size: 36px;
-  font-weight: normal;
-  margin: 0;
+.game-day-tracker {
+  width: 12px;
+  min-width: 120px;
 }
-
-.nav-button {
-  border: 1px solid #420D09;
-  color: #420D09;
-  padding: 4px;
-  margin: 4px;
+.game-day-events {
+  display: flex;
+  width: 100%;
 }
-.nav-button:hover {
-  border: 1px solid #A6674C;
-  color: #A6674C;
+.game-day-events .note-title {
+  width: 100px;
+  max-width: 100px;
+  min-width: 100px;
 }
-
-.nav-link {
-  border: none;
-  background: transparent;
-  padding: 0;
-  margin: 4px;
-  color: #BB9351;
-  text-decoration: underline;
+.game-day-events .edit-container {
+  margin: 0 4px;
+  float: right;
 }
-.nav-link:hover {
-  color: #F7AE62;
+.game-day-notes {
+  width: 300px;
+  min-width: 300px;
 }
 
 .header-content {
@@ -451,19 +446,54 @@ template {
   color: #420D09;
 }
 
-.left-nav {
+.campaign-body-content {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+}
+.campaign-body-content .left-nav {
   display: flex;
   flex-direction: column;
   height: 400px;
-  width: 200px;
+  width: 250px;
+  min-width: 250px;
   margin-left: 6px;
 }
-
-.campaign-body-content {
-  display: flex;
-  height: 100%;
+.campaign-body-content .panel-content {
+  height: 700px;
+  margin: 12px 120px 0;
+  overflow-y: auto;
+  scrollbar-color: #3D2D13 #E0CDA9;
+  scrollbar-width: thin;
+}
+@media all and (min-width: 2000px) {
+  .campaign-body-content .panel-content {
+    height: 1200px;
+  }
+}
+.campaign-body-content .right-panel {
+  width: 250px;
+  min-width: 250px;
 }
 
+.loader {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+  margin: 40px auto 0;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 html, body {
   margin: 0;
   padding: 0;
@@ -477,6 +507,7 @@ html, body {
   background-image: url("/assets/png/tavern-medieval.png");
   background-size: cover;
   position: absolute;
+  font-family: "Cambria Math";
 }
 
 /*# sourceMappingURL=main.css.map */

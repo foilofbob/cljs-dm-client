@@ -1,13 +1,13 @@
-@import "lib/components";
+@use "lib/components";
+@use "lib/breakpoints";
 
-//////////// Header //////////////
 .header-content {
   display: flex;
   align-items: baseline;
   height: 60px;
   margin-bottom: 12px;
   padding: 12px;
-  color: $pale-sand;
+  color: components.$pale-sand;
 
   .campaign {
     position: fixed;
@@ -25,20 +25,57 @@
     margin: 0 auto;
     text-align: center;
     align-content: center;
-    color: $mahogany;
+    color: components.$mahogany;
   }
-}
-
-//////////// Campaign /////////////
-.left-nav {
-  display: flex;
-  flex-direction: column;
-  height: 400px;
-  width: 200px;
-  margin-left: 6px;
 }
 
 .campaign-body-content {
   display: flex;
+  justify-content: space-between;
   height: 100%;
+
+  .left-nav {
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+    width: 250px;
+    min-width: 250px;
+    margin-left: 6px;
+  }
+
+  .panel-content {
+    height: 700px;
+    margin: 12px 120px 0;
+    overflow-y: auto;
+    scrollbar-color: components.$umber components.$sable;
+    scrollbar-width: thin;
+
+    @include breakpoints.bp-modern {
+      height: 1200px;
+    }
+  }
+
+  .right-panel {
+    width: 250px;
+    min-width: 250px;
+  }
+}
+
+.loader {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+  margin: 40px auto 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.page-error {
+
 }

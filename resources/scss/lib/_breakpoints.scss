@@ -36,3 +36,10 @@
     @content;
   }
 }
+
+// My laptop browser gets ~1900x900
+@mixin bp-modern {
+  @media all and (min-width: 2000px) {
+    @content;
+  }
+}

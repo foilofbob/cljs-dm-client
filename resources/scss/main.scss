@@ -2,6 +2,7 @@
 @use "lib/breakpoints";
 @use "lib/components";
 @use "pages/campaign-select";
+@use "pages/timeline";
 @use "layout";
 
 html, body {
@@ -17,4 +18,5 @@ html, body {
     background-image: url("/assets/png/tavern-medieval.png");
     background-size: cover;
     position: absolute;
+    font-family: "Cambria Math";
 }

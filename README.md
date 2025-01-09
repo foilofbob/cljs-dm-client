@@ -1,60 +1,16 @@
 # cljs-dm-client
 
-A [re-frame](https://github.com/day8/re-frame) application designed to ... well, that part is up to
-you.
+This is a [re-frame](https://github.com/day8/re-frame) application intended to be a web app that manages a D&D campaign.
+
+The API code is located at [go-dm-api](https://github.com/foilofbob/go-dm-api)
 
 ## Getting Started
-
-### Project Overview
-
-* Architecture:
-[Single Page Application (SPA)](https://en.wikipedia.org/wiki/Single-page_application)
-* Languages
-  - Front end is [ClojureScript](https://clojurescript.org/) with ([re-frame](https://github.com/day8/re-frame))
-* Dependencies
-  - UI framework: [re-frame](https://github.com/day8/re-frame)
-  ([docs](https://github.com/day8/re-frame/blob/master/docs/README.md),
-  [FAQs](https://github.com/day8/re-frame/blob/master/docs/FAQs/README.md)) ->
-  [Reagent](https://github.com/reagent-project/reagent) ->
-  [React](https://github.com/facebook/react)
-  - Client-side routing: [bidi](https://github.com/juxt/bidi) and [pushy](https://github.com/clj-commons/pushy)
-* Build tools
-  - CLJS compilation, dependency management, REPL, & hot reload: [`shadow-cljs`](https://github.com/thheller/shadow-cljs)
-* Development tools
-  - Debugging: [CLJS DevTools](https://github.com/binaryage/cljs-devtools),
-  [`re-frame-10x`](https://github.com/day8/re-frame-10x),
-  [re-frisk](https://github.com/flexsurfer/re-frisk)
-
-#### Directory structure
-
-* [`/`](/../../): project config files
-* [`dev/`](dev/): source files compiled only with the [dev](#running-the-app) profile
-  - [`user.cljs`](dev/cljs/user.cljs): symbols for use during development in the
-[ClojureScript REPL](#connecting-to-the-browser-repl-from-a-terminal)
-* [`resources/public/`](resources/public/): SPA root directory;
-[dev](#running-the-app) / [prod](#production) profile depends on the most recent build
-  - [`index.html`](resources/public/index.html): SPA home page
-    - Dynamic SPA content rendered in the following `div`:
-        ```html
-        <div id="app"></div>
-        ```
-    - Customizable; add headers, footers, links to other scripts and styles, etc.
-  - Generated directories and files
-    - Created on build with either the [dev](#running-the-app) or [prod](#production) profile
-    - `js/compiled/`: compiled CLJS (`shadow-cljs`)
-      - Not tracked in source control; see [`.gitignore`](.gitignore)
-* [`src/cljs_dm_client/`](src/cljs_dm_client/): SPA source files (ClojureScript,
-[re-frame](https://github.com/Day8/re-frame))
-  - [`core.cljs`](src/cljs_dm_client/core.cljs): contains the SPA entry point, `init`
-* [`.github/workflows/`](.github/workflows/): contains the
-[github actions](https://github.com/features/actions) pipelines.
-  - [`test.yaml`](.github/workflows/test.yaml): Pipeline for testing.
 
 
 ### Editor/IDE
 
 Use your preferred editor or IDE that supports Clojure/ClojureScript development. See
-[Clojure tools](https://clojure.org/community/resources#_clojure_tools) for some popular options.
+[Clojure tools](https://clojure.org/community/resources#_clojure_tools) for some popular options, I used IntelliJ.
 
 ### Environment Setup
 
@@ -62,37 +18,6 @@ Use your preferred editor or IDE that supports Clojure/ClojureScript development
 2. Install [Node.js](https://nodejs.org/) (JavaScript runtime environment) which should include
    [NPM](https://docs.npmjs.com/cli/npm) or if your Node.js installation does not include NPM also install it.
 5. Clone this repo and open a terminal in the `cljs-dm-client` project root directory
-
-### Browser Setup
-
-Browser caching should be disabled when developer tools are open to prevent interference with
-[`shadow-cljs`](https://github.com/thheller/shadow-cljs) hot reloading.
-
-Custom formatters must be enabled in the browser before
-[CLJS DevTools](https://github.com/binaryage/cljs-devtools) can display ClojureScript data in the
-console in a more readable way.
-
-#### Chrome/Chromium
-
-1. Open [DevTools](https://developers.google.com/web/tools/chrome-devtools/) (Linux/Windows: `F12`
-or `Ctrl-Shift-I`; macOS: `⌘-Option-I`)
-2. Open DevTools Settings (Linux/Windows: `?` or `F1`; macOS: `?` or `Fn+F1`)
-3. Select `Preferences` in the navigation menu on the left, if it is not already selected
-4. Under the `Network` heading, enable the `Disable cache (while DevTools is open)` option
-5. Under the `Console` heading, enable the `Enable custom formatters` option
-
-#### Firefox
-
-1. Open [Developer Tools](https://developer.mozilla.org/en-US/docs/Tools) (Linux/Windows: `F12` or
-`Ctrl-Shift-I`; macOS: `⌘-Option-I`)
-2. Open [Developer Tools Settings](https://developer.mozilla.org/en-US/docs/Tools/Settings)
-(Linux/macOS/Windows: `F1`)
-3. Under the `Advanced settings` heading, enable the `Disable HTTP Cache (when toolbox is open)`
-option
-
-Unfortunately, Firefox does not yet support custom formatters in their devtools. For updates, follow
-the enhancement request in their bug tracker:
-[1262914 - Add support for Custom Formatters in devtools](https://bugzilla.mozilla.org/show_bug.cgi?id=1262914).
 
 ## Development
 
@@ -106,7 +31,11 @@ npm install
 npx shadow-cljs watch app
 ```
 
-Please be patient; it may take over 20 seconds to see any output, and over 40 seconds to complete.
+Additionally this app uses [Sass](https://sass-lang.com/) for CSS, so to get that watching you'll need to run:
+
+```sh
+npx sass --watch resources/scss/main.scss:resources/public/css/main.css
+```
 
 When `[:app] Build completed` appears in the output, browse to
 [http://localhost:8280/](http://localhost:8280/).
@@ -152,21 +81,6 @@ For example, in Vim / Neovim with `fireplace.vim`
 3. See [`user.cljs`](dev/cljs/user.cljs) for symbols that are immediately accessible in the REPL
 without needing to `require`.
 
-### Running `shadow-cljs` Actions
-
-See a list of [`shadow-cljs CLI`](https://shadow-cljs.github.io/docs/UsersGuide.html#_command_line)
-actions:
-```sh
-npx shadow-cljs --help
-```
-
-Please be patient; it may take over 10 seconds to see any output. Also note that some actions shown
-may not actually be supported, outputting "Unknown action." when run.
-
-Run a shadow-cljs action on this project's build id (without the colon, just `app`):
-```sh
-npx shadow-cljs <action> app
-```
 ### Debug Logging
 
 The `debug?` variable in [`config.cljs`](src/cljs/cljs_dm_client/config.cljs) defaults to `true` in
@@ -190,8 +104,6 @@ Build the app with the `prod` profile:
 npm install
 npm run release
 ```
-
-Please be patient; it may take over 15 seconds to see any output, and over 30 seconds to complete.
 
 The `resources/public/js/compiled` directory is created, containing the compiled `app.js` and
 `manifest.edn` files.

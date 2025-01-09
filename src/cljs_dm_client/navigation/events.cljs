@@ -4,5 +4,8 @@
 
 (reg-event-fx
  ::navigate
- (fn [_ [_ handler]]
-   {:navigate handler}))
+ (fn [{db :db} [_ handler]]
+   {:navigate handler
+    :db (-> db
+            (assoc :page-data {})
+            (assoc :loading-status :loading))}))

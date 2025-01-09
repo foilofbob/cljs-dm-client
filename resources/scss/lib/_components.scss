@@ -19,6 +19,7 @@ $umber: #3D2D13;
   font-size: 48px;
   font-weight: normal;
   margin: 0;
+  color: $mahogany;
 }
 
 .subtitle {
@@ -43,7 +44,7 @@ $umber: #3D2D13;
   border: none;
   background: transparent;
   padding: 0;
-  margin: 4px;
+  margin: 4px 0;
   color: $maple;
   text-decoration: underline;
 
@@ -51,3 +52,45 @@ $umber: #3D2D13;
     color: $chamois;
   }
 }
+
+.card {
+  margin: 12px;
+  background-color: white;
+  padding: 8px;
+  border: 2px solid $mahogany;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.md-content {
+  width: 100%;
+  p {
+    margin: 2px 0;
+    &:first-child {
+      margin-top: 0;
+    }
+    &:last-child {
+      margin-top: 0;
+    }
+  }
+}
+
+.edit-button {
+  background-image: url("/assets/svg/pencil-mahogany.svg");
+  height: 18px;
+  width: 18px;
+  background-color: transparent;
+  border: none;
+
+  &:hover {
+    background-image: url("/assets/svg/pencil-sable.svg");
+  }
+}
+
+
