@@ -4,6 +4,6 @@
     [cljs-dm-client.layout.views :refer [campaign-panel]]))
 
 (defn party []
-      [campaign-panel
-       [:p "PARTY"]])
+  [campaign-panel
+   [:div.loader]])
 

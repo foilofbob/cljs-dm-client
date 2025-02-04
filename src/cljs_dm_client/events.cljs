@@ -40,3 +40,17 @@
     (-> db
       (assoc :loading-status :failure)
       (assoc :page-error response))))
+
+(reg-event-db
+  :action-failure
+  (fn [db [_ response]]
+      (-> db
+          (assoc :action-status :failure)
+          (assoc :page-error response))))
+
+(reg-event-db
+  :toggle-modal
+  (fn [db [_ modal-key]]
+    (update-in db [:page-data :modal modal-key :is-open] not)))
+
+

@@ -32,7 +32,8 @@
 .campaign-body-content {
   display: flex;
   justify-content: space-between;
-  height: 100%;
+  max-height: calc(100% - 150px);
+  position: absolute;
 
   .left-nav {
     display: flex;
@@ -44,15 +45,11 @@
   }
 
   .panel-content {
-    height: 700px;
+    min-width: 200px;
     margin: 12px 120px 0;
     overflow-y: auto;
     scrollbar-color: components.$umber components.$sable;
     scrollbar-width: thin;
-
-    @include breakpoints.bp-modern {
-      height: 1200px;
-    }
   }
 
   .right-panel {
@@ -68,7 +65,7 @@
   width: 60px;
   height: 60px;
   animation: spin 2s linear infinite;
-  margin: 40px auto 0;
+  margin: 40px auto;
 }
 
 @keyframes spin {

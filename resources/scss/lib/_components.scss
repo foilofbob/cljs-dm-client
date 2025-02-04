@@ -1,4 +1,5 @@
 // Light
+$shadow: #E6E6E6;
 $pale-sand: #FFECC6;
 $sand: #EDCDAF;
 $sable: #E0CDA9;
@@ -28,10 +29,11 @@ $umber: #3D2D13;
   margin: 0;
 }
 
-.nav-button {
+.action-button {
   border: 1px solid $mahogany;
+  background-color: white;
   color: $mahogany;
-  padding: 4px;
+  padding: 4px 8px;
   margin: 4px;
 
   &:hover {
@@ -40,7 +42,7 @@ $umber: #3D2D13;
   }
 }
 
-.nav-link {
+.action-link {
   border: none;
   background: transparent;
   padding: 0;
@@ -53,8 +55,8 @@ $umber: #3D2D13;
   }
 }
 
-.card {
-  margin: 12px;
+.common-panel {
+  margin: 12px 4px;
   background-color: white;
   padding: 8px;
   border: 2px solid $mahogany;
@@ -87,9 +89,10 @@ $umber: #3D2D13;
   width: 18px;
   background-color: transparent;
   border: none;
+  padding: 0;
 
   &:hover {
-    background-image: url("/assets/svg/pencil-sable.svg");
+    background-image: url("/assets/svg/pencil-taupe.svg");
   }
 }
 

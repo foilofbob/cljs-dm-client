@@ -1,35 +1,53 @@
+@use "../lib/components";
+
 .game-day {
   display: flex;
   margin-right: 4px;
 
   &-tracker {
-    width: 12px;
-    min-width: 120px;
+    width: 130px;
+    min-width: 130px;
   }
 
   &-events {
     display: flex;
+    flex-direction: column;
     width: 100%;
-
-    .note-title {
-      width: 100px;
-      max-width: 100px;
-      min-width: 100px;
-    }
-
-    .note-content {
-
-    }
-
-    .edit-container {
-      margin: 0 4px;
-      float: right;
-    }
   }
 
-
   &-notes {
-    width: 300px;
-    min-width: 300px;
+    width: 400px;
+    min-width: 400px;
+  }
+
+  &-controls {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 330px 0 130px;
+  }
+
+  .edit-container {
+    margin: 0 4px;
+    float: right;
+  }
+
+  .note-title {
+    width: 100px;
+    max-width: 100px;
+    min-width: 100px;
+    margin: 0 5px;
+  }
+
+  .note-content {
+
+  }
+
+  .events-entry {
+    display: flex;
+  }
+
+  .md-content {
+    border-bottom: 1px solid components.$shadow;
+    margin-bottom: 5px;
   }
 }

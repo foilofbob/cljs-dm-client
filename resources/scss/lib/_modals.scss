@@ -1,0 +1,11 @@
+.modal {
+  &-body-note {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  &-footer-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+}

@@ -11,8 +11,7 @@
       {:navigate :campaign-select}                          ;; TODO: Make this an interceptor
       {:db         (assoc db :loading-status :loading)
        :http-xhrio {:method          :get
-                    :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/gameday" )
-                    :timeout         10000
+                    :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/gameday")
                     :response-format (ajax/json-response-format {:keywords? true})
                     :on-success      [::timeline-page-load-success]
                     :on-failure      [:standard-failure]}})))
@@ -24,3 +23,22 @@
            (assoc :loading-status :success)
            (assoc-in [:page-data :game-days] (utils/tranform-response response)))
      :fx [[:dispatch [:fetch-notes "game_day"]]]}))
+
+(reg-event-fx
+  ::post-game-day
+  (fn [{:keys [db]} [_]]
+      {:db         (assoc db :action-status :working)
+       :http-xhrio {:method          :post
+                    :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/gameday")
+                    :format          (ajax/json-request-format)
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :on-success      [::post-game-day-success]
+                    :on-failure      [:action-failure]}}))
+
+(reg-event-fx
+  ::post-game-day-success
+  (fn [{:keys [db]} [_ response]]
+      (let [new-game-day (utils/tranform-response response)]
+           {:db (-> db
+                    (assoc :action-status :success)
+                    (update-in [:page-data :game-days] #(conj % new-game-day)))})))

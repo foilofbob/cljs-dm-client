@@ -1,6 +1,8 @@
-@use "../../node_modules/normalize.css/normalize.css";
+//@use "../../node_modules/normalize.css/normalize.css";
+@use "../../node_modules/bootstrap/scss/bootstrap.scss";
 @use "lib/breakpoints";
 @use "lib/components";
+@use "lib/modals";
 @use "pages/campaign-select";
 @use "pages/timeline";
 @use "layout";
@@ -19,4 +21,12 @@ html, body {
     background-size: cover;
     position: absolute;
     font-family: "Cambria Math";
+}
+
+* {
+    box-sizing: unset;
+}
+
+input, textarea, select {
+    box-sizing: border-box;
 }
