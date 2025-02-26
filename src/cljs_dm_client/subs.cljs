@@ -16,7 +16,7 @@
 ;; TODO: worth scoping to a utils?
 (reg-sub
   :notes
-  (fn [db _]
+  (fn [db [_ note-type]]
     (some-> db :page-data :notes)))
 
 (reg-sub

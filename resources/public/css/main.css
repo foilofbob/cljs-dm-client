@@ -11844,6 +11844,234 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+/**
+ * @credits https://github.com/qjebbs/vscode-markdown-extended
+ * @copyright 2018 jebbs
+ * @license MIT
+ */
+@font-face {
+  font-family: "Material Icons";
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/materialicons/v92/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format("woff2");
+}
+.admonition {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  position: relative;
+  margin: 1.5625em 0;
+  padding: 0 1.2rem;
+  border-left: 0.4rem solid rgba(68, 138, 255, 0.8);
+  border-radius: 0.2rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  overflow: auto;
+}
+
+.admonition > p {
+  margin-top: 0.8rem;
+}
+
+.admonition > .admonition-title {
+  margin: 0 -1.2rem;
+  padding: 0.8rem 1rem 0.8rem 1rem;
+  border-bottom: 1px solid rgba(68, 138, 255, 0.2);
+  background-color: rgba(68, 138, 255, 0.1);
+  font-weight: 700;
+}
+
+.admonition > .admonition-title:before {
+  position: absolute;
+  left: 1rem;
+  font-size: 1.5rem;
+  /* color: rgba(68, 138, 255, .8); */
+  /* content: "\f05b"; */
+}
+
+.admonition > .admonition-title:before {
+  font-family: Material Icons;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 1.2rem;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+}
+
+.admonition.note > .admonition-title {
+  padding-left: 3.3rem;
+}
+
+.admonition.note > .admonition-title:before {
+  color: rgba(68, 138, 255, 0.8);
+  content: "\f05b";
+}
+
+.admonition.summary, .admonition.abstract, .admonition.tldr {
+  border-left-color: rgba(0, 176, 255, 0.8);
+}
+
+.admonition.summary > .admonition-title, .admonition.abstract > .admonition-title, .admonition.tldr > .admonition-title {
+  background-color: rgba(0, 176, 255, 0.1);
+  border-bottom-color: rgba(0, 176, 255, 0.2);
+  padding-left: 3.3rem;
+}
+
+.admonition.summary > .admonition-title:before, .admonition.abstract > .admonition-title:before, .admonition.tldr > .admonition-title:before {
+  color: rgba(0, 176, 255, 1);
+  content: "\e8d2";
+}
+
+.admonition.hint, .admonition.tip {
+  border-left-color: rgba(0, 191, 165, 0.8);
+}
+
+.admonition.hint > .admonition-title, .admonition.tip > .admonition-title {
+  background-color: rgba(0, 191, 165, 0.1);
+  border-bottom-color: rgba(0, 191, 165, 0.2);
+  padding-left: 3.3rem;
+}
+
+.admonition.hint > .admonition-title:before, .admonition.tip > .admonition-title:before {
+  color: rgba(0, 191, 165, 1);
+  content: "\e80e";
+}
+
+.admonition.info, .admonition.todo {
+  border-left-color: rgba(0, 184, 212, 0.8);
+}
+
+.admonition.info > .admonition-title, .admonition.todo > .admonition-title {
+  background-color: rgba(0, 184, 212, 0.1);
+  border-bottom-color: rgba(0, 184, 212, 0.2);
+  padding-left: 3.3rem;
+}
+
+.admonition.info > .admonition-title:before, .admonition.todo > .admonition-title:before {
+  color: rgba(0, 184, 212, 1);
+  content: "\e88e";
+}
+
+.admonition.success, .admonition.check, .admonition.done {
+  border-left-color: rgba(0, 200, 83, 0.8);
+}
+
+.admonition.success > .admonition-title, .admonition.check > .admonition-title, .admonition.done > .admonition-title {
+  background-color: rgba(0, 200, 83, 0.1);
+  border-bottom-color: rgba(0, 200, 83, 0.2);
+  padding-left: 3.3rem;
+}
+
+.admonition.success > .admonition-title:before, .admonition.check > .admonition-title:before, .admonition.done > .admonition-title:before {
+  color: rgba(0, 200, 83, 1);
+  content: "\e876";
+}
+
+.admonition.question, .admonition.help, .admonition.faq {
+  border-left-color: rgba(100, 221, 23, 0.8);
+}
+
+.admonition.question > .admonition-title, .admonition.help > .admonition-title, .admonition.faq > .admonition-title {
+  background-color: rgba(100, 221, 23, 0.1);
+  border-bottom-color: rgba(100, 221, 23, 0.2);
+  padding-left: 3.3rem;
+}
+
+.admonition.question > .admonition-title:before, .admonition.help > .admonition-title:before, .admonition.faq > .admonition-title:before {
+  color: rgba(100, 221, 23, 1);
+  content: "\e887";
+}
+
+.admonition.warning, .admonition.attention, .admonition.caution {
+  border-left-color: rgba(255, 145, 0, 0.8);
+}
+
+.admonition.warning > .admonition-title, .admonition.attention > .admonition-title, .admonition.caution > .admonition-title {
+  background-color: rgba(255, 145, 0, 0.1);
+  border-bottom-color: rgba(255, 145, 0, 0.2);
+  padding-left: 3.3rem;
+}
+
+.admonition.attention > .admonition-title:before {
+  color: rgba(255, 145, 0, 1);
+  content: "\e417";
+}
+
+.admonition.warning > .admonition-title:before, .admonition.caution > .admonition-title:before {
+  color: rgba(255, 145, 0, 1);
+  content: "\e002";
+}
+
+.admonition.failure, .admonition.fail, .admonition.missing {
+  border-left-color: rgba(255, 82, 82, 0.8);
+}
+
+.admonition.failure > .admonition-title, .admonition.fail > .admonition-title, .admonition.missing > .admonition-title {
+  background-color: rgba(255, 82, 82, 0.1);
+  border-bottom-color: rgba(255, 82, 82, 0.2);
+  padding-left: 3.3rem;
+}
+
+.admonition.failure > .admonition-title:before, .admonition.fail > .admonition-title:before, .admonition.missing > .admonition-title:before {
+  color: rgba(255, 82, 82, 1);
+  content: "\e14c";
+}
+
+.admonition.danger, .admonition.error, .admonition.bug {
+  border-left-color: rgba(255, 23, 68, 0.8);
+}
+
+.admonition.danger > .admonition-title, .admonition.error > .admonition-title, .admonition.bug > .admonition-title {
+  background-color: rgba(255, 23, 68, 0.1);
+  border-bottom-color: rgba(255, 23, 68, 0.2);
+  padding-left: 3.3rem;
+}
+
+.admonition.danger > .admonition-title:before {
+  color: rgba(255, 23, 68, 1);
+  content: "\e3e7";
+}
+
+.admonition.error > .admonition-title:before {
+  color: rgba(255, 23, 68, 1);
+  content: "\e000";
+}
+
+.admonition.bug > .admonition-title:before {
+  color: rgba(255, 23, 68, 1);
+  content: "\e868";
+}
+
+.admonition.example, .admonition.snippet {
+  border-left-color: rgba(0, 184, 212, 0.8);
+}
+
+.admonition.example > .admonition-title, .admonition.snippet > .admonition-title {
+  background-color: rgba(0, 184, 212, 0.1);
+  border-bottom-color: rgba(0, 184, 212, 0.2);
+  padding-left: 3.3rem;
+}
+
+.admonition.example > .admonition-title:before, .admonition.snippet > .admonition-title:before {
+  color: rgba(0, 184, 212, 1);
+  content: "\e86f";
+}
+
+.admonition.quote, .admonition.cite {
+  border-left-color: rgba(158, 158, 158, 0.8);
+}
+
+.admonition.quote > .admonition-title, .admonition.cite > .admonition-title {
+  background-color: rgba(158, 158, 158, 0.1);
+  border-bottom-color: rgba(158, 158, 158, 0.2);
+  padding-left: 3.3rem;
+}
+
+.admonition.quote > .admonition-title:before, .admonition.cite > .admonition-title:before {
+  color: rgba(158, 158, 158, 1);
+  content: "\e244";
+}
+
 .title, .header-content .current-panel {
   font-size: 48px;
   font-weight: normal;
@@ -11858,11 +12086,12 @@ textarea.form-control-lg {
 }
 
 .action-button {
-  border: 1px solid #420D09;
+  border: 1px solid #1170EE;
   background-color: white;
-  color: #420D09;
+  color: #1170EE;
   padding: 4px 8px;
   margin: 4px;
+  border-radius: 5px;
 }
 .action-button:hover {
   border: 1px solid #A6674C;
@@ -11919,6 +12148,32 @@ textarea.form-control-lg {
   background-image: url("/assets/svg/pencil-taupe.svg");
 }
 
+.admonition {
+  margin: 8px 0;
+  padding: 0 8px;
+  border-width: 3px;
+}
+.admonition .admonition-title {
+  margin: 0 -8px;
+  padding: 4px 0 0 28px !important;
+}
+.admonition .admonition-title:before {
+  left: 2px;
+}
+
+.tooltip.show {
+  opacity: 1;
+}
+.tooltip .arrow {
+  fill: #420D09;
+}
+.tooltip .component-tooltip {
+  background-color: white;
+  color: black;
+  border: 2px solid #420D09;
+  max-width: 300px;
+}
+
 .modal-body-note {
   display: flex;
   flex-direction: column;
@@ -11956,15 +12211,27 @@ textarea.form-control-lg {
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-right: 10px;
 }
 .game-day-notes {
-  width: 400px;
-  min-width: 400px;
+  width: 500px;
+  min-width: 500px;
+}
+@media all and (max-width: 2400px) {
+  .game-day-notes {
+    width: 400px;
+    min-width: 400px;
+  }
 }
 .game-day-controls {
   display: flex;
   justify-content: space-between;
-  margin: 0 330px 0 130px;
+  margin: 0 430px 0 130px;
+}
+@media all and (max-width: 2400px) {
+  .game-day-controls {
+    margin-right: 330px;
+  }
 }
 .game-day .edit-container {
   margin: 0 4px;
@@ -11974,14 +12241,15 @@ textarea.form-control-lg {
   width: 100px;
   max-width: 100px;
   min-width: 100px;
-  margin: 0 5px;
+  margin: 0 5px 5px;
 }
 .game-day .events-entry {
   display: flex;
-}
-.game-day .md-content {
-  border-bottom: 1px solid #E6E6E6;
+  border-bottom: 1px solid #C6C6C6;
   margin-bottom: 5px;
+}
+.game-day .holiday {
+  color: #1170EE;
 }
 
 .header-content {
@@ -12025,24 +12293,30 @@ textarea.form-control-lg {
 }
 .campaign-body-content .panel-content {
   min-width: 200px;
-  margin: 12px 120px 0;
+  margin: 0 20px;
   overflow-y: auto;
   scrollbar-color: #3D2D13 #E0CDA9;
   scrollbar-width: thin;
 }
 .campaign-body-content .right-panel {
-  width: 250px;
-  min-width: 250px;
+  width: 450px;
+  min-width: 450px;
+  margin-right: 12px;
+  overflow-y: auto;
+  scrollbar-color: #3D2D13 #E0CDA9;
+  scrollbar-width: thin;
 }
 
 .loader {
+  position: fixed;
+  left: 50%;
   border: 8px solid #f3f3f3; /* Light grey */
   border-top: 8px solid #3498db; /* Blue */
   border-radius: 50%;
   width: 60px;
   height: 60px;
   animation: spin 2s linear infinite;
-  margin: 40px auto;
+  margin: 100px auto;
 }
 
 @keyframes spin {

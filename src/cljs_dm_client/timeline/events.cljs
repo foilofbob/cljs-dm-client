@@ -19,9 +19,7 @@
 (reg-event-fx
   ::timeline-page-load-success
   (fn [{:keys [db]} [_ response]]
-    {:db (-> db
-           (assoc :loading-status :success)
-           (assoc-in [:page-data :game-days] (utils/tranform-response response)))
+    {:db (assoc-in db [:page-data :game-days] (utils/tranform-response response))
      :fx [[:dispatch [:fetch-notes "game_day"]]]}))
 
 (reg-event-fx

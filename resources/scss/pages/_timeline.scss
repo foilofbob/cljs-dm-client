@@ -1,4 +1,5 @@
 @use "../lib/components";
+@use "../lib/breakpoints";
 
 .game-day {
   display: flex;
@@ -13,17 +14,27 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-right: 10px;
   }
 
   &-notes {
-    width: 400px;
-    min-width: 400px;
+    width: 500px;
+    min-width: 500px;
+
+    @include breakpoints.bp-modern-down {
+      width: 400px;
+      min-width: 400px;
+    }
   }
 
   &-controls {
     display: flex;
     justify-content: space-between;
-    margin: 0 330px 0 130px;
+    margin: 0 430px 0 130px;
+
+    @include breakpoints.bp-modern-down {
+      margin-right: 330px;
+    }
   }
 
   .edit-container {
@@ -35,7 +46,7 @@
     width: 100px;
     max-width: 100px;
     min-width: 100px;
-    margin: 0 5px;
+    margin: 0 5px 5px;
   }
 
   .note-content {
@@ -44,10 +55,11 @@
 
   .events-entry {
     display: flex;
-  }
-
-  .md-content {
     border-bottom: 1px solid components.$shadow;
     margin-bottom: 5px;
+  }
+
+  .holiday {
+    color: components.$azure;
   }
 }

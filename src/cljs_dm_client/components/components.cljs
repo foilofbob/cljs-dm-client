@@ -14,7 +14,7 @@
 (def NOTE_MODAL_KEY :note-modal)
 
 (defn note-modal []
-  (let [note      @(subscribe [:edit-object :edit-note])]
+  (let [note @(subscribe [:edit-object :edit-note])]
     [:> Modal {:is-open @(subscribe [:modal-open? NOTE_MODAL_KEY])
                :toggle  #(dispatch [:toggle-modal NOTE_MODAL_KEY])
                :size    :xl}
@@ -28,7 +28,7 @@
                :on-change  #(dispatch [:update-edit-field :edit-note :title (-> % .-target .-value)])}]
       [:textarea {:value      (:content note)
                   :max-length 10000
-                  :rows       15
+                  :rows       20
                   :on-change  #(dispatch [:update-edit-field :edit-note :content (-> % .-target .-value)])}]]
      [:> ModalFooter {:class :modal-footer-buttons}
       [:button.action-link {:on-click #(dispatch [:toggle-modal NOTE_MODAL_KEY])}

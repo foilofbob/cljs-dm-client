@@ -1,5 +1,5 @@
 // Light
-$shadow: #E6E6E6;
+$shadow: #C6C6C6;
 $pale-sand: #FFECC6;
 $sand: #EDCDAF;
 $sable: #E0CDA9;
@@ -16,6 +16,14 @@ $mocha: #654321;
 $mahogany: #420D09;
 $umber: #3D2D13;
 
+// Accents
+$air-force: #598BAF;
+$yale: #0E4C92;
+$sapphire: #0F52BA;
+$azure: #1170EE;
+$egyptian: #1134A6;
+$navy: #000080;
+
 .title {
   font-size: 48px;
   font-weight: normal;
@@ -30,11 +38,12 @@ $umber: #3D2D13;
 }
 
 .action-button {
-  border: 1px solid $mahogany;
+  border: 1px solid $azure;
   background-color: white;
-  color: $mahogany;
+  color: $azure;
   padding: 4px 8px;
   margin: 4px;
+  border-radius: 5px;
 
   &:hover {
     border: 1px solid $taupe;
@@ -96,4 +105,36 @@ $umber: #3D2D13;
   }
 }
 
+// Overrides for the styles added from markdown-it-admon
+.admonition {
+  margin: 8px 0;
+  padding: 0 8px;
+  border-width: 3px;
+
+  .admonition-title {
+    margin: 0 -8px;
+    padding: 4px 0 0 28px !important;
+
+    &:before {
+      left: 2px;
+    }
+  }
+}
+
+.tooltip {
+  &.show {
+    opacity: 1;
+  }
+
+  .arrow {
+    fill: $mahogany;
+  }
+
+  .component-tooltip {
+    background-color: white;
+    color: black;
+    border: 2px solid $mahogany;
+    max-width: 300px;
+  }
+}
 

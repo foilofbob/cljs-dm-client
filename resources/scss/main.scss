@@ -1,5 +1,6 @@
 //@use "../../node_modules/normalize.css/normalize.css";
 @use "../../node_modules/bootstrap/scss/bootstrap.scss";
+@use "../../node_modules/markdown-it-admon/styles/admonition.css";
 @use "lib/breakpoints";
 @use "lib/components";
 @use "lib/modals";

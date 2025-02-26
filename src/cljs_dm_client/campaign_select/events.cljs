@@ -51,5 +51,9 @@
           {:db (-> db
                    (assoc :action-status :success)
                    (assoc :selected-campaign (:campaign parsed-response))
-                   (assoc :campaign-setting (select-keys parsed-response [:months :week-days])))
+                   (assoc :campaign-setting (select-keys parsed-response [:months
+                                                                          :week-days
+                                                                          :calendar-cycles
+                                                                          :calendar-cycle-offsets
+                                                                          :calendar-events])))
            :fx [[:dispatch nav-call]]})))

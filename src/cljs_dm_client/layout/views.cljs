@@ -36,32 +36,26 @@
                    :handler handler
                    :target  id}])))
 
-;; TODO: Paceholder for now, not sure what I want here (but helps with layout)
-(defn right-panel []
-  [:div.right-panel])
-
 (defn campaign-panel [& panel-content]
-  [:div.campaign-manager
+  [:div.campaign-manager {:key :campaign-panel}
    [header-content]
-   [:div.campaign-body-content
-    [left-nav]
-    (into [:div.panel-content]
-      panel-content)
-    [right-panel]
-    ]])
+   (into [:div.campaign-body-content
+          [left-nav]]
+         panel-content)])
 
-(def loading-spinner [:div.loader])
+(def loading-spinner
+  [:div.loader {:key :loading-spinner}])
 
 (defn page-error []
   (let [error-str @(subscribe [:page-error])]
-    [:div.error error-str]))
+    [:div.error {:key :page-error} error-str]))
 
-(defn loading-wrapper [{:keys [loading-handler container content]}]
+(defn loading-wrapper [{:keys [loading-handler container content right-panel-content]}]
   (let [loading-status @(subscribe [:loading-status])]
-    (into container
-      [(case loading-status
-         :success content
-         :failure page-error
-         (do
-           (dispatch loading-handler)
-           loading-spinner))])))
+       (into container
+             [(case loading-status
+                    :success content
+                    :failure page-error
+                    (do ;; TODO: This really should be an interceptor
+                      (dispatch loading-handler)
+                      loading-spinner))])))

@@ -46,26 +46,32 @@
 
   .panel-content {
     min-width: 200px;
-    margin: 12px 120px 0;
+    margin: 0 20px;
     overflow-y: auto;
     scrollbar-color: components.$umber components.$sable;
     scrollbar-width: thin;
   }
 
   .right-panel {
-    width: 250px;
-    min-width: 250px;
+    width: 450px;
+    min-width: 450px;
+    margin-right: 12px;
+    overflow-y: auto;
+    scrollbar-color: components.$umber components.$sable;
+    scrollbar-width: thin;
   }
 }
 
 .loader {
+  position: fixed;
+  left: 50%;
   border: 8px solid #f3f3f3; /* Light grey */
   border-top: 8px solid #3498db; /* Blue */
   border-radius: 50%;
   width: 60px;
   height: 60px;
   animation: spin 2s linear infinite;
-  margin: 40px auto;
+  margin: 100px auto;
 }
 
 @keyframes spin {
