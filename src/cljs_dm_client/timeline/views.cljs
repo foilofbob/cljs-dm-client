@@ -1,5 +1,6 @@
 (ns cljs-dm-client.timeline.views
   (:require
+   [clojure.math :as math]
    [re-frame.core :refer [dispatch subscribe]]
    [cljs-dm-client.components.components :refer [note-modal]]
    [cljs-dm-client.layout.views :refer [campaign-panel
@@ -68,9 +69,21 @@
           (mod period)
           (+ 1)))
 
-(defn cycle-status [cycle in-game-day offset]
-      (let [current (cycle-int in-game-day (:period cycle) offset)]
-           (str (:name cycle) " " current "/" (:period cycle))))
+(defn cycle-elems
+      ([game-day campaign-setting]
+       (cycle-elems game-day campaign-setting true))
+      ([game-day campaign-setting include-all?]
+       (into [:<>]
+             (for [{period :period cycle-name :name cycle-id :id} (:calendar-cycles campaign-setting)]
+                  (let [offset (or (some->> campaign-setting
+                                            :calendar-cycle-offsets
+                                            (filter #(= cycle-id (:calendar-cycle-id %)))
+                                            first
+                                            :offset)
+                                   0)
+                        current (cycle-int (:in-game-day game-day) period offset)]
+                       (when (or include-all? (= current period) (= current (math/round (/ period 2))))
+                             [:div.day-highlight (str cycle-name " " current "/" period)]))))))
 
 (defn game-day-card [game-day notes]
       (let [campaign-setting @(subscribe [:campaign-setting])
@@ -90,12 +103,13 @@
                                           first)]
                         (let [holiday-id (str "holiday-" (:id holiday))]
                              [:<>
-                              [:div.holiday {:id holiday-id}
+                              [:div.day-highlight {:id holiday-id}
                                (:name holiday)]
                               [:> UncontrolledTooltip {:target           holiday-id
                                                        :placement        "right"
                                                        :inner-class-name "component-tooltip"}
-                               [:div (:description holiday)]]]))]
+                               [:div (:description holiday)]]]))
+              [cycle-elems game-day campaign-setting false]]
              (into [:div.game-day-events]
                    (build-notes play-sessions))
              (into [:div.game-day-notes]
@@ -110,15 +124,7 @@
                                      :inner-class-name "component-tooltip"}
              [:div "In game day " (:in-game-day game-day)]
              [:div "Year " (:year game-day)]
-             (into [:<>]
-                   (for [cycle (:calendar-cycles campaign-setting)]
-                        (let [offset (or (some->> campaign-setting
-                                                  :calendar-cycle-offsets
-                                                  (filter #(= (:id cycle) (:calendar-cycle-id %)))
-                                                  first
-                                                  :offset)
-                                         0)]
-                             [:div (cycle-status cycle (:in-game-day game-day) offset)])))]]))
+             [cycle-elems game-day campaign-setting]]]))
 
 (defn timeline-content []
       (let [game-days @(subscribe [::subs/game-days])
