@@ -17,11 +17,6 @@
       keyword)))
 
 (reg-sub
-  :selected-campaign
-  (fn [db _]
-    (:selected-campaign db)))
-
-(reg-sub
   :page-error
   (fn [db _]
     (str "Error: " (-> db :page-data :status-text) " (" (-> db :page-data :status) ")")))

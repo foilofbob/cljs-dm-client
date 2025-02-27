@@ -34,6 +34,7 @@
   justify-content: space-between;
   max-height: calc(100% - 150px);
   position: absolute;
+  width: 100%;
 
   .left-nav {
     display: flex;
@@ -71,7 +72,7 @@
   width: 60px;
   height: 60px;
   animation: spin 2s linear infinite;
-  margin: 100px auto;
+  margin: 100px 0 0 -30px;
 }
 
 @keyframes spin {

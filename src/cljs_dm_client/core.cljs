@@ -14,7 +14,7 @@
    [cljs-dm-client.locations.events]
    [cljs-dm-client.locations.views]
    [cljs-dm-client.locations.subs]
-   [cljs-dm-client.navigation.events]
+   [cljs-dm-client.navigation.events :as nav]
    [cljs-dm-client.navigation.subs]
    [cljs-dm-client.navigation.views]
    [cljs-dm-client.party.events]
@@ -32,7 +32,8 @@
   (re-frame/clear-subscription-cache!)
   (let [root-el (.getElementById js/document "app")]
     (rdom/unmount-component-at-node root-el)
-    (rdom/render [views/main-panel] root-el)))
+    (rdom/render [views/main-panel] root-el)
+       (re-frame/dispatch [::nav/navigate :campaign-select])))
 
 (defn init []
   (routes/start!)

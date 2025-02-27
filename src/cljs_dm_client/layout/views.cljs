@@ -53,9 +53,10 @@
 (defn loading-wrapper [{:keys [loading-handler container content right-panel-content]}]
   (let [loading-status @(subscribe [:loading-status])]
        (into container
-             [(case loading-status
+             [(case loading-status ;; TODO: Somehow this is being triggered with no status and retriggering
                     :success content
                     :failure page-error
-                    (do ;; TODO: This really should be an interceptor
+                    loading-spinner
+                    #_(do ;; TODO: This really should be an interceptor
                       (dispatch loading-handler)
                       loading-spinner))])))

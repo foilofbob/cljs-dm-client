@@ -5,7 +5,7 @@
    [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
 (reg-event-fx
-  ::timeline-page-load
+  :timeline-page-load
   (fn [{:keys [db]} _]
     (if (-> db :selected-campaign nil?)
       {:navigate :campaign-select}                          ;; TODO: Make this an interceptor

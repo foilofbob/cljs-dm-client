@@ -10,6 +10,7 @@
    ["markdown-it" :as md]
    ["markdown-it-admon" :as mda]
    ["markdown-it-task-lists" :as mdts]
+   [cljs-dm-client.components.markdown :refer [render-markdown]]
    [reagent.core :as reagent]
    ["reactstrap/lib/UncontrolledTooltip" :default UncontrolledTooltip]))
 
@@ -28,11 +29,7 @@
                    [:strong (:title note)]])
             [:div.md-content
              {:dangerouslySetInnerHTML
-              {:__html
-               (-> (md)
-                   (.use mda)
-                   (.use mdts)
-                   (.render (:content note)))}}]
+              {:__html (render-markdown (:content note))}}]
             [:div.edit-container
              [:button.edit-button {:type     :button
                                    :on-click #(do (dispatch [:set-edit-object :edit-note note])
@@ -144,10 +141,7 @@
                   [:div.common-panel {:key (str "global-" (:id note))}
                    [:div.md-content
                     {:dangerouslySetInnerHTML
-                     {:__html
-                      (-> (md)
-                          (.use mda)
-                          (.render (:content note)))}}]
+                     {:__html (render-markdown (:content note))}}]
                    [:div.edit-container
                     [:button.edit-button {:type     :button
                                           :on-click #(do (dispatch [:set-edit-object :edit-note note])
@@ -157,6 +151,5 @@
       [:<>
        [note-modal]
        [loading-wrapper
-        {:loading-handler [::events/timeline-page-load]
-         :container       [campaign-panel]
-         :content         [timeline-content]}]])
+        {:container [campaign-panel]
+         :content   [timeline-content]}]])

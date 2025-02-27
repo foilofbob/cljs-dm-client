@@ -12174,6 +12174,10 @@ textarea.form-control-lg {
   max-width: 300px;
 }
 
+.contains-task-list {
+  padding-left: 0;
+}
+
 .modal-body-note {
   display: flex;
   flex-direction: column;
@@ -12282,6 +12286,7 @@ textarea.form-control-lg {
   justify-content: space-between;
   max-height: calc(100% - 150px);
   position: absolute;
+  width: 100%;
 }
 .campaign-body-content .left-nav {
   display: flex;
@@ -12316,7 +12321,7 @@ textarea.form-control-lg {
   width: 60px;
   height: 60px;
   animation: spin 2s linear infinite;
-  margin: 100px auto;
+  margin: 100px 0 0 -30px;
 }
 
 @keyframes spin {

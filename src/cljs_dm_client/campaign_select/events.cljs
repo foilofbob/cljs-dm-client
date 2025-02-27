@@ -5,7 +5,7 @@
    [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
 (reg-event-fx
- ::campaign-select-page-load
+ :campaign-select-page-load
  (fn [{:keys [db]} _]
      {:db         (assoc db :loading-status :loading)
       :http-xhrio {:method          :get
