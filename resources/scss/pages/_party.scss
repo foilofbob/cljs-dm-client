@@ -1,0 +1,50 @@
+@use "../lib/components";
+
+.party {
+  width: 100%;
+
+  .panel-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+
+  .player-name {
+    font-size: 24px;
+    margin-right: 4px;
+    color: components.$mahogany;
+  }
+
+  .player-card {
+    @extend .common-panel;
+    width: 45%;
+    max-width: 550px;
+  }
+
+  .player-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .player-attributes {
+    display: flex;
+    gap: 4px;
+  }
+
+  .attribute {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid components.$mahogany;
+    border-radius: 5px;
+    padding: 2px 4px;
+  }
+
+  .attribute-header {
+    font-size: 12px;
+    margin: auto;
+  }
+
+  .attribute-value {
+    font-size: 20px;
+  }
+}

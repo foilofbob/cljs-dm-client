@@ -3,6 +3,7 @@
    [reagent.dom :as rdom]
    [re-frame.core :as re-frame]
    [day8.re-frame.http-fx]
+   [day8.re-frame.async-flow-fx :as async-flow-fx]
    [cljs-dm-client.config :as config]
    [cljs-dm-client.events :as events]
    [cljs-dm-client.routes :as routes]

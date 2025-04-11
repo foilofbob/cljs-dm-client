@@ -3,6 +3,7 @@
    [ajax.core :as ajax]
    [camel-snake-kebab.core :as csk]
    [camel-snake-kebab.extras :as cske]
+   [cljs-dm-client.components.markdown :refer [render-markdown]]
    [cljs-dm-client.utils :as utils]
    [clojure.set :refer [rename-keys]]
    ["reactstrap/lib/Modal" :default Modal]
@@ -38,10 +39,44 @@
       [:button.action-button {:on-click #(dispatch [::edit-note note])}
        "Save"]]]))
 
+(defn note-for-campaign-object [camp-obj obj-type category]
+      {:category       {:string category
+                        :valid  true}
+       :campaign-id    (:campaign-id camp-obj)
+       :reference-type obj-type
+       :reference-id   (:id camp-obj)})
+
+(defn open-edit-note-modal [camp-obj obj-type category]
+      (dispatch [:open-edit-note-modal camp-obj obj-type category]))
+
+(reg-event-fx
+ :open-edit-note-modal
+ (fn [{:keys [db]} [_ camp-obj obj-type category]]
+     {:fx [[:dispatch [:set-edit-object :edit-note (note-for-campaign-object camp-obj obj-type category)]]
+           [:dispatch [:toggle-modal :note-modal]]]}))
+
+(defn build-notes
+      ([notes]
+       (build-notes notes :notes-entry))
+      ([notes class]
+       (for [note notes]
+            [:div {:key   (str "note-" (:id note))
+                   :class class}
+             (when (-> note :title seq)
+                   [:div.note-title
+                    [:strong (:title note)]])
+             [:div.md-content
+              {:dangerouslySetInnerHTML
+               {:__html (render-markdown (:content note))}}]
+             [:div.edit-container
+              [:button.edit-button {:type     :button
+                                    :on-click #(do (dispatch [:set-edit-object :edit-note note])
+                                                   (dispatch [:toggle-modal :note-modal]))}]]])))
+
 (reg-event-db
-  :set-edit-object
-  (fn [db [_ path object]]
-    (assoc-in db [:page-data path] object)))
+ :set-edit-object
+ (fn [db [_ path object]]
+   (assoc-in db [:page-data path] object)))
 
 (reg-event-db
   :update-edit-field

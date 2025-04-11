@@ -5,22 +5,30 @@
    [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
 (reg-event-fx
-  :timeline-page-load
-  (fn [{:keys [db]} _]
-    (if (-> db :selected-campaign nil?)
-      {:navigate :campaign-select}                          ;; TODO: Make this an interceptor
-      {:db         (assoc db :loading-status :loading)
-       :http-xhrio {:method          :get
-                    :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/gameday")
-                    :response-format (ajax/json-response-format {:keywords? true})
-                    :on-success      [::timeline-page-load-success]
-                    :on-failure      [:standard-failure]}})))
+ :timeline-page-load
+ (utils/page-loader
+  {:first-dispatch [::fetch-game-days]
+   :rules [{:when :seen? :events ::fetch-game-days-success :dispatch [:fetch-notes "game_day"]}
+           {:when :seen-all-of? :events [::fetch-game-days-success :fetch-notes-success] :dispatch [:page-ready]}
+           {:when :seen-any-of? :events [::fetch-game-days-failure :fetch-notes-failure] :halt? true}]}))
 
 (reg-event-fx
-  ::timeline-page-load-success
-  (fn [{:keys [db]} [_ response]]
-    {:db (assoc-in db [:page-data :game-days] (utils/tranform-response response))
-     :fx [[:dispatch [:fetch-notes "game_day"]]]}))
+ ::fetch-game-days
+ (fn [{:keys [db]} _]
+     {:http-xhrio {:method          :get
+                   :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/gameday")
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success      [::fetch-game-days-success]
+                   :on-failure      [::fetch-game-days-failure]}}))
+
+(reg-event-db
+ ::fetch-game-days-success
+ (fn [db [_ response]]
+     (utils/standard-success-handler db :game-days response)))
+
+(reg-event-fx
+ ::fetch-game-days-failure
+ utils/standard-failure-handler)
 
 (reg-event-fx
   ::post-game-day

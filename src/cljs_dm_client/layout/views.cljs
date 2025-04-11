@@ -8,7 +8,7 @@
   [{:id      :timeline
     :name    "Timeline / Events"}
    {:id      :party
-    :name    "Party Members"}
+    :name    "Party / Inventory"}
    {:id      :locations
     :name    "Locations"}])
 
@@ -29,12 +29,14 @@
         :name)]]))
 
 (defn left-nav []
-  (into [:div.left-nav]
-    (for [{id :id name :name handler :handler} page-mappings]
-      [nav-button {:key     id
-                   :content name
-                   :handler handler
-                   :target  id}])))
+      (let [current-panel @(subscribe [:active-panel-key])]
+           (into [:div.left-nav]
+                 (for [{id :id name :name handler :handler} page-mappings]
+                      [nav-button {:key     id
+                                   :active? (= current-panel id)
+                                   :content name
+                                   :handler handler
+                                   :target  id}]))))
 
 (defn campaign-panel [& panel-content]
   [:div.campaign-manager {:key :campaign-panel}
@@ -53,10 +55,7 @@
 (defn loading-wrapper [{:keys [loading-handler container content right-panel-content]}]
   (let [loading-status @(subscribe [:loading-status])]
        (into container
-             [(case loading-status ;; TODO: Somehow this is being triggered with no status and retriggering
+             [(case loading-status
                     :success content
                     :failure page-error
-                    loading-spinner
-                    #_(do ;; TODO: This really should be an interceptor
-                      (dispatch loading-handler)
-                      loading-spinner))])))
+                    loading-spinner)])))

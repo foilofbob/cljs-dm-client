@@ -15,6 +15,28 @@
  (fn [{:keys [db]} [_ active-panel]]
    {:db (assoc db :active-panel active-panel)}))
 
+
+
+(reg-event-db
+ :standard-async-success
+ (fn [db [_ path response]]
+     (assoc-in db [:page-data path] (utils/tranform-response response))))
+
+(reg-event-db
+ :standard-success
+ (fn [db [_ path response]]
+     (-> db
+         (assoc :loading-status :success)
+         (assoc-in [:page-data path] (utils/tranform-response response)))))
+
+(reg-event-db
+ :standard-failure
+ utils/standard-failure-handler
+ #_(fn [db [_ response]]
+       (-> db
+           (assoc :loading-status :failure)
+           (assoc :page-error response))))
+
 (reg-event-fx
   :fetch-notes
   (fn [{:keys [db]} [_ reference-type]]
@@ -24,22 +46,22 @@
                     :uri             (str "http://localhost:8090/campaign/" campaign-id "/note/" reference-type)
                     :timeout         10000
                     :response-format (ajax/json-response-format {:keywords? true})
-                    :on-success      [:standard-success :notes]
-                    :on-failure      [:standard-failure]}})))
+                    :on-success      [:fetch-notes-success]
+                    :on-failure      [:fetch-notes-failure]}})))
 
 (reg-event-db
-  :standard-success
-  (fn [db [_ path response]]
-    (-> db
-      (assoc :loading-status :success)
-      (assoc-in [:page-data path] (utils/tranform-response response)))))
+ :fetch-notes-success
+ (fn [db [_ response]]
+     (utils/standard-success-handler db :notes response)))
+
+(reg-event-fx
+ :fetch-notes-failure
+ utils/standard-failure-handler)
 
 (reg-event-db
-  :standard-failure
-  (fn [db [_ response]]
-    (-> db
-      (assoc :loading-status :failure)
-      (assoc :page-error response))))
+ :page-ready
+ (fn [db [_]]
+     (assoc db :loading-status :success)))
 
 (reg-event-db
   :action-failure

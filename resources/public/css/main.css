@@ -12072,6 +12072,10 @@ textarea.form-control-lg {
   content: "\e244";
 }
 
+hr {
+  margin: 5px 0 4px 0;
+}
+
 .title, .header-content .current-panel {
   font-size: 48px;
   font-weight: normal;
@@ -12097,6 +12101,10 @@ textarea.form-control-lg {
   border: 1px solid #A6674C;
   color: #A6674C;
 }
+.action-button.active {
+  border-color: #420D09;
+  color: #420D09;
+}
 
 .action-link {
   border: none;
@@ -12110,16 +12118,16 @@ textarea.form-control-lg {
   color: #F7AE62;
 }
 
-.common-panel {
+.common-panel, .party .player-card {
   margin: 12px 4px;
   background-color: white;
   padding: 8px;
   border: 2px solid #420D09;
 }
-.common-panel:last-child {
+.common-panel:last-child, .party .player-card:last-child {
   margin-bottom: 0;
 }
-.common-panel:first-child {
+.common-panel:first-child, .party .player-card:first-child {
   margin-top: 0;
 }
 
@@ -12134,6 +12142,12 @@ textarea.form-control-lg {
 }
 .md-content p:last-child {
   margin-top: 0;
+}
+
+.notes-entry {
+  display: flex;
+  border-bottom: 1px solid #C6C6C6;
+  margin-bottom: 5px;
 }
 
 .edit-button {
@@ -12159,6 +12173,9 @@ textarea.form-control-lg {
 }
 .admonition .admonition-title:before {
   left: 2px;
+}
+.admonition ul {
+  margin-bottom: 4px;
 }
 
 .tooltip.show {
@@ -12201,6 +12218,46 @@ textarea.form-control-lg {
   display: flex;
   flex-direction: column;
   margin-top: 12px;
+}
+
+.party {
+  width: 100%;
+}
+.party .panel-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.party .player-name {
+  font-size: 24px;
+  margin-right: 4px;
+  color: #420D09;
+}
+.party .player-card {
+  width: 45%;
+  max-width: 550px;
+}
+.party .player-header {
+  display: flex;
+  justify-content: space-between;
+}
+.party .player-attributes {
+  display: flex;
+  gap: 4px;
+}
+.party .attribute {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #420D09;
+  border-radius: 5px;
+  padding: 2px 4px;
+}
+.party .attribute-header {
+  font-size: 12px;
+  margin: auto;
+}
+.party .attribute-value {
+  font-size: 20px;
 }
 
 .game-day {
@@ -12246,11 +12303,6 @@ textarea.form-control-lg {
   max-width: 100px;
   min-width: 100px;
   margin: 0 5px 5px;
-}
-.game-day .events-entry {
-  display: flex;
-  border-bottom: 1px solid #C6C6C6;
-  margin-bottom: 5px;
 }
 .game-day .day-highlight {
   color: #1170EE;

@@ -2,42 +2,16 @@
   (:require
    [clojure.math :as math]
    [re-frame.core :refer [dispatch subscribe]]
-   [cljs-dm-client.components.components :refer [note-modal]]
+   [cljs-dm-client.components.components :refer [build-notes
+                                                 note-modal]]
    [cljs-dm-client.layout.views :refer [campaign-panel
                                         loading-wrapper]]
    [cljs-dm-client.timeline.events :as events]
    [cljs-dm-client.timeline.subs :as subs]
-   ["markdown-it" :as md]
-   ["markdown-it-admon" :as mda]
-   ["markdown-it-task-lists" :as mdts]
-   [cljs-dm-client.components.markdown :refer [render-markdown]]
-   [reagent.core :as reagent]
    ["reactstrap/lib/UncontrolledTooltip" :default UncontrolledTooltip]))
 
-(defn new-note-for-game-day [game-day category]
-      {:category       {:string category
-                        :valid  true}
-       :campaign-id    (:campaign-id game-day)
-       :reference-type "GAME_DAY"
-       :reference-id   (:id game-day)})
-
-(defn build-notes [notes]
-      (for [note notes]
-           [:div.events-entry
-            (when (-> note :title seq)
-                  [:div.note-title
-                   [:strong (:title note)]])
-            [:div.md-content
-             {:dangerouslySetInnerHTML
-              {:__html (render-markdown (:content note))}}]
-            [:div.edit-container
-             [:button.edit-button {:type     :button
-                                   :on-click #(do (dispatch [:set-edit-object :edit-note note])
-                                                  (dispatch [:toggle-modal :note-modal]))}]]]))
-
 (defn open-edit-modal [game-day category]
-      (do (dispatch [:set-edit-object :edit-note (new-note-for-game-day game-day category)])
-          (dispatch [:toggle-modal :note-modal])))
+      (dispatch [:open-edit-note-modal game-day "GAME_DAY" category]))
 
 (defn month-label [months month-num]
       (->> months
@@ -136,16 +110,7 @@
             [:div.right-panel
              [:button.action-button {:on-click #(open-edit-modal {:campaign-id 1} "global")}
               "Add Global Note"]
-
-             (for [note (filter #(= "global" (some-> % :category :string)) notes)]
-                  [:div.common-panel {:key (str "global-" (:id note))}
-                   [:div.md-content
-                    {:dangerouslySetInnerHTML
-                     {:__html (render-markdown (:content note))}}]
-                   [:div.edit-container
-                    [:button.edit-button {:type     :button
-                                          :on-click #(do (dispatch [:set-edit-object :edit-note note])
-                                                         (dispatch [:toggle-modal :note-modal]))}]]])]]))
+             (build-notes (filter #(= "global" (some-> % :category :string)) notes) [:common-panel :notes-entry])]]))
 
 (defn timeline []
       [:<>
