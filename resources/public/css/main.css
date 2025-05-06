@@ -12075,6 +12075,12 @@ textarea.form-control-lg {
 hr {
   margin: 5px 0 4px 0;
 }
+hr.section-divider {
+  opacity: 1;
+  background-color: #C19A6B;
+  height: 2px;
+  margin-bottom: 8px;
+}
 
 .title, .header-content .current-panel {
   font-size: 48px;
@@ -12094,7 +12100,7 @@ hr {
   background-color: white;
   color: #1170EE;
   padding: 4px 8px;
-  margin: 4px;
+  margin: 4px 0;
   border-radius: 5px;
 }
 .action-button:hover {
@@ -12157,9 +12163,22 @@ hr {
   background-color: transparent;
   border: none;
   padding: 0;
+  margin-top: 2px;
 }
 .edit-button:hover {
   background-image: url("/assets/svg/pencil-taupe.svg");
+}
+
+.input-row {
+  display: flex;
+  flex-direction: column;
+}
+.input-row label {
+  font-size: smaller;
+  font-weight: bold;
+}
+.input-row input[type=checkbox] {
+  align-self: flex-start;
 }
 
 .admonition {
@@ -12226,7 +12245,8 @@ hr {
 .party .panel-content {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: flex-start;
+  gap: 10px;
 }
 .party .player-name {
   font-size: 24px;
@@ -12236,6 +12256,7 @@ hr {
 .party .player-card {
   width: 45%;
   max-width: 550px;
+  margin: 0;
 }
 .party .player-header {
   display: flex;
@@ -12258,6 +12279,38 @@ hr {
 }
 .party .attribute-value {
   font-size: 20px;
+}
+
+.item {
+  background-color: white;
+  padding: 4px 8px 0;
+  margin: 4px 0;
+  border-radius: 5px;
+  width: fit-content;
+  color: #420D09;
+}
+.item .name {
+  margin-right: 6px;
+  vertical-align: top;
+}
+.item .name.uncommon {
+  color: green;
+}
+.item .name.rare {
+  color: blue;
+}
+.item .name.very-rare {
+  color: purple;
+}
+.item .name.legendary {
+  color: orange;
+}
+.item .name.other {
+  color: turquoise;
+}
+.items {
+  display: grid;
+  grid-template-columns: 50% 50%;
 }
 
 .game-day {

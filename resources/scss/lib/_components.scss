@@ -26,6 +26,13 @@ $navy: #000080;
 
 hr {
   margin: 5px 0 4px 0;
+
+  &.section-divider {
+    opacity: 1;
+    background-color: $camel;
+    height: 2px;
+    margin-bottom: 8px;
+  }
 }
 
 .title {
@@ -46,7 +53,7 @@ hr {
   background-color: white;
   color: $azure;
   padding: 4px 8px;
-  margin: 4px;
+  margin: 4px 0;
   border-radius: 5px;
 
   &:hover {
@@ -115,9 +122,24 @@ hr {
   background-color: transparent;
   border: none;
   padding: 0;
+  margin-top: 2px;
 
   &:hover {
     background-image: url("/assets/svg/pencil-taupe.svg");
+  }
+}
+
+.input-row {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: smaller;
+    font-weight: bold;
+  }
+
+  input[type=checkbox] {
+    align-self: flex-start;
   }
 }
 

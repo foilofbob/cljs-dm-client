@@ -3,7 +3,8 @@
    [bidi.bidi :as bidi]
    [pushy.core :as pushy]
    [re-frame.core :as re-frame]
-   [cljs-dm-client.events :as events]))
+   [cljs-dm-client.events :as events]
+   [cljs-dm-client.utils :as utils]))
 
 (defmulti panels identity)
 (defmethod panels :default [] [:div "No panel found for this route."])
@@ -42,4 +43,5 @@
 (re-frame/reg-fx
   :navigate
   (fn [handler]
-    (navigate! handler)))
+      (utils/update-in-session {:current-page handler})
+      (navigate! handler)))

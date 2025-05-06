@@ -35,8 +35,11 @@
      (if (nil? campaign)
        {:db (-> db
                 (assoc :action-status :success)
-                (assoc :selected-campaign nil))
-        :fx [[:dispatch nav-call]]}
+                (assoc :selected-campaign nil)
+                (assoc :campaign-setting nil))
+        :fx [[:dispatch nav-call]]
+        :update-in-session {:selected-campaign nil
+                            :campaign-setting nil}}
        {:db         (assoc db :action-status :working)
         :http-xhrio {:method          :get
                      :uri             (str "http://localhost:8090/campaign/" (:id campaign))
@@ -47,13 +50,17 @@
 (reg-event-fx
  ::select-campaign-success
  (fn [{:keys [db]} [_ nav-call response]]
-     (let [parsed-response (utils/tranform-response response)]
+     (let [parsed-response  (utils/tranform-response response)
+           campaign         (:campaign parsed-response)
+           campaign-setting (select-keys parsed-response [:months
+                                                          :week-days
+                                                          :calendar-cycles
+                                                          :calendar-cycle-offsets
+                                                          :calendar-events])]
           {:db (-> db
                    (assoc :action-status :success)
-                   (assoc :selected-campaign (:campaign parsed-response))
-                   (assoc :campaign-setting (select-keys parsed-response [:months
-                                                                          :week-days
-                                                                          :calendar-cycles
-                                                                          :calendar-cycle-offsets
-                                                                          :calendar-events])))
-           :fx [[:dispatch nav-call]]})))
+                   (assoc :selected-campaign campaign)
+                   (assoc :campaign-setting campaign-setting))
+           :fx [[:dispatch nav-call]]
+           :update-in-session {:selected-campaign campaign
+                               :campaign-setting campaign-setting}})))

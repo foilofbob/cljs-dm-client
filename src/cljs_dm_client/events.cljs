@@ -1,21 +1,32 @@
 (ns cljs-dm-client.events
   (:require
    [ajax.core :as ajax]
+   [cljs-dm-client.navigation.events :as nav]
    [cljs-dm-client.utils :as utils]
-   [re-frame.core :refer [reg-event-db reg-event-fx]]
-   [cljs-dm-client.db :as db]))
+   [re-frame.core :refer [reg-event-db reg-event-fx reg-fx]]
+   [cljs-dm-client.db :refer [default-db]]))
 
 (reg-event-db
  ::initialize-db
- (fn [_ _]
-   db/default-db))
+ (fn [db [_]]
+     (merge default-db (utils/read-from-session))))
+
+(reg-event-fx
+ ::resume-session-if-present
+ (fn [{:keys [db]} [_]]
+     (let [current-page (some-> (utils/read-from-session) :current-page)]
+          (print (str "Session page: " current-page))
+          {:fx [[:dispatch [::nav/navigate (or current-page :campaign-select)]]]})))
+
+(reg-fx
+ :update-in-session
+ (fn [data]
+   (utils/update-in-session data)))
 
 (reg-event-fx
  ::set-active-panel
  (fn [{:keys [db]} [_ active-panel]]
    {:db (assoc db :active-panel active-panel)}))
-
-
 
 (reg-event-db
  :standard-async-success
@@ -31,11 +42,7 @@
 
 (reg-event-db
  :standard-failure
- utils/standard-failure-handler
- #_(fn [db [_ response]]
-       (-> db
-           (assoc :loading-status :failure)
-           (assoc :page-error response))))
+ utils/standard-failure-handler)
 
 (reg-event-fx
   :fetch-notes
@@ -74,5 +81,3 @@
   :toggle-modal
   (fn [db [_ modal-key]]
     (update-in db [:page-data :modal modal-key :is-open] not)))
-
-

@@ -6,7 +6,8 @@
   .panel-content {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: flex-start;
+    gap: 10px;
   }
 
   .player-name {
@@ -19,6 +20,7 @@
     @extend .common-panel;
     width: 45%;
     max-width: 550px;
+    margin: 0;
   }
 
   .player-header {
@@ -47,4 +49,50 @@
   .attribute-value {
     font-size: 20px;
   }
+}
+
+.item {
+  background-color: white;
+  padding: 4px 8px 0;
+  margin: 4px 0;
+  border-radius: 5px;
+  width: fit-content;
+  color: components.$mahogany;
+
+  .name {
+    margin-right: 6px;
+    vertical-align: top;
+
+    //&.common {
+    //  color: green;
+    //}
+
+    &.uncommon {
+      color: green;
+    }
+
+    &.rare {
+      color: blue;
+    }
+
+    &.very-rare {
+      color: purple;
+    }
+
+    &.legendary {
+      color: orange;
+    }
+
+    &.other {
+      color: turquoise;
+    }
+  }
+  .edit-button {
+
+  }
+}
+
+.items {
+  display: grid;
+  grid-template-columns: 50% 50%;
 }
