@@ -52,20 +52,18 @@
 }
 
 .item {
+  display: flex;
   background-color: white;
   padding: 4px 8px 0;
   margin: 4px 0;
   border-radius: 5px;
-  width: fit-content;
+  width: 250px;
   color: components.$mahogany;
 
   .name {
     margin-right: 6px;
     vertical-align: top;
-
-    //&.common {
-    //  color: green;
-    //}
+    width: 100%;
 
     &.uncommon {
       color: green;

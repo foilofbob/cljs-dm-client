@@ -111,6 +111,10 @@
       [:div.item {:key (str "item-" (:id item))}
        [:span.name {:class (some-> item :rarity lower-case)}
         (str (:name item))]
+       (when (seq (:link item))
+             [:a.dnd-icon {:href (:link item)
+                  :target "_blank"}
+              [:div.dnd-icon]])
        [:button.edit-button {:on-click #(dispatch [::events/open-edit-item-modal item])}]])
 
 (defn party-content []

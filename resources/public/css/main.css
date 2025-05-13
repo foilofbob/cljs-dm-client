@@ -12078,8 +12078,10 @@ hr {
 hr.section-divider {
   opacity: 1;
   background-color: #C19A6B;
-  height: 2px;
-  margin-bottom: 8px;
+  height: 16px;
+  margin: 12px 0;
+  background-image: url("/assets/png/celtic-knot.png");
+  background-size: contain;
 }
 
 .title, .header-content .current-panel {
@@ -12167,6 +12169,16 @@ hr.section-divider {
 }
 .edit-button:hover {
   background-image: url("/assets/svg/pencil-taupe.svg");
+}
+
+.dnd-icon {
+  background-image: url("/assets/svg/dnd-mahogany.svg");
+  background-size: 24px;
+  height: 24px;
+  width: 24px;
+}
+.dnd-icon:hover {
+  background-image: url("/assets/svg/dnd-taupe.svg");
 }
 
 .input-row {
@@ -12282,16 +12294,18 @@ hr.section-divider {
 }
 
 .item {
+  display: flex;
   background-color: white;
   padding: 4px 8px 0;
   margin: 4px 0;
   border-radius: 5px;
-  width: fit-content;
+  width: 250px;
   color: #420D09;
 }
 .item .name {
   margin-right: 6px;
   vertical-align: top;
+  width: 100%;
 }
 .item .name.uncommon {
   color: green;

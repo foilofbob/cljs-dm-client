@@ -30,8 +30,10 @@ hr {
   &.section-divider {
     opacity: 1;
     background-color: $camel;
-    height: 2px;
-    margin-bottom: 8px;
+    height: 16px;
+    margin: 12px 0;
+    background-image: url("/assets/png/celtic-knot.png");
+    background-size: contain;
   }
 }
 
@@ -126,6 +128,17 @@ hr {
 
   &:hover {
     background-image: url("/assets/svg/pencil-taupe.svg");
+  }
+}
+
+.dnd-icon {
+  background-image: url("/assets/svg/dnd-mahogany.svg");
+  background-size: 24px;
+  height: 24px;
+  width: 24px;
+
+  &:hover {
+    background-image: url("/assets/svg/dnd-taupe.svg");
   }
 }
 
