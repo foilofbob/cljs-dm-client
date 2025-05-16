@@ -30,10 +30,27 @@ hr {
   &.section-divider {
     opacity: 1;
     background-color: $camel;
-    height: 16px;
+    height: 12px;
     margin: 12px 0;
     background-image: url("/assets/png/celtic-knot.png");
     background-size: contain;
+  }
+
+  &.top {
+    margin-bottom: 0;
+  }
+
+  &.bottom {
+    margin-top: 0;
+  }
+}
+
+.logical-division {
+  text-align: center;
+  background-color: $camel;
+
+  h3 {
+    margin: 0;
   }
 }
 
@@ -83,7 +100,6 @@ hr {
 }
 
 .common-panel {
-  //width: 98%;
   margin: 12px 4px;
   background-color: white;
   padding: 8px;
@@ -190,6 +206,11 @@ hr {
     color: black;
     border: 2px solid $mahogany;
     max-width: 300px;
+  }
+
+  .wide-description {
+    max-width: 600px;
+    text-align: left;
   }
 }
 

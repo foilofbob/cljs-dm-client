@@ -141,3 +141,9 @@
   :edit-object
   (fn [db [_ path]]
     (-> db :page-data path)))
+
+(defn logical-division [text]
+      [:div.logical-division
+       [:hr.section-divider.top]
+       [:h3 text]
+       [:hr.section-divider.bottom]])

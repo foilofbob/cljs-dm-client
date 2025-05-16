@@ -130,6 +130,8 @@
               (update-in [:page-data :items] #(remove (fn [item] (= item-id (:id item))) %)))
       :fx [[:dispatch [:toggle-modal :item-modal]]]}))
 
-;; PUT - update player
+;; POST - Create player
 
-;; DELETE - player
+;; PUT - Update player
+
+;; DELETE - Delete player

@@ -12078,10 +12078,24 @@ hr {
 hr.section-divider {
   opacity: 1;
   background-color: #C19A6B;
-  height: 16px;
+  height: 12px;
   margin: 12px 0;
   background-image: url("/assets/png/celtic-knot.png");
   background-size: contain;
+}
+hr.top {
+  margin-bottom: 0;
+}
+hr.bottom {
+  margin-top: 0;
+}
+
+.logical-division {
+  text-align: center;
+  background-color: #C19A6B;
+}
+.logical-division h3 {
+  margin: 0;
 }
 
 .title, .header-content .current-panel {
@@ -12220,6 +12234,10 @@ hr.section-divider {
   color: black;
   border: 2px solid #420D09;
   max-width: 300px;
+}
+.tooltip .wide-description {
+  max-width: 600px;
+  text-align: left;
 }
 
 .contains-task-list {

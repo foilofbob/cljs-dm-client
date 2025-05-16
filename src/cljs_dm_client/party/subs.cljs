@@ -5,7 +5,7 @@
 (reg-sub
  ::players
  (fn [db]
-     (-> db :page-data :players (or []))))
+     (sort-by :name (-> db :page-data :players (or [])))))
 
 (reg-sub
  ::items

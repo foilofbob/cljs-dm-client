@@ -3,7 +3,9 @@
    [clojure.string :refer [lower-case]]
    [re-frame.core :refer [dispatch subscribe]]
    [cljs-dm-client.components.components :refer [build-notes
+                                                 logical-division
                                                  note-modal]]
+   [cljs-dm-client.components.markdown :refer [render-markdown]]
    [cljs-dm-client.layout.views :refer [campaign-panel
                                         loading-wrapper]]
    [cljs-dm-client.party.events :as events]
@@ -82,7 +84,7 @@
               [{:label "- Not Carried -" :value ""}
                {:label "Item" :value "ITEM"}
                {:label "Player" :value "PLAYER"}]]
-             (when (:carried-by item)
+             (when (seq (:carried-by item))
                    (let [options (if (= "PLAYER" (:carried-by item))
                                    @(subscribe [::subs/players-as-select-options])
                                    @(subscribe [::subs/containers-as-select-options]))]
@@ -108,14 +110,24 @@
        [player-attribute "MV" (:movement player)]])
 
 (defn item-component [item]
-      [:div.item {:key (str "item-" (:id item))}
-       [:span.name {:class (some-> item :rarity lower-case)}
-        (str (:name item))]
-       (when (seq (:link item))
-             [:a.dnd-icon {:href (:link item)
-                  :target "_blank"}
-              [:div.dnd-icon]])
-       [:button.edit-button {:on-click #(dispatch [::events/open-edit-item-modal item])}]])
+      (let [element-id (str "item-" (:id item))]
+           [:<>
+            [:div.item {:key element-id}
+            [:span.name {:id    element-id
+                         :class (some-> item :rarity lower-case)}
+             (str (:name item))]
+            (when (seq (:link item))
+                  [:a.dnd-icon {:href (:link item)
+                                :target "_blank"}
+                   [:div.dnd-icon]])
+            [:button.edit-button {:on-click #(dispatch [::events/open-edit-item-modal item])}]]
+            (when (seq (:description item))
+                  [:> UncontrolledTooltip {:target           element-id
+                                           :placement        "bottom"
+                                           :inner-class-name "component-tooltip wide-description"}
+                   [:div.md-content
+                    {:dangerouslySetInnerHTML
+                     {:__html (render-markdown (:description item))}}]])]))
 
 (defn party-content []
       (let [players             @(subscribe [::subs/players])
@@ -152,7 +164,7 @@
                                     (filter #(= (:id player) (:carried-by-id %)))
                                     (sort-by :name)
                                     (map item-component)))]]))
-             [:hr.section-divider]
+             [logical-division "Items With Storage"]
              (into [:div.panel-content]
                    (for [container items-as-containers]
                         [:div.player-card
@@ -168,7 +180,7 @@
             [:div.right-panel
              [:button.action-button {:on-click #(dispatch [::events/open-edit-item-modal nil])}
               "Add Item"]
-             [:hr.section-divider]
+             [logical-division "Not Carried Items"]
              (map item-component items-not-carried)]]))
 
 (defn party []
