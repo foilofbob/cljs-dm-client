@@ -130,8 +130,72 @@
               (update-in [:page-data :items] #(remove (fn [item] (= item-id (:id item))) %)))
       :fx [[:dispatch [:toggle-modal :item-modal]]]}))
 
-;; POST - Create player
+(reg-event-fx
+ ::open-edit-player-modal
+ (fn [{:keys [db]} [_ player]]
+     (let [edit-player (or player
+                           {:campaign-id (-> db :selected-campaign :id)
+                            :name ""
+                            :race ""
+                            :class ""
+                            :armor-class 0
+                            :hit-points 0
+                            :passive-perception 0
+                            :languages ""
+                            :movement 30})]
+          {:fx [[:dispatch [:set-edit-object :edit-player edit-player]]
+                [:dispatch [:toggle-modal :player-modal]]]})))
 
-;; PUT - Update player
+(reg-event-fx
+ ::edit-player
+ (fn [{:keys [db]} [_ player]]
+     (let [new-player? (nil? (:id player))]
+          {:db         (assoc db :action-status :working)
+           :http-xhrio {:method          (if new-player? :post :put)
+                        :uri             (cond-> (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/player")
+                                                 (not new-player?)
+                                                 (str "/" (:id player)))
+                        :params          (rename-keys
+                                          (cske/transform-keys csk/->PascalCase player)
+                                          {:Id :ID :CampaignId :CampaignID})
+                        :format          (ajax/json-request-format)
+                        :response-format (ajax/json-response-format {:keywords? true})
+                        :on-success      [::edit-player-success new-player?]
+                        :on-failure      [:action-failure]}})))
 
-;; DELETE - Delete player
+(reg-event-fx
+ ::edit-player-success
+ (fn [{:keys [db]} [_ new-player? response]]
+     (let [updated-player (utils/tranform-response response)]
+          {:db (cond-> (assoc db :action-status :success)
+
+                       new-player?
+                       (update-in [:page-data :players] concat [updated-player])
+
+                       (not new-player?)
+                       (update-in [:page-data :players]
+                                  #(map (fn [player]
+                                            (if (= (:id player) (:id updated-player))
+                                              updated-player
+                                              player))
+                                        %)))
+           :fx [[:dispatch [:toggle-modal :player-modal]]]})))
+
+(reg-event-fx
+ ::delete-player
+ (fn [{:keys [db]} [_ player-id]]
+     {:db         (assoc db :action-status :working)
+      :http-xhrio {:method          :delete
+                   :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/player/" player-id)
+                   :format          (ajax/json-request-format)
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success      [::delete-player-success player-id]
+                   :on-failure      [:action-failure]}}))
+
+(reg-event-fx
+ ::delete-player-success
+ (fn [{:keys [db]} [_ player-id response]]
+     {:db (-> db
+              (assoc :action-status :success)
+              (update-in [:page-data :players] #(remove (fn [player] (= player-id (:id player))) %)))
+      :fx [[:dispatch [:toggle-modal :player-modal]]]}))

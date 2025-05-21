@@ -2,6 +2,7 @@
   (:require
    [cljs-dm-client.campaign-select.events :as events]
    [cljs-dm-client.campaign-select.subs :as subs]
+   [cljs-dm-client.components.components :refer [logical-division]]
    [cljs-dm-client.layout.views :refer [loading-wrapper]]
    [cljs-dm-client.navigation.views :refer [nav-button]]
    [re-frame.core :refer [subscribe]]))
@@ -9,7 +10,7 @@
 (defn campaign-select []
   [loading-wrapper
    {:container [:div.select-campaign
-                [:h1.title "Campaigns"]]
+                [logical-division "Campaigns"]]
     :content   (let [campaigns @(subscribe [::subs/campaigns])]
                     [:div.campaign-list
                      (if (seq campaigns)

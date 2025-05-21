@@ -12092,10 +12092,12 @@ hr.bottom {
 
 .logical-division {
   text-align: center;
-  background-color: #C19A6B;
+  background-color: #E0CDA9;
 }
 .logical-division h3 {
   margin: 0;
+  color: #420D09;
+  font-weight: bold;
 }
 
 .title, .header-content .current-panel {
@@ -12259,14 +12261,16 @@ hr.bottom {
   width: 250px;
   text-align: center;
   background-color: #C19A6B;
-  padding: 20px;
   border: 2px solid #420D09;
+}
+.select-campaign hr.top, .select-campaign hr.bottom {
+  margin: 0;
 }
 
 .campaign-list {
   display: flex;
   flex-direction: column;
-  margin-top: 12px;
+  padding: 20px;
 }
 
 .party {

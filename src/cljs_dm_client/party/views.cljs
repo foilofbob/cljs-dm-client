@@ -17,22 +17,38 @@
    ["reactstrap/lib/UncontrolledTooltip" :default UncontrolledTooltip]))
 
 (def ITEM_MODAL_KEY :item-modal)
+(def PLAYER_MODAL_KEY :player-modal)
 
 (defn elem-id [obj-type obj-id obj-key]
       (str obj-type "-" (or obj-id "new") "-" (name obj-key)))
 
 (defn text-input-row [label length obj obj-type obj-key]
-      (let [input-id (elem-id obj-type (:id obj) obj-key)]
+      (let [input-id (elem-id obj-type (:id obj) obj-key)
+            edit-storage (keyword (str "edit-" obj-type))]
            [:div.input-row
             [:label {:for input-id}
              label]
             [:input {:id         input-id
                      :value      (obj-key obj)
                      :max-length length
-                     :on-change  #(dispatch [:update-edit-field :edit-item obj-key (-> % .-target .-value)])}]]))
+                     :on-change  #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-value)])}]]))
+
+(defn number-input-row [label min max obj obj-type obj-key]
+      (let [input-id (elem-id obj-type (:id obj) obj-key)
+            edit-storage (keyword (str "edit-" obj-type))]
+           [:div.input-row
+            [:label {:for input-id}
+             label]
+            [:input {:id        input-id
+                     :type      :number
+                     :min       min
+                     :max       max
+                     :value     (obj-key obj)
+                     :on-change #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-value int)])}]]))
 
 (defn textarea-input-row [label length rows obj obj-type obj-key]
-      (let [input-id (elem-id obj-type (:id obj) obj-key)]
+      (let [input-id (elem-id obj-type (:id obj) obj-key)
+            edit-storage (keyword (str "edit-" obj-type))]
            [:div.input-row
             [:label {:for input-id}
              label]
@@ -40,26 +56,28 @@
                         :value      (obj-key obj)
                         :max-length length
                         :rows       rows
-                        :on-change  #(dispatch [:update-edit-field :edit-item obj-key (-> % .-target .-value)])}]]))
+                        :on-change  #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-value)])}]]))
 
 (defn checkbox-input-row [label obj obj-type obj-key]
-      (let [input-id (elem-id obj-type (:id obj) obj-key)]
+      (let [input-id (elem-id obj-type (:id obj) obj-key)
+            edit-storage (keyword (str "edit-" obj-type))]
            [:div.input-row
             [:label {:for input-id}
              label]
             [:input {:id         input-id
                      :type       :checkbox
                      :value      (obj-key obj)
-                     :on-change  #(dispatch [:update-edit-field :edit-item obj-key (-> % .-target .-checked)])}]]))
+                     :on-change  #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-checked)])}]]))
 
 (defn select-input-row [label obj obj-type obj-key options]
-      (let [input-id (elem-id obj-type (:id obj) obj-key)]
+      (let [input-id (elem-id obj-type (:id obj) obj-key)
+            edit-storage (keyword (str "edit-" obj-type))]
            [:div.input-row
             [:label {:for input-id}
              label]
             (into [:select {:id         input-id
                             :value      (obj-key obj)
-                            :on-change  #(dispatch [:update-edit-field :edit-item obj-key (-> % .-target .-value)])}]
+                            :on-change  #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-value)])}]
                   (for [option options]
                        [:option {:value (:value option)} (:label option)]))]))
 
@@ -72,7 +90,7 @@
              (if (:id item)
                "Update Item"
                "Add Item")]
-            [:> ModalBody {:class :modal-body-note} ;; TODO: Generic class?
+            [:> ModalBody {:class :modal-body-note} ;; TODO: Generic class
              [text-input-row "Name" 100 item "item" :name]
              [textarea-input-row "Description" 5000 4 item "item" :description]
              [text-input-row "Link" 500 item "item" :link]
@@ -95,6 +113,32 @@
              [:button.action-link {:on-click #(dispatch [::events/delete-item (:id item)])}
               "Delete"]
              [:button.action-button {:on-click #(dispatch [::events/edit-item item])}
+              "Save"]]]))
+
+(defn player-modal []
+      (let [player @(subscribe [:edit-object :edit-player])]
+           [:> Modal {:is-open @(subscribe [:modal-open? PLAYER_MODAL_KEY])
+                      :toggle  #(dispatch [:toggle-modal PLAYER_MODAL_KEY])
+                      :size    :xl}
+            [:> ModalHeader
+             (if (:id player)
+               "Update Player"
+               "Add Player")]
+            [:> ModalBody {:class :modal-body-note} ;; TODO: Generic class
+             [text-input-row "Name" 100 player "player" :name]
+             [text-input-row "Race" 100 player "player" :race]
+             [text-input-row "Class" 100 player "player" :class]
+             [number-input-row "Armor Class" 0 30 player "player" :armor-class]
+             [number-input-row "Hit Points" 0 500 player "player" :hit-points]
+             [number-input-row "Passive Perception" 0 30 player "player" :passive-perception]
+             [text-input-row "Languages" 100 player "player" :languages]
+             [number-input-row "Movement" 0 200 player "player" :movement]]
+            [:> ModalFooter {:class :modal-footer-buttons}
+             [:button.action-link {:on-click #(dispatch [:toggle-modal PLAYER_MODAL_KEY])}
+              "Cancel"]
+             [:button.action-link {:on-click #(dispatch [::events/delete-player (:id player)])}
+              "Delete"]
+             [:button.action-button {:on-click #(dispatch [::events/edit-player player])}
               "Save"]]]))
 
 (defn player-attribute [label value]
@@ -137,7 +181,10 @@
             items-as-containers @(subscribe [::subs/items-as-containers])
             container-items     @(subscribe [::subs/items-carried-by-items])]
            [:<>
-            [:div.party
+            [:div.party.panel-content
+             [:div.panel-content
+              [:button.action-button {:on-click #(dispatch [::events/open-edit-player-modal nil])}
+               "Add Player"]]
              (into [:div.panel-content]
                   (for [player players]
                        [:div.player-card
@@ -145,7 +192,8 @@
                          [:div
                           [:div.player-name (:name player)]
                           [:div (str (:race player) ", " (:class player))]]
-                         [player-attributes player]]
+                         [player-attributes player]
+                         [:button.edit-button {:on-click #(dispatch [::events/open-edit-player-modal player])}]]
                         [:hr]
                         [:div [:strong "Languages: "] (:languages player)]
                         [:hr]
@@ -180,13 +228,15 @@
             [:div.right-panel
              [:button.action-button {:on-click #(dispatch [::events/open-edit-item-modal nil])}
               "Add Item"]
-             [logical-division "Not Carried Items"]
-             (map item-component items-not-carried)]]))
+             [logical-division "Unassigned Items"]
+             (into [:<>]
+                   (map item-component items-not-carried))]]))
 
 (defn party []
       [:<>
        [note-modal]
        [item-modal]
+       [player-modal]
        [loading-wrapper
         {:container [campaign-panel]
          :content   [party-content]}]])

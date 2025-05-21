@@ -5,12 +5,15 @@
   width: 250px;
   text-align: center;
   background-color: components.$camel;
-  padding: 20px;
   border: 2px solid components.$mahogany;
+
+  hr.top, hr.bottom {
+    margin: 0;
+  }
 }
 
 .campaign-list {
   display: flex;
   flex-direction: column;
-  margin-top: 12px;
+  padding: 20px;
 }
