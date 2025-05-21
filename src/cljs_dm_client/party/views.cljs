@@ -2,10 +2,15 @@
   (:require
    [clojure.string :refer [lower-case]]
    [re-frame.core :refer [dispatch subscribe]]
-   [cljs-dm-client.components.components :refer [build-notes
-                                                 logical-division
-                                                 note-modal]]
-   [cljs-dm-client.components.markdown :refer [render-markdown]]
+   [cljs-dm-client.components.components :refer [logical-division]]
+   [cljs-dm-client.components.forms :refer [text-input-row
+                                            number-input-row
+                                            textarea-input-row
+                                            checkbox-input-row
+                                            select-input-row]]
+   [cljs-dm-client.components.notes :refer [build-notes
+                                            note-modal]]
+   [cljs-dm-client.components.markdown :refer [markdown-div]]
    [cljs-dm-client.layout.views :refer [campaign-panel
                                         loading-wrapper]]
    [cljs-dm-client.party.events :as events]
@@ -18,68 +23,6 @@
 
 (def ITEM_MODAL_KEY :item-modal)
 (def PLAYER_MODAL_KEY :player-modal)
-
-(defn elem-id [obj-type obj-id obj-key]
-      (str obj-type "-" (or obj-id "new") "-" (name obj-key)))
-
-(defn text-input-row [label length obj obj-type obj-key]
-      (let [input-id (elem-id obj-type (:id obj) obj-key)
-            edit-storage (keyword (str "edit-" obj-type))]
-           [:div.input-row
-            [:label {:for input-id}
-             label]
-            [:input {:id         input-id
-                     :value      (obj-key obj)
-                     :max-length length
-                     :on-change  #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-value)])}]]))
-
-(defn number-input-row [label min max obj obj-type obj-key]
-      (let [input-id (elem-id obj-type (:id obj) obj-key)
-            edit-storage (keyword (str "edit-" obj-type))]
-           [:div.input-row
-            [:label {:for input-id}
-             label]
-            [:input {:id        input-id
-                     :type      :number
-                     :min       min
-                     :max       max
-                     :value     (obj-key obj)
-                     :on-change #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-value int)])}]]))
-
-(defn textarea-input-row [label length rows obj obj-type obj-key]
-      (let [input-id (elem-id obj-type (:id obj) obj-key)
-            edit-storage (keyword (str "edit-" obj-type))]
-           [:div.input-row
-            [:label {:for input-id}
-             label]
-            [:textarea {:id         input-id
-                        :value      (obj-key obj)
-                        :max-length length
-                        :rows       rows
-                        :on-change  #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-value)])}]]))
-
-(defn checkbox-input-row [label obj obj-type obj-key]
-      (let [input-id (elem-id obj-type (:id obj) obj-key)
-            edit-storage (keyword (str "edit-" obj-type))]
-           [:div.input-row
-            [:label {:for input-id}
-             label]
-            [:input {:id         input-id
-                     :type       :checkbox
-                     :value      (obj-key obj)
-                     :on-change  #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-checked)])}]]))
-
-(defn select-input-row [label obj obj-type obj-key options]
-      (let [input-id (elem-id obj-type (:id obj) obj-key)
-            edit-storage (keyword (str "edit-" obj-type))]
-           [:div.input-row
-            [:label {:for input-id}
-             label]
-            (into [:select {:id         input-id
-                            :value      (obj-key obj)
-                            :on-change  #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-value)])}]
-                  (for [option options]
-                       [:option {:value (:value option)} (:label option)]))]))
 
 (defn item-modal []
       (let [item @(subscribe [:edit-object :edit-item])]
@@ -169,9 +112,7 @@
                   [:> UncontrolledTooltip {:target           element-id
                                            :placement        "bottom"
                                            :inner-class-name "component-tooltip wide-description"}
-                   [:div.md-content
-                    {:dangerouslySetInnerHTML
-                     {:__html (render-markdown (:description item))}}]])]))
+                   [markdown-div (:description item)]])]))
 
 (defn party-content []
       (let [players             @(subscribe [::subs/players])

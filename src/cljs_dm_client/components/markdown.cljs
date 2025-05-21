@@ -11,3 +11,8 @@
 
 (defn render-markdown [content]
       (.render markdown content))
+
+(defn markdown-div [content]
+      [:div.md-content
+       {:dangerouslySetInnerHTML
+        {:__html (render-markdown content)}}])

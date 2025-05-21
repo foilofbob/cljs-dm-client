@@ -2,8 +2,8 @@
   (:require
    [clojure.math :as math]
    [re-frame.core :refer [dispatch subscribe]]
-   [cljs-dm-client.components.components :refer [build-notes
-                                                 note-modal]]
+   [cljs-dm-client.components.notes :refer [build-notes
+                                            note-modal]]
    [cljs-dm-client.layout.views :refer [campaign-panel
                                         loading-wrapper]]
    [cljs-dm-client.timeline.events :as events]
