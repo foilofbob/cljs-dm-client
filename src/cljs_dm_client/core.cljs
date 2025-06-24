@@ -22,7 +22,10 @@
    [cljs-dm-client.party.subs]
    [cljs-dm-client.timeline.events]
    [cljs-dm-client.timeline.views]
-   [cljs-dm-client.timeline.subs]))
+   [cljs-dm-client.timeline.subs]
+   [cljs-dm-client.xp-tracker.events]
+   [cljs-dm-client.xp-tracker.views]
+   [cljs-dm-client.xp-tracker.subs]))
 
 (defn dev-setup []
   (when config/debug?

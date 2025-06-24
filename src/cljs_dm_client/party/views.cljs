@@ -153,7 +153,7 @@
                                     (filter #(= (:id player) (:carried-by-id %)))
                                     (sort-by :name)
                                     (map item-component)))]]))
-             [logical-division "Items With Storage"]
+             [logical-division {:text "Items With Storage"}]
              (into [:div.panel-content]
                    (for [container items-as-containers]
                         [:div.player-card
@@ -167,9 +167,10 @@
                                      (sort-by :name)
                                      (map item-component)))]]))]
             [:div.right-panel
-             [:button.action-button {:on-click #(dispatch [::events/open-edit-item-modal nil])}
-              "Add Item"]
-             [logical-division "Unassigned Items"]
+             [logical-division {:left [:button {:class [:action-button :skinny]
+                                                :on-click #(dispatch [::events/open-edit-item-modal nil])}
+                                       "Add Item"]
+                                :text "Unassigned Items"}]
              (into [:<>]
                    (map item-component items-not-carried))]]))
 

@@ -9,6 +9,16 @@
   padding: 12px;
   color: components.$pale-sand;
 
+  // These are to account for the width of the left nav and right panels
+  // so these keep the banner actually centered over the main panel
+  .header-align-left {
+    width: 250px;
+  }
+
+  .header-align-right {
+    width: 450px;
+  }
+
   .campaign {
     position: fixed;
     display: flex;

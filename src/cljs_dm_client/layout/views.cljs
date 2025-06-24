@@ -10,7 +10,9 @@
    {:id      :party
     :name    "Party / Inventory"}
    {:id      :locations
-    :name    "Locations"}])
+    :name    "Locations"}
+   {:id      :xp-tracker
+    :name    "XP Tracker"}])
 
 (defn header-content []
   (let [campaign @(subscribe [:selected-campaign])
@@ -22,11 +24,13 @@
                    :handler [::campaign-events/select-campaign nil]
                    :target  :campaign-select
                    :link?   true}]]
+     [:div.header-align-left]
      [:h1.current-panel
       (->> page-mappings
-        (filter #(= current-panel (:id %)))
-        first
-        :name)]]))
+           (filter #(= current-panel (:id %)))
+           first
+           :name)]
+     [:div.header-align-right]]))
 
 (defn left-nav []
       (let [current-panel @(subscribe [:active-panel-key])]

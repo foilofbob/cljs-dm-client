@@ -10,7 +10,7 @@
 (defn campaign-select []
   [loading-wrapper
    {:container [:div.select-campaign
-                [logical-division "Campaigns"]]
+                [logical-division {:text "Campaigns"}]]
     :content   (let [campaigns @(subscribe [::subs/campaigns])]
                     [:div.campaign-list
                      (if (seq campaigns)

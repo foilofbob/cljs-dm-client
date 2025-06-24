@@ -1,0 +1,39 @@
+@use "../lib/components";
+
+.xp-row {
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
+
+  .edit-button {
+    margin-left: 8px;
+  }
+
+  span:first-child {
+    max-width: 300px;
+  }
+}
+
+progress[value] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 1px solid components.$umber;
+  width: 100%;
+  min-width: 300px;
+  height: 8px;
+  border-radius: 10px;
+  background: components.$pale-sand;
+}
+progress[value]::-webkit-progress-bar {
+  border-radius: 10px;
+  background: components.$pale-sand;
+}
+progress[value]::-webkit-progress-value {
+  border-radius: 10px;
+  background: components.$taupe;
+}
+progress[value]::-moz-progress-bar {
+  border-radius: 10px;
+  background: components.$taupe;
+}

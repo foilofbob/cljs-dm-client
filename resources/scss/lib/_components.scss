@@ -54,6 +54,14 @@ hr {
     color: $mahogany;
     font-weight: bold;
   }
+
+  .left {
+    position: absolute;
+  }
+
+  .right {
+    position: absolute;
+  }
 }
 
 .title {
@@ -85,6 +93,11 @@ hr {
   &.active {
     border-color: $mahogany;
     color: $mahogany;
+  }
+
+  &.skinny {
+    padding: 1px 4px;
+    margin: 2px;
   }
 }
 
