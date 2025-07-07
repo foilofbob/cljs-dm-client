@@ -10,7 +10,7 @@
 (reg-sub
  ::items
  (fn [db]
-     (-> db :page-data :items (or []))))
+     (sort-by :name (-> db :page-data :items (or [])))))
 
 (reg-sub
  ::items-not-carried

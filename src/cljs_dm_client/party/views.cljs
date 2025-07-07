@@ -33,9 +33,9 @@
              (if (:id item)
                "Update Item"
                "Add Item")]
-            [:> ModalBody {:class :modal-body-note} ;; TODO: Generic class
+            [:> ModalBody {:class :modal-body}
              [text-input-row "Name" 100 item "item" :name]
-             [textarea-input-row "Description" 5000 4 item "item" :description]
+             [textarea-input-row "Description" 5000 15 item "item" :description]
              [text-input-row "Link" 500 item "item" :link]
              [text-input-row "Rarity" 10 item "item" :rarity]
              [text-input-row "Cost" 20 item "item" :cost]
@@ -67,7 +67,7 @@
              (if (:id player)
                "Update Player"
                "Add Player")]
-            [:> ModalBody {:class :modal-body-note} ;; TODO: Generic class
+            [:> ModalBody {:class :modal-body}
              [text-input-row "Name" 100 player "player" :name]
              [text-input-row "Race" 100 player "player" :race]
              [text-input-row "Class" 100 player "player" :class]
@@ -151,7 +151,6 @@
                          (into [:<>]
                                (->> player-items
                                     (filter #(= (:id player) (:carried-by-id %)))
-                                    (sort-by :name)
                                     (map item-component)))]]))
              [logical-division {:text "Items With Storage"}]
              (into [:div.panel-content]
@@ -164,7 +163,6 @@
                           (into [:<>]
                                 (->> container-items
                                      (filter #(= (:id container) (:carried-by-id %)))
-                                     (sort-by :name)
                                      (map item-component)))]]))]
             [:div.right-panel
              [logical-division {:left [:button {:class [:action-button :skinny]

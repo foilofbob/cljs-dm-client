@@ -1,0 +1,19 @@
+[tools]
+java = "corretto-21"
+node = "22"
+
+[tasks.node-install]
+description = "installs node packages"
+run = "npm install"
+
+[tasks.shadow]
+description = "start the app with hot reload"
+run = "npx shadow-cljs watch app"
+
+[tasks.sass]
+description = "compile the styles with watching"
+run = "npx sass --watch resources/scss/main.scss:resources/public/css/main.css"
+
+[tasks.release]
+description = "package for release"
+run = "npm run release"

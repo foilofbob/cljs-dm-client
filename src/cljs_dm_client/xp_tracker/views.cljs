@@ -27,7 +27,7 @@
              (if (:id xp)
                "Update XP"
                "Add XP")]
-            [:> ModalBody {:class :modal-body-note} ;; TODO: Generic class
+            [:> ModalBody {:class :modal-body}
              [textarea-input-row "Description" 1000 4 xp "xp" :description]
              [:div.input-row
               [:button.action-button {:on-click #(dispatch [::events/calculate-xp])}

@@ -23,7 +23,7 @@
              (if (:id note)
                "Update Note"
                "Add Note")]
-            [:> ModalBody {:class :modal-body-note}
+            [:> ModalBody {:class :modal-body}
              [:input {:value      (:title note)
                       :max-length 100
                       :on-change  #(dispatch [:update-edit-field :edit-note :title (-> % .-target .-value)])}]
