@@ -10,7 +10,7 @@
    ["reactstrap/lib/ModalBody" :default ModalBody]
    ["reactstrap/lib/ModalFooter" :default ModalFooter]
    ["reactstrap/lib/ModalHeader" :default ModalHeader]
-   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub subscribe]]))
+   [re-frame.core :refer [dispatch reg-event-db reg-event-fx subscribe]]))
 
 (def NOTE_MODAL_KEY :note-modal)
 
@@ -70,6 +70,19 @@
               [:button.edit-button {:type     :button
                                     :on-click #(do (dispatch [:set-edit-object :edit-note note])
                                                    (dispatch [:toggle-modal :note-modal]))}]]])))
+
+(defn standard-note-columns
+      "This will build two columns for managing notes, the first with no category and the second for category 'notes'"
+      [{:keys [container-class notes selected-obj obj-type]}]
+      [:div.common-panel {:class container-class}
+       [:div.primary
+        (build-notes (filter #(-> % :category :string seq not) notes))
+        [:button.action-link {:on-click #(open-edit-note-modal selected-obj obj-type "")}
+         "Add Description"]]
+       [:div.secondary
+        (build-notes (filter #(-> % :category :string (= "note")) notes))
+        [:button.action-link {:on-click #(open-edit-note-modal selected-obj obj-type "note")}
+         "Add Note"]]])
 
 (reg-event-fx
  ::edit-note

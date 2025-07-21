@@ -59,7 +59,7 @@
 (reg-event-db
  :fetch-notes-success
  (fn [db [_ response]]
-     (utils/standard-success-handler db :notes response)))
+     (utils/append-success-handler db :notes response)))
 
 (reg-event-fx
  :fetch-notes-failure

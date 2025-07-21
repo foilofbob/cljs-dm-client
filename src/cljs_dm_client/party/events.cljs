@@ -10,9 +10,9 @@
 (reg-event-fx
  :party-page-load
  (utils/page-loader
-  {:first-dispatch [::page-load-dispatcher]
-   :rules [{:when :seen-all-of? :events [::fetch-players-success ::fetch-items-success :fetch-notes-success] :dispatch [:page-ready]}
-           {:when :seen-any-of? :events [::fetch-players-failure ::fetch-items-failure :fetch-notes-failure] :halt? true}]}))
+  [::page-load-dispatcher]
+  [::fetch-players-success ::fetch-items-success :fetch-notes-success]
+  [::fetch-players-failure ::fetch-items-failure :fetch-notes-failure]))
 
 (reg-event-fx
  ::page-load-dispatcher

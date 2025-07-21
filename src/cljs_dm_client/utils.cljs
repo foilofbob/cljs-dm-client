@@ -4,12 +4,21 @@
    [camel-snake-kebab.extras :as cske]
    [cognitect.transit :as t]))
 
-(defn page-loader [async-flow]
+;(defn page-loader [async-flow]
+;      (fn [{:keys [db]} _]
+;          (if (-> db :selected-campaign nil?)
+;            {:navigate :campaign-select}
+;            {:db         (assoc db :loading-status :loading)
+;             :async-flow async-flow})))
+
+(defn page-loader [dispatcher-fn page-ready-events page-error-events]
       (fn [{:keys [db]} _]
           (if (-> db :selected-campaign nil?)
             {:navigate :campaign-select}
             {:db         (assoc db :loading-status :loading)
-             :async-flow async-flow})))
+             :async-flow {:first-dispatch dispatcher-fn
+                          :rules [{:when :seen-all-of? :events page-ready-events :dispatch [:page-ready]}
+                                  {:when :seen-any-of? :events page-error-events :halt? true}]}})))
 
 (defn write-to-session
       "Expecting to write a map containing active-panel and selected-campaign"
@@ -41,8 +50,15 @@
   [response]
   (cske/transform-keys csk/->kebab-case-keyword response))
 
-(defn standard-success-handler [db path response]
+(defn standard-success-handler
+      "This will replace existing data"
+      [db path response]
       (assoc-in db [:page-data path] (tranform-response response)))
+
+(defn append-success-handler
+      "This will add onto existing data, expecting to joining lists"
+      [db path response]
+      (update-in db [:page-data path] #(concat (or % []) (tranform-response response))))
 
 (defn standard-failure-handler [db [_ response]]
       (-> db

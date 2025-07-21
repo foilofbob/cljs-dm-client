@@ -17,3 +17,7 @@ run = "npx sass --watch resources/scss/main.scss:resources/public/css/main.css"
 [tasks.release]
 description = "package for release"
 run = "npm run release"
+
+[tasks.default]
+description = "Start up the app in dev mode"
+run = "mise run shadow ::: sass"

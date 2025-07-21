@@ -1,5 +1,6 @@
 // Light
 $shadow: #C6C6C6;
+$cream: #FFFDD0;
 $pale-sand: #FFECC6;
 $sand: #EDCDAF;
 $sable: #E0CDA9;
@@ -23,6 +24,21 @@ $sapphire: #0F52BA;
 $azure: #1170EE;
 $egyptian: #1134A6;
 $navy: #000080;
+$deep-blue: #092242;
+$teal: #093E42;
+$sage: #B2C495;
+$rose: #DCA1A1;
+$lilac-hint: #ece8f1;
+$lilac: #C8A2C8;
+$purple: #7d63a2;
+
+// Pastels
+$pastel-purple: #F0D9EF;
+$pastel-red: #FCDCE1;
+$pastel-yellow: #FFE6BB;
+$pastel-green: #E9ECCE;
+$pastel-teal: #CDE9DC;
+$pastel-blue: #C4DFE5;
 
 hr {
   margin: 5px 0 4px 0;
@@ -34,20 +50,26 @@ hr {
     margin: 12px 0;
     background-image: url("/assets/png/celtic-knot.png");
     background-size: contain;
-  }
 
-  &.top {
-    margin-bottom: 0;
-  }
+    &.top {
+      margin-bottom: 0;
+    }
 
-  &.bottom {
-    margin-top: 0;
+    &.bottom {
+      margin-top: 0;
+    }
   }
 }
 
 .logical-division {
   text-align: center;
   background-color: $sable;
+
+  &.no-bottom {
+    .bottom {
+      margin-bottom: 0;
+    }
+  }
 
   h3 {
     margin: 0;

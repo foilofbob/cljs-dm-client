@@ -17,8 +17,8 @@
  (fn [db [_ path]]
      (-> db :page-data path)))
 
-(defn logical-division [{:keys [text left right]}]
-      [:div.logical-division
+(defn logical-division [{:keys [text left right class]}]
+      [:div.logical-division (when class {:class class})
        [:hr.section-divider.top]
        [:div
         (when left [:div.left left])

@@ -105,8 +105,8 @@
              [:div
               [:button.action-button {:on-click #(dispatch [::events/post-game-day])}
                "Add Game Day"]]
-             (for [gd game-days] ^{:key (str "game-day-" (:id gd))}
-                  [game-day-card gd (filter #(= (:id gd) (:reference-id %)) notes)])]
+             (for [game-day game-days] ^{:key (str "game-day-" (:id game-day))}
+                  [game-day-card game-day (filter #(= (:id game-day) (:reference-id %)) notes)])]
             [:div.right-panel
              [:button.action-button {:on-click #(open-edit-modal {:campaign-id 1} "global")}
               "Add Global Note"]

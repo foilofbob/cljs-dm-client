@@ -14,10 +14,19 @@
 
 ;; Global since notes will be frequently used across many pages
 ;; TODO: worth scoping to a utils?
+;; TODO: Scope further versions by Reference / Category?
 (reg-sub
   :notes
-  (fn [db [_ note-type]]
+  (fn [db _]
     (some-> db :page-data :notes)))
+
+
+(reg-sub
+ :notes-for-ref
+ (fn [db [_ type id]]
+     (some->> db :page-data :notes
+              (filter #(and (= type (:reference-type %))
+                            (= id (:reference-id %)))))))
 
 (reg-sub
   :modal-open?

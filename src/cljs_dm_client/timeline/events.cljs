@@ -7,10 +7,15 @@
 (reg-event-fx
  :timeline-page-load
  (utils/page-loader
-  {:first-dispatch [::fetch-game-days]
-   :rules [{:when :seen? :events ::fetch-game-days-success :dispatch [:fetch-notes "game_day"]}
-           {:when :seen-all-of? :events [::fetch-game-days-success :fetch-notes-success] :dispatch [:page-ready]}
-           {:when :seen-any-of? :events [::fetch-game-days-failure :fetch-notes-failure] :halt? true}]}))
+  [::page-load-dispatcher]
+  [::fetch-game-days-success :fetch-notes-success]
+  [::fetch-game-days-failure :fetch-notes-failure]))
+
+(reg-event-fx
+ ::page-load-dispatcher
+ (fn [_ _]
+     {:dispatch-n [[::fetch-game-days]
+                   [:fetch-notes "game_day"]]}))
 
 (reg-event-fx
  ::fetch-game-days

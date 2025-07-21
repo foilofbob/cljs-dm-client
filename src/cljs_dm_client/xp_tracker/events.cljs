@@ -10,9 +10,9 @@
 (reg-event-fx
  :xp-tracker-page-load
  (utils/page-loader
-  {:first-dispatch [::page-load-dispatcher]
-   :rules [{:when :seen-all-of? :events [::fetch-experiences-success ::fetch-players-success :fetch-notes-success] :dispatch [:page-ready]}
-           {:when :seen-any-of? :events [::fetch-experiences-failure ::fetch-players-failure :fetch-notes-failure] :halt? true}]}))
+  [::page-load-dispatcher]
+  [::fetch-experiences-success ::fetch-players-success :fetch-notes-success]
+  [::fetch-experiences-failure ::fetch-players-failure :fetch-notes-failure]))
 
 (reg-event-fx
  ::page-load-dispatcher
