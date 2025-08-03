@@ -97,15 +97,20 @@
 
 (defn xp-tracker-content []
       [:<>
-       [:div.panel-content
+       [:div.panel-content.xp-tracker
         [summary]
         [logical-division {:left [:button {:class [:action-button :skinny]
                                            :on-click #(dispatch [::events/open-edit-xp-modal nil])}
                                   "Add XP"]
-                           :text "Planned XP"}]
+                           :text "Planned XP"
+                           :class :no-bottom}]
         [planned-xp]]
-       [:div.right-panel
-        [logical-division {:text "Finalized XP"}]
+       [:div.right-panel.xp-tracker
+        [logical-division {:text "Finalized XP"
+                           :left [:button {:class [:action-button :skinny]
+                                           :on-click #(dispatch [::events/clear-finalized])}
+                                  "Clear History"]
+                           :class :no-bottom}]
         [finalized-xp]]])
 
 (defn xp-tracker []

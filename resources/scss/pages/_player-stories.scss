@@ -1,0 +1,25 @@
+@use "../lib/components";
+
+.player-stories-page {
+  width: 100%;
+
+  .notes-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0;
+    border: none;
+
+    .note-title {
+      margin-right: 12px;
+      width: 100px;
+    }
+
+    .primary {
+      width: 58%;
+    }
+
+    .secondary {
+      width: 40%;
+    }
+  }
+}

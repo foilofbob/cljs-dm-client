@@ -4,6 +4,12 @@ This is a [re-frame](https://github.com/day8/re-frame) application intended to b
 
 The API code is located at [go-dm-api](https://github.com/foilofbob/go-dm-api)
 
+### Features / Enchancements to Add
+- Campaign Management
+- Campaign Setting management
+  - Is this really worth it???
+- User Authentication
+
 ## Getting Started
 
 

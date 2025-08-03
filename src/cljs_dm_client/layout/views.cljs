@@ -9,6 +9,8 @@
     :name    "Timeline / Events"}
    {:id      :party
     :name    "Party / Inventory"}
+   {:id      :player-stories
+    :name    "Player Stories"}
    {:id      :locations
     :name    "Locations"}
    {:id      :xp-tracker

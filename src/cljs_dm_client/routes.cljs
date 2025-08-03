@@ -11,11 +11,12 @@
 
 (def routes
   (atom
-    ["/" {""           :campaign-select
-          "locations"  :locations
-          "party"      :party
-          "timeline"   :timeline
-          "xp-tracker" :xp-tracker}]))
+    ["/" {""               :campaign-select
+          "locations"      :locations
+          "party"          :party
+          "player-stories" :player-stories
+          "timeline"       :timeline
+          "xp-tracker"     :xp-tracker}]))
 
 (defn parse
   [url]

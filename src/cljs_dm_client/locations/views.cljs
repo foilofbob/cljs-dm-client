@@ -2,7 +2,9 @@
   (:require
    [reagent.core :as r]
    [re-frame.core :refer [dispatch subscribe]]
-   [cljs-dm-client.components.components :refer [logical-division]]
+   [cljs-dm-client.components.components :refer [idx->accent-class
+                                                 toggle-container
+                                                 logical-division]]
    [cljs-dm-client.components.forms :refer [text-input-row
                                             textarea-input-row]]
    [cljs-dm-client.components.notes :refer [build-notes
@@ -87,34 +89,6 @@
                                    :container-class :notes-container
                                    :selected-obj    selected-location
                                    :obj-type        "LOCATION"}]))
-
-(def accent-colors
-  ["pastel-purple"
-   "pastel-yellow"
-   "pastel-teal"
-   "pastel-red"
-   "pastel-blue"
-   "pastel-green"])
-
-(defn idx->accent-class [idx]
-      (get accent-colors (mod idx (count accent-colors))))
-
-;; TODO: Refactor as component
-;; TODO: Edit function logic
-(defn toggle-container [{:keys [title desc header-class edit-fn]} content]
-      (let [toggle-atom (r/atom false)]
-           (fn [{:keys [title desc edit-fn]} content]
-               [:div.toggle-container
-                [:div.toggle-header {:class header-class}
-                 [:button.action-button.toggle {:type     :button
-                                                :on-click #(do (swap! toggle-atom not) (print (str @toggle-atom)))}
-                  (if @toggle-atom "-" "+")]
-                 [:div.toggle-title title]
-                 [:div.toggle-description desc]
-                 (when edit-fn
-                       [:button.edit-button {:type     :button
-                                             :on-click edit-fn}])]
-                (when @toggle-atom content)])))
 
 (defn poi-details [poi]
       (let [notes @(subscribe [:notes-for-ref "POINT_OF_INTEREST" (:id poi)])]

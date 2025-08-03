@@ -1,5 +1,6 @@
 (ns cljs-dm-client.components.components
   (:require
+   [reagent.core :as r]
    [re-frame.core :refer [reg-event-db reg-sub]]))
 
 (reg-event-db
@@ -25,3 +26,29 @@
         [:h3 text]
         (when right [:div.right right])]
        [:hr.section-divider.bottom]])
+
+(def accent-colors
+  ["pastel-purple"
+   "pastel-yellow"
+   "pastel-teal"
+   "pastel-red"
+   "pastel-blue"
+   "pastel-green"])
+
+(defn idx->accent-class [idx]
+      (get accent-colors (mod idx (count accent-colors))))
+
+(defn toggle-container [{:keys [title desc header-class edit-fn]} content]
+      (let [toggle-atom (r/atom false)]
+           (fn [{:keys [title desc edit-fn]} content]
+               [:div.toggle-container
+                [:div.toggle-header {:class header-class}
+                 [:button.action-button.toggle {:type     :button
+                                                :on-click #(do (swap! toggle-atom not) (print (str @toggle-atom)))}
+                  (if @toggle-atom "-" "+")]
+                 [:div.toggle-title title]
+                 [:div.toggle-description desc]
+                 (when edit-fn
+                       [:button.edit-button {:type     :button
+                                             :on-click edit-fn}])]
+                (when @toggle-atom content)])))

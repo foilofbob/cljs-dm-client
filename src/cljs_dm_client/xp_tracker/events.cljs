@@ -143,3 +143,21 @@
               (assoc :action-status :success)
               (update-in [:page-data :experiences] #(remove (fn [xp] (= xp-id (:id xp))) %)))
       :fx [[:dispatch [:toggle-modal :xp-modal]]]}))
+
+(reg-event-fx
+ ::clear-finalized
+ (fn [{:keys [db]} [_]]
+     {:db         (assoc db :action-status :working)
+      :http-xhrio {:method          :delete
+                   :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/experience/clear-finalized")
+                   :format          (ajax/json-request-format)
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success      [::clear-finalized-success]
+                   :on-failure      [:action-failure]}}))
+
+(reg-event-db
+ ::clear-finalized-success
+ (fn [db [_ response]]
+     (-> db
+         (assoc :action-status :success)
+         (update-in [:page-data :experiences] #(remove (fn [xp] (-> xp :finalized true?)) %)))))
