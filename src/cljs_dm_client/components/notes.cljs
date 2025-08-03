@@ -15,125 +15,125 @@
 (def NOTE_MODAL_KEY :note-modal)
 
 (defn note-modal []
-      (let [note @(subscribe [:edit-object :edit-note])]
-           [:> Modal {:is-open @(subscribe [:modal-open? NOTE_MODAL_KEY])
-                      :toggle  #(dispatch [:toggle-modal NOTE_MODAL_KEY])
-                      :size    :xl}
-            [:> ModalHeader
-             (if (:id note)
-               "Update Note"
-               "Add Note")]
-            [:> ModalBody {:class :modal-body}
-             [:input {:value      (:title note)
-                      :max-length 100
-                      :on-change  #(dispatch [:update-edit-field :edit-note :title (-> % .-target .-value)])}]
-             [:textarea {:value      (:content note)
-                         :max-length 10000
-                         :rows       20
-                         :on-change  #(dispatch [:update-edit-field :edit-note :content (-> % .-target .-value)])}]]
-            [:> ModalFooter {:class :modal-footer-buttons}
-             [:button.action-link {:on-click #(dispatch [:toggle-modal NOTE_MODAL_KEY])}
-              "Cancel"]
-             [:button.action-link {:on-click #(dispatch [::delete-note (:id note)])}
-              "Delete"]
-             [:button.action-button {:on-click #(dispatch [::edit-note note])}
-              "Save"]]]))
+  (let [note @(subscribe [:edit-object :edit-note])]
+    [:> Modal {:is-open @(subscribe [:modal-open? NOTE_MODAL_KEY])
+               :toggle  #(dispatch [:toggle-modal NOTE_MODAL_KEY])
+               :size    :xl}
+     [:> ModalHeader
+      (if (:id note)
+        "Update Note"
+        "Add Note")]
+     [:> ModalBody {:class :modal-body}
+      [:input {:value      (:title note)
+               :max-length 100
+               :on-change  #(dispatch [:update-edit-field :edit-note :title (-> % .-target .-value)])}]
+      [:textarea {:value      (:content note)
+                  :max-length 10000
+                  :rows       20
+                  :on-change  #(dispatch [:update-edit-field :edit-note :content (-> % .-target .-value)])}]]
+     [:> ModalFooter {:class :modal-footer-buttons}
+      [:button.action-link {:on-click #(dispatch [:toggle-modal NOTE_MODAL_KEY])}
+       "Cancel"]
+      [:button.action-link {:on-click #(dispatch [::delete-note (:id note)])}
+       "Delete"]
+      [:button.action-button {:on-click #(dispatch [::edit-note note])}
+       "Save"]]]))
 
 (defn note-for-campaign-object [camp-obj obj-type category]
-      {:category       {:string category
-                        :valid  true}
-       :campaign-id    (:campaign-id camp-obj)
-       :reference-type obj-type
-       :reference-id   (:id camp-obj)})
+  {:category       {:string category
+                    :valid  true}
+   :campaign-id    (:campaign-id camp-obj)
+   :reference-type obj-type
+   :reference-id   (:id camp-obj)})
 
 (defn open-edit-note-modal [camp-obj obj-type category]
-      (dispatch [:open-edit-note-modal camp-obj obj-type category]))
+  (dispatch [:open-edit-note-modal camp-obj obj-type category]))
 
 (reg-event-fx
  :open-edit-note-modal
  (fn [{:keys [db]} [_ camp-obj obj-type category]]
-     {:fx [[:dispatch [:set-edit-object :edit-note (note-for-campaign-object camp-obj obj-type category)]]
-           [:dispatch [:toggle-modal :note-modal]]]}))
+   {:fx [[:dispatch [:set-edit-object :edit-note (note-for-campaign-object camp-obj obj-type category)]]
+         [:dispatch [:toggle-modal :note-modal]]]}))
 
 (defn build-notes
-      ([notes]
-       (build-notes notes :notes-entry))
-      ([notes class]
-       (for [note notes]
-            [:div {:key   (str "note-" (:id note))
-                   :class class}
-             (when (-> note :title seq)
-                   [:div.note-title
-                    [:strong (:title note)]])
-             [markdown-div (:content note)]
-             [:div.edit-container
-              [:button.edit-button {:type     :button
-                                    :on-click #(do (dispatch [:set-edit-object :edit-note note])
-                                                   (dispatch [:toggle-modal :note-modal]))}]]])))
+  ([notes]
+   (build-notes notes :notes-entry))
+  ([notes class]
+   (for [note notes]
+     [:div {:key   (str "note-" (:id note))
+            :class class}
+      (when (-> note :title seq)
+        [:div.note-title
+         [:strong (:title note)]])
+      [markdown-div (:content note)]
+      [:div.edit-container
+       [:button.edit-button {:type     :button
+                             :on-click #(do (dispatch [:set-edit-object :edit-note note])
+                                            (dispatch [:toggle-modal :note-modal]))}]]])))
 
 (defn standard-note-columns
-      "This will build two columns for managing notes, the first with no category and the second for category 'notes'"
-      [{:keys [container-class notes selected-obj obj-type]}]
-      [:div.common-panel {:class container-class}
-       [:div.primary
-        (build-notes (filter #(-> % :category :string seq not) notes))
-        [:button.action-link {:on-click #(open-edit-note-modal selected-obj obj-type "")}
-         "Add Description"]]
-       [:div.secondary
-        (build-notes (filter #(-> % :category :string (= "note")) notes))
-        [:button.action-link {:on-click #(open-edit-note-modal selected-obj obj-type "note")}
-         "Add Note"]]])
+  "This will build two columns for managing notes, the first with no category and the second for category 'notes'"
+  [{:keys [container-class notes selected-obj obj-type]}]
+  [:div.common-panel {:class container-class}
+   [:div.primary
+    (build-notes (filter #(-> % :category :string seq not) notes))
+    [:button.action-link {:on-click #(open-edit-note-modal selected-obj obj-type "")}
+     "Add Description"]]
+   [:div.secondary
+    (build-notes (filter #(-> % :category :string (= "note")) notes))
+    [:button.action-link {:on-click #(open-edit-note-modal selected-obj obj-type "note")}
+     "Add Note"]]])
 
 (reg-event-fx
  ::edit-note
  (fn [{:keys [db]} [_ note]]
-     (let [new-note? (nil? (:id note))]
-          {:db         (assoc db :action-status :working)
-           :http-xhrio {:method          (if new-note? :post :put)
-                        :uri             (cond-> (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/note")
-                                                 (not new-note?)
-                                                 (str "/" (:id note)))
-                        :params          (rename-keys
-                                          (cske/transform-keys csk/->PascalCase note)
-                                          {:Id :ID :CampaignId :CampaignID :ReferenceId :ReferenceID})
-                        :format          (ajax/json-request-format)
-                        :response-format (ajax/json-response-format {:keywords? true})
-                        :on-success      [::edit-note-success new-note?]
-                        :on-failure      [:action-failure]}})))
+   (let [new-note? (nil? (:id note))]
+     {:db         (assoc db :action-status :working)
+      :http-xhrio {:method          (if new-note? :post :put)
+                   :uri             (cond-> (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/note")
+                                      (not new-note?)
+                                      (str "/" (:id note)))
+                   :params          (rename-keys
+                                     (cske/transform-keys csk/->PascalCase note)
+                                     {:Id :ID :CampaignId :CampaignID :ReferenceId :ReferenceID})
+                   :format          (ajax/json-request-format)
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success      [::edit-note-success new-note?]
+                   :on-failure      [:action-failure]}})))
 
 (reg-event-fx
  ::edit-note-success
  (fn [{:keys [db]} [_ new-note? response]]
-     (let [updated-note (utils/tranform-response response)]
-          {:db (cond-> (assoc db :action-status :success)
+   (let [updated-note (utils/tranform-response response)]
+     {:db (cond-> (assoc db :action-status :success)
 
-                       new-note?
-                       (update-in [:page-data :notes] concat [updated-note])
+            new-note?
+            (update-in [:page-data :notes] concat [updated-note])
 
-                       (not new-note?)
-                       (update-in [:page-data :notes]
-                                  #(map (fn [note]
-                                            (if (= (:id note) (:id updated-note))
-                                              updated-note
-                                              note))
-                                        %)))
-           :fx [[:dispatch [:toggle-modal NOTE_MODAL_KEY]]]})))
+            (not new-note?)
+            (update-in [:page-data :notes]
+                       #(map (fn [note]
+                               (if (= (:id note) (:id updated-note))
+                                 updated-note
+                                 note))
+                             %)))
+      :fx [[:dispatch [:toggle-modal NOTE_MODAL_KEY]]]})))
 
 (reg-event-fx
  ::delete-note
  (fn [{:keys [db]} [_ note-id]]
-     {:db         (assoc db :action-status :working)
-      :http-xhrio {:method          :delete
-                   :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/note/" note-id)
-                   :format          (ajax/json-request-format)
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success      [::delete-note-success note-id]
-                   :on-failure      [:action-failure]}}))
+   {:db         (assoc db :action-status :working)
+    :http-xhrio {:method          :delete
+                 :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/note/" note-id)
+                 :format          (ajax/json-request-format)
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [::delete-note-success note-id]
+                 :on-failure      [:action-failure]}}))
 
 (reg-event-fx
  ::delete-note-success
  (fn [{:keys [db]} [_ note-id response]]
-     {:db (-> db
-              (assoc :action-status :success)
-              (update-in [:page-data :notes] #(remove (fn [note] (= note-id (:id note))) %)))
-      :fx [[:dispatch [:toggle-modal NOTE_MODAL_KEY]]]}))
+   {:db (-> db
+            (assoc :action-status :success)
+            (update-in [:page-data :notes] #(remove (fn [note] (= note-id (:id note))) %)))
+    :fx [[:dispatch [:toggle-modal NOTE_MODAL_KEY]]]}))

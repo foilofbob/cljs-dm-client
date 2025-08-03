@@ -17,22 +17,22 @@
 (reg-event-fx
  ::page-load-dispatcher
  (fn [_ _]
-     {:dispatch-n [[::fetch-players]
-                   [:fetch-notes "player_story"]]}))
+   {:dispatch-n [[::fetch-players]
+                 [:fetch-notes "player_story"]]}))
 
 (reg-event-fx
  ::fetch-players
  (fn [{:keys [db]} _]
-     {:http-xhrio {:method          :get
-                   :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/players")
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success      [::fetch-players-success]
-                   :on-failure      [::fetch-players-failure]}}))
+   {:http-xhrio {:method          :get
+                 :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/players")
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [::fetch-players-success]
+                 :on-failure      [::fetch-players-failure]}}))
 
 (reg-event-db
  ::fetch-players-success
  (fn [db [_ response]]
-     (utils/standard-success-handler db :players response)))
+   (utils/standard-success-handler db :players response)))
 
 (reg-event-fx
  ::fetch-players-failure

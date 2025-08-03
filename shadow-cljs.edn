@@ -15,7 +15,8 @@
   [camel-snake-kebab "0.4.3"]
   [cljsjs/react-tooltip "3.3.0-0"]
   [com.cognitect/transit-cljs "0.8.280"]
-  [org.clojure/clojurescript "1.12.38"]]
+  [org.clojure/clojurescript "1.12.38"]
+  [clj-kondo "2025.07.28"]]
 
  :dev-http
  {8280 "resources/public"

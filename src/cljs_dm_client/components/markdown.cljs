@@ -5,14 +5,14 @@
    ["markdown-it-task-lists" :as mdts]))
 
 (defonce markdown
-         (-> (md)
-             (.use mda)
-             (.use mdts #js {:enabled true})))
+  (-> (md)
+      (.use mda)
+      (.use mdts #js {:enabled true})))
 
 (defn render-markdown [content]
-      (.render markdown content))
+  (.render markdown content))
 
 (defn markdown-div [content]
-      [:div.md-content
-       {:dangerouslySetInnerHTML
-        {:__html (render-markdown content)}}])
+  [:div.md-content
+   {:dangerouslySetInnerHTML
+    {:__html (render-markdown content)}}])

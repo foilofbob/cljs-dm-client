@@ -11,12 +11,12 @@
 
 (def routes
   (atom
-    ["/" {""               :campaign-select
-          "locations"      :locations
-          "party"          :party
-          "player-stories" :player-stories
-          "timeline"       :timeline
-          "xp-tracker"     :xp-tracker}]))
+   ["/" {""               :campaign-select
+         "locations"      :locations
+         "party"          :party
+         "player-stories" :player-stories
+         "timeline"       :timeline
+         "xp-tracker"     :xp-tracker}]))
 
 (defn parse
   [url]
@@ -43,7 +43,7 @@
   (pushy/start! history))
 
 (re-frame/reg-fx
-  :navigate
-  (fn [handler]
-      (utils/update-in-session {:current-page handler})
-      (navigate! handler)))
+ :navigate
+ (fn [handler]
+   (utils/update-in-session {:current-page handler})
+   (navigate! handler)))

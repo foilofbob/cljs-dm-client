@@ -12,11 +12,11 @@
    {:container [:div.select-campaign
                 [logical-division {:text "Campaigns"}]]
     :content   (let [campaigns @(subscribe [::subs/campaigns])]
-                    [:div.campaign-list
-                     (if (seq campaigns)
-                       (for [campaign campaigns]
-                            [nav-button {:key     (:id campaign)
-                                         :content (:name campaign)
-                                         :handler [::events/select-campaign campaign]
-                                         :target  :timeline}])
-                       [:p "No campaigns!"])])}])
+                 [:div.campaign-list
+                  (if (seq campaigns)
+                    (for [campaign campaigns]
+                      [nav-button {:key     (:id campaign)
+                                   :content (:name campaign)
+                                   :handler [::events/select-campaign campaign]
+                                   :target  :timeline}])
+                    [:p "No campaigns!"])])}])

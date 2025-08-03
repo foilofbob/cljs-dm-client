@@ -37,12 +37,12 @@
 (defn ^:dev/after-load mount-root []
   (re-frame/clear-subscription-cache!)
   (let [root-el (.getElementById js/document "app")]
-       (rdom/unmount-component-at-node root-el)
-       (rdom/render [views/main-panel] root-el)
-       (re-frame/dispatch [::events/resume-session-if-present])))
+    (rdom/unmount-component-at-node root-el)
+    (rdom/render [views/main-panel] root-el)
+    (re-frame/dispatch [::events/resume-session-if-present])))
 
 (defn init []
-      (routes/start!)
-      (dev-setup)
-      (re-frame/dispatch-sync [::events/initialize-db])
-      (mount-root))
+  (routes/start!)
+  (dev-setup)
+  (re-frame/dispatch-sync [::events/initialize-db])
+  (mount-root))

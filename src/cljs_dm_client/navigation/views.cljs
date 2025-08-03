@@ -9,6 +9,6 @@
                     (when active? :active)]
             :key key
             :on-click #(do (if handler
-                         (dispatch (conj handler [::events/navigate target]))
-                         (dispatch [::events/navigate target])))}
+                             (dispatch (conj handler [::events/navigate target]))
+                             (dispatch [::events/navigate target])))}
    content])

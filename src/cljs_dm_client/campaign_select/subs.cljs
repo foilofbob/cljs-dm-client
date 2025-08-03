@@ -3,6 +3,6 @@
    [re-frame.core :refer [reg-sub]]))
 
 (reg-sub
-  ::campaigns
-  (fn [db _]
-    (-> db :page-data :campaigns)))
+ ::campaigns
+ (fn [db _]
+   (-> db :page-data :campaigns)))

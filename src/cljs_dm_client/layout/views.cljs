@@ -35,14 +35,14 @@
      [:div.header-align-right]]))
 
 (defn left-nav []
-      (let [current-panel @(subscribe [:active-panel-key])]
-           (into [:div.left-nav]
-                 (for [{id :id name :name handler :handler} page-mappings]
-                      [nav-button {:key     id
-                                   :active? (= current-panel id)
-                                   :content name
-                                   :handler handler
-                                   :target  id}]))))
+  (let [current-panel @(subscribe [:active-panel-key])]
+    (into [:div.left-nav]
+          (for [{id :id name :name handler :handler} page-mappings]
+            [nav-button {:key     id
+                         :active? (= current-panel id)
+                         :content name
+                         :handler handler
+                         :target  id}]))))
 
 (defn campaign-panel [& panel-content]
   [:div.campaign-manager {:key :campaign-panel}
@@ -60,8 +60,8 @@
 
 (defn loading-wrapper [{:keys [loading-handler container content right-panel-content]}]
   (let [loading-status @(subscribe [:loading-status])]
-       (into container
-             [(case loading-status
-                    :success content
-                    :failure page-error
-                    loading-spinner)])))
+    (into container
+          [(case loading-status
+             :success content
+             :failure page-error
+             loading-spinner)])))

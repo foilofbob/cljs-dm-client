@@ -21,3 +21,15 @@ run = "npm run release"
 [tasks.default]
 description = "Start up the app in dev mode"
 run = "mise run shadow ::: sass"
+
+[tasks.clj-kondo]
+description = "Invoke the clj-kondo linter"
+run = "shadow-cljs run clj-kondo.main/main --lint src"
+
+[tasks.cljfmt-check]
+description = "On a windows machine I run cljfmt from a bin"
+run = "..\\cljfmt.exe check"
+
+[tasks.cljfmt-fix]
+description = "On a windows machine I run cljfmt from a bin"
+run = "..\\cljfmt.exe fix"

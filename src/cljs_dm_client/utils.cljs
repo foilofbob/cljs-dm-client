@@ -12,38 +12,38 @@
 ;             :async-flow async-flow})))
 
 (defn page-loader [dispatcher-fn page-ready-events page-error-events]
-      (fn [{:keys [db]} _]
-          (if (-> db :selected-campaign nil?)
-            {:navigate :campaign-select}
-            {:db         (assoc db :loading-status :loading)
-             :async-flow {:first-dispatch dispatcher-fn
-                          :rules [{:when :seen-all-of? :events page-ready-events :dispatch [:page-ready]}
-                                  {:when :seen-any-of? :events page-error-events :halt? true}]}})))
+  (fn [{:keys [db]} _]
+    (if (-> db :selected-campaign nil?)
+      {:navigate :campaign-select}
+      {:db         (assoc db :loading-status :loading)
+       :async-flow {:first-dispatch dispatcher-fn
+                    :rules [{:when :seen-all-of? :events page-ready-events :dispatch [:page-ready]}
+                            {:when :seen-any-of? :events page-error-events :halt? true}]}})))
 
 (defn write-to-session
-      "Expecting to write a map containing active-panel and selected-campaign"
-      [session-data]
-      (try
-        (js/sessionStorage.setItem "campaign-manager-session" (js/JSON.stringify (clj->js session-data)))
-        (catch :default e
-          (print "Exception writing session data: " e))))
+  "Expecting to write a map containing active-panel and selected-campaign"
+  [session-data]
+  (try
+    (js/sessionStorage.setItem "campaign-manager-session" (js/JSON.stringify (clj->js session-data)))
+    (catch :default e
+      (print "Exception writing session data: " e))))
 
 (defn read-from-session []
-      (try
-        (or (some-> (.getItem js/sessionStorage "campaign-manager-session")
-                    (js/JSON.parse)
-                    (js->clj :keywordize-keys true))
-            {})
-        (catch :default e
-          (print "Exception reading from session data: " e)
-          {})))
+  (try
+    (or (some-> (.getItem js/sessionStorage "campaign-manager-session")
+                (js/JSON.parse)
+                (js->clj :keywordize-keys true))
+        {})
+    (catch :default e
+      (print "Exception reading from session data: " e)
+      {})))
 
 (defn update-in-session [update-map]
-      (let [current-session (read-from-session)
-            updated-session (if (seq current-session)
-                              (merge current-session update-map)
-                              update-map)]
-           (write-to-session updated-session)))
+  (let [current-session (read-from-session)
+        updated-session (if (seq current-session)
+                          (merge current-session update-map)
+                          update-map)]
+    (write-to-session updated-session)))
 
 (defn tranform-response
   "Takes a response body and updates keys to be kebab-case-keyword"
@@ -51,19 +51,19 @@
   (cske/transform-keys csk/->kebab-case-keyword response))
 
 (defn standard-success-handler
-      "This will replace existing data"
-      [db path response]
-      (assoc-in db [:page-data path] (tranform-response response)))
+  "This will replace existing data"
+  [db path response]
+  (assoc-in db [:page-data path] (tranform-response response)))
 
 (defn append-success-handler
-      "This will add onto existing data, expecting to joining lists"
-      [db path response]
-      (update-in db [:page-data path] #(concat (or % []) (tranform-response response))))
+  "This will add onto existing data, expecting to joining lists"
+  [db path response]
+  (update-in db [:page-data path] #(concat (or % []) (tranform-response response))))
 
 (defn standard-failure-handler [db [_ response]]
-      (-> db
-          (assoc :loading-status :failure)
-          (assoc :page-error response)))
+  (-> db
+      (assoc :loading-status :failure)
+      (assoc :page-error response)))
 
 (def character-levels
   [{:lvl 1 :xp 0 :proficiency 2}
@@ -88,17 +88,17 @@
    {:lvl 20 :xp 355000 :proficiency 6}])
 
 (defn level-by-xp [xp]
-      (->> character-levels
-           (filter #(<= (:xp %) xp))
-           last))
+  (->> character-levels
+       (filter #(<= (:xp %) xp))
+       last))
 
 (defn next-level-by-xp [xp]
-      (->> character-levels
-           (filter #(> (:xp %) xp))
-           first))
+  (->> character-levels
+       (filter #(> (:xp %) xp))
+       first))
 
 (defn percentage [numerator denominator]
-      (-> numerator (/ denominator) (* 100) Math/floor))
+  (-> numerator (/ denominator) (* 100) Math/floor))
 
 ;; TODO: Not sure if I'll end up needing this
 (def cr-xp
