@@ -63,3 +63,13 @@
                      :on-change  #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-value)])}]
            (for [option options]
              [:option {:value (:value option)} (:label option)]))]))
+
+(defn build-options
+      "This will take a list of objects and return a list of maps with id->value and name->label"
+      [objects]
+      (concat `({:value "" :label ""})
+              (->> objects
+                   (sort-by :name)
+                   (map (fn [obj]
+                            {:value (:id obj)
+                             :label (:name obj)})))))

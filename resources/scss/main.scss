@@ -12,6 +12,21 @@
 @use "pages/xp-tracker";
 @use "layout";
 
+@font-face {
+  font-family: "EagleLake";
+  src: url("/assets/fonts/EagleLake-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "MedievalSharp";
+  src: url("/assets/fonts/MedievalSharp-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Metamorphous";
+  src: url("/assets/fonts/Metamorphous-Regular.ttf") format("truetype");
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -25,7 +40,7 @@ html, body {
     background-image: url("/assets/png/tavern-medieval.png");
     background-size: cover;
     position: absolute;
-    font-family: "Cambria Math";
+  font-family: "Cambria Math", sans-serif;
 }
 
 * {

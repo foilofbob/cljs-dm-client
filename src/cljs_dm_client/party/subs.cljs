@@ -1,5 +1,6 @@
 (ns cljs-dm-client.party.subs
   (:require
+   [cljs-dm-client.components.forms :refer [build-options]]
    [re-frame.core :refer [reg-sub]]))
 
 (reg-sub
@@ -35,14 +36,6 @@
  :<- [::items]
  (fn [items]
    (filter #(:is-container %) items)))
-
-(defn- build-options [objects]
-  (concat `({:value "" :label ""})
-          (->> objects
-               (sort-by :name)
-               (map (fn [obj]
-                      {:value (:id obj)
-                       :label (:name obj)})))))
 
 (reg-sub
  ::players-as-select-options

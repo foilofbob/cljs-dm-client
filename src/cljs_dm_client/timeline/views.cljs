@@ -8,7 +8,36 @@
                                         loading-wrapper]]
    [cljs-dm-client.timeline.events :as events]
    [cljs-dm-client.timeline.subs :as subs]
+   ["reactstrap/lib/Modal" :default Modal]
+   ["reactstrap/lib/ModalBody" :default ModalBody]
+   ["reactstrap/lib/ModalFooter" :default ModalFooter]
+   ["reactstrap/lib/ModalHeader" :default ModalHeader]
    ["reactstrap/lib/UncontrolledTooltip" :default UncontrolledTooltip]))
+
+(def GAME_DAY_MODAL_KEY :game-day-modal-key)
+
+;; TODO: Currently just meant for adding initial day
+(defn game-day-modal []
+      (let [game-day @(subscribe [:edit-object :edit-game-day])]
+           [:> Modal {:is-open @(subscribe [:modal-open? GAME_DAY_MODAL_KEY])
+                      :toggle  #(dispatch [:toggle-modal GAME_DAY_MODAL_KEY])
+                      :size    :xl}
+            [:> ModalHeader
+             (if (:id game-day)
+               "Update Game Day"
+               "Starting Game Day")]
+            [:> ModalBody {:class :modal-body}
+
+             ;; 
+
+             ]
+            [:> ModalFooter {:class :modal-footer-buttons}
+             [:button.action-link {:on-click #(dispatch [:toggle-modal GAME_DAY_MODAL_KEY])}
+              "Cancel"]
+             #_[:button.action-link {:on-click #(dispatch [::events/delete-player (:id game-day)])}
+              "Delete"]
+             [:button.action-button {:on-click #(dispatch [::events/edit-player game-day])}
+              "Save"]]]))
 
 (defn open-edit-modal [game-day category]
   (dispatch [:open-edit-note-modal game-day "GAME_DAY" category]))
@@ -26,6 +55,7 @@
       (mod 7)
       (+ 1)))
 
+;; TODO: the offset here is fixed, needs to be dynamic. Where to track?
 (defn day-of-week [week-days in-game-day]
   (let [day-num (day-of-week-int in-game-day 3)]
     (->> week-days
