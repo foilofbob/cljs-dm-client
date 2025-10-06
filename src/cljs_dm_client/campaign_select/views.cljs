@@ -19,7 +19,8 @@
 
 (defn campaign-modal []
       (let [campaign @(subscribe [:edit-object :edit-campaign])
-            campaign-setting-options @(subscribe [::subs/campaign-settings-as-select-options])]
+            campaign-setting-options @(subscribe [::subs/campaign-settings-as-select-options])
+            base {:obj campaign :obj-type "campaign"}]
            [:> Modal {:is-open @(subscribe [:modal-open? CAMPAIGN_MODAL_KEY])
                       :toggle  #(dispatch [:toggle-modal CAMPAIGN_MODAL_KEY])
                       :size    :md}
@@ -30,7 +31,8 @@
             [:> ModalBody {:class :modal-body}
              [text-input-row "Campaign Name" 100 campaign "campaign" :name]
              ;; TODO: Weird number overflow???
-             [number-input-row "Current Player XP" 0 9999999 campaign "campaign" :current-player-xp]
+             [number-input-row (merge base {:label "Current Player XP"
+                                            :obj-key :current-player-xp})]
              [select-input-row "Campaign Setting" campaign "campaign" :campaign-setting-id campaign-setting-options]]
             [:> ModalFooter {:class :modal-footer-buttons}
              [:button.action-link {:on-click #(dispatch [:toggle-modal CAMPAIGN_MODAL_KEY])}

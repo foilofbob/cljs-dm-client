@@ -1,6 +1,6 @@
 (ns cljs-dm-client.party.subs
   (:require
-   [cljs-dm-client.components.forms :refer [build-options]]
+   [cljs-dm-client.components.forms :refer [build-options-from-list]]
    [re-frame.core :refer [reg-sub]]))
 
 (reg-sub
@@ -40,9 +40,9 @@
 (reg-sub
  ::players-as-select-options
  :<- [::players]
- build-options)
+ build-options-from-list)
 
 (reg-sub
  ::containers-as-select-options
  :<- [::items-as-containers]
- build-options)
+ build-options-from-list)

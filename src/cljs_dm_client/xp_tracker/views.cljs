@@ -19,7 +19,8 @@
 (def XP_MODAL_KEY :xp-modal)
 
 (defn xp-modal []
-  (let [xp @(subscribe [:edit-object :edit-xp])]
+  (let [xp @(subscribe [:edit-object :edit-xp])
+        base {:obj xp :obj-type "xp"}]
     [:> Modal {:is-open @(subscribe [:modal-open? XP_MODAL_KEY])
                :toggle  #(dispatch [:toggle-modal XP_MODAL_KEY])
                :size    :md}
@@ -32,7 +33,8 @@
       [:div.input-row
        [:button.action-button {:on-click #(dispatch [::events/calculate-xp])}
         "Calculate XP"]]
-      [number-input-row "XP" 0 999999 xp "xp" :xp]
+      [number-input-row (merge base {:label "XP"
+                                     :obj-key :xp})]
       [checkbox-input-row "Finalized?" xp "xp" :finalized]]
      [:> ModalFooter {:class :modal-footer-buttons}
       [:button.action-link {:on-click #(dispatch [:toggle-modal XP_MODAL_KEY])}

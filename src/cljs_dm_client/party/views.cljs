@@ -59,7 +59,8 @@
        "Save"]]]))
 
 (defn player-modal []
-  (let [player @(subscribe [:edit-object :edit-player])]
+  (let [player @(subscribe [:edit-object :edit-player])
+        base {:obj player :obj-type "player"}]
     [:> Modal {:is-open @(subscribe [:modal-open? PLAYER_MODAL_KEY])
                :toggle  #(dispatch [:toggle-modal PLAYER_MODAL_KEY])
                :size    :xl}
@@ -71,11 +72,19 @@
       [text-input-row "Name" 100 player "player" :name]
       [text-input-row "Race" 100 player "player" :race]
       [text-input-row "Class" 100 player "player" :class]
-      [number-input-row "Armor Class" 0 30 player "player" :armor-class]
-      [number-input-row "Hit Points" 0 500 player "player" :hit-points]
-      [number-input-row "Passive Perception" 0 30 player "player" :passive-perception]
+      [number-input-row (merge base {:label "Armor Class"
+                                     :max 30
+                                     :obj-key :armor-class})]
+      [number-input-row (merge base {:label "Hit Points"
+                                     :max 500
+                                     :obj-key :hit-points})]
+      [number-input-row (merge base {:label "Passive Perception"
+                                     :max 30
+                                     :obj-key :passive-perception})]
       [text-input-row "Languages" 100 player "player" :languages]
-      [number-input-row "Movement" 0 200 player "player" :movement]]
+      [number-input-row (merge base {:label "Movement"
+                                     :max 200
+                                     :obj-key :movement})]]
      [:> ModalFooter {:class :modal-footer-buttons}
       [:button.action-link {:on-click #(dispatch [:toggle-modal PLAYER_MODAL_KEY])}
        "Cancel"]

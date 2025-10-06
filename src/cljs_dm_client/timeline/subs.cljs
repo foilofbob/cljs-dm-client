@@ -6,3 +6,9 @@
  ::game-days
  (fn [db]
    (->> db :page-data :game-days (sort-by :in-game-day) reverse)))
+
+(reg-sub
+ ::campaign-setting
+ (fn [db]
+     (or (:campaign-setting db)
+         [])))

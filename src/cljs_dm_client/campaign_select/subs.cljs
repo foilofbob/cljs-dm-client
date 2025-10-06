@@ -1,6 +1,6 @@
 (ns cljs-dm-client.campaign-select.subs
   (:require
-   [cljs-dm-client.components.forms :refer [build-options]]
+   [cljs-dm-client.components.forms :refer [build-options-from-list]]
    [re-frame.core :refer [reg-sub]]))
 
 (reg-sub
@@ -17,4 +17,4 @@
 (reg-sub
  ::campaign-settings-as-select-options
  :<- [::campaign-settings]
- build-options)
+ build-options-from-list)
