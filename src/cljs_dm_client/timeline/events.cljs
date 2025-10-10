@@ -51,13 +51,16 @@
                  :on-success      [::post-game-day-success]
                  :on-failure      [:action-failure]}}))
 
+(defn post-game-day-success [db response]
+      (let [new-game-day (utils/tranform-response response)]
+           {:db (-> db
+                    (assoc :action-status :success)
+                    (update-in [:page-data :game-days] #(conj % new-game-day)))}))
+
 (reg-event-fx
  ::post-game-day-success
  (fn [{:keys [db]} [_ response]]
-   (let [new-game-day (utils/tranform-response response)]
-     {:db (-> db
-              (assoc :action-status :success)
-              (update-in [:page-data :game-days] #(conj % new-game-day)))})))
+     (post-game-day-success db response)))
 
 ;; TODO: Consolidate defs
 (def GAME_DAY_MODAL_KEY :game-day-modal-key)
@@ -104,5 +107,11 @@
                                                         cycles)}
                         :format          (ajax/json-request-format)
                         :response-format (ajax/json-response-format {:keywords? true})
-                        :on-success      [::post-game-day-success]
+                        :on-success      [::initialize-game-day-success] ;; TODO: Dismiss modal
                         :on-failure      [:action-failure]}})))
+
+(reg-event-fx
+ ::initialize-game-day-success
+ (fn [{:keys [db]} [_ response]]
+     (merge (post-game-day-success db response)
+            {:fx [[:dispatch [:toggle-modal GAME_DAY_MODAL_KEY]]]})))
