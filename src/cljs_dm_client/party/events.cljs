@@ -141,8 +141,16 @@
                           :armor-class 0
                           :hit-points 0
                           :passive-perception 0
+                          :strength 10
+                          :dexterity 10
+                          :constitution 10
+                          :intelligence 10
+                          :wisdom 10
+                          :charisma 10
+                          :movement 30
                           :languages ""
-                          :movement 30})]
+                          :proficiencies ""
+                          :saves ""})]
      {:fx [[:dispatch [:set-edit-object :edit-player edit-player]]
            [:dispatch [:toggle-modal :player-modal]]]})))
 

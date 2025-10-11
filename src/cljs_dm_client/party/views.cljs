@@ -72,6 +72,7 @@
       [text-input-row "Name" 100 player "player" :name]
       [text-input-row "Race" 100 player "player" :race]
       [text-input-row "Class" 100 player "player" :class]
+
       [number-input-row (merge base {:label "Armor Class"
                                      :max 30
                                      :obj-key :armor-class})]
@@ -81,10 +82,31 @@
       [number-input-row (merge base {:label "Passive Perception"
                                      :max 30
                                      :obj-key :passive-perception})]
-      [text-input-row "Languages" 100 player "player" :languages]
+      [number-input-row (merge base {:label "Strength"
+                                     :max 40
+                                     :obj-key :strength})]
+      [number-input-row (merge base {:label "Dexterity"
+                                     :max 40
+                                     :obj-key :dexterity})]
+      [number-input-row (merge base {:label "Constitution"
+                                     :max 40
+                                     :obj-key :constitution})]
+      [number-input-row (merge base {:label "Intelligence"
+                                     :max 40
+                                     :obj-key :intelligence})]
+      [number-input-row (merge base {:label "Wisdom"
+                                     :max 40
+                                     :obj-key :wisdom})]
+      [number-input-row (merge base {:label "Charisma"
+                                     :max 40
+                                     :obj-key :charisma})]
       [number-input-row (merge base {:label "Movement"
                                      :max 200
-                                     :obj-key :movement})]]
+                                     :obj-key :movement})]
+
+      [text-input-row "Languages" 100 player "player" :languages]
+      [text-input-row "Proficiencies" 100 player "player" :proficiencies]
+      [text-input-row "Saving Throws" 100 player "player" :saves]]
      [:> ModalFooter {:class :modal-footer-buttons}
       [:button.action-link {:on-click #(dispatch [:toggle-modal PLAYER_MODAL_KEY])}
        "Cancel"]
@@ -96,14 +118,20 @@
 (defn player-attribute [label value]
   [:div.attribute
    [:span.attribute-header label]
-   [:span.attribute-value value]])
+   [:span.attribute-value (or value " -- ")]])
 
 (defn player-attributes [player]
   [:div.player-attributes
    [player-attribute "AC" (:armor-class player)]
    [player-attribute "HP" (:hit-points player)]
    [player-attribute "PP" (:passive-perception player)]
-   [player-attribute "MV" (:movement player)]])
+   [player-attribute "MV" (:movement player)]
+   [player-attribute "Str" (:strength player)]
+   [player-attribute "Dex" (:dexterity player)]
+   [player-attribute "Con" (:constitution player)]
+   [player-attribute "Int" (:intelligence player)]
+   [player-attribute "Wis" (:wisdom player)]
+   [player-attribute "Cha" (:charisma player)]])
 
 (defn item-component [item]
   (let [element-id (str "item-" (:id item))]
@@ -142,10 +170,13 @@
                 [:div
                  [:div.player-name (:name player)]
                  [:div (str (:race player) ", " (:class player))]]
-                [player-attributes player]
                 [:button.edit-button {:on-click #(dispatch [::events/open-edit-player-modal player])}]]
                [:hr]
+               [player-attributes player]
+               [:hr]
                [:div [:strong "Languages: "] (:languages player)]
+               [:div [:strong "Proficiencies: "] (:proficiencies player)]
+               [:div [:strong "Saves: "] (:saves player)]
                [:hr]
                (into [:<>]
                      (or (some->> notes

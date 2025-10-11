@@ -18,8 +18,8 @@
 
   .player-card {
     @extend .common-panel;
-    width: 45%;
-    max-width: 550px;
+    width: 700px;
+    max-width: 700px;
     margin: 0;
   }
 
@@ -57,7 +57,6 @@
   padding: 4px 8px 0;
   margin: 4px 0;
   border-radius: 5px;
-  width: 250px;
   color: components.$mahogany;
 
   .name {
@@ -92,5 +91,5 @@
 
 .items {
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 33% 33% 33%;
 }
