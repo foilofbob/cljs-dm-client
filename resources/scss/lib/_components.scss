@@ -195,9 +195,19 @@ hr {
   }
 }
 
+.input-group {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+}
+
 .input-row {
   display: flex;
   flex-direction: column;
+
+  &.short {
+    width: 80px;
+  }
 
   label {
     font-size: smaller;

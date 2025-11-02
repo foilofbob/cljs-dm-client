@@ -3,7 +3,7 @@
    [clojure.string :refer [lower-case]]
    [re-frame.core :refer [dispatch subscribe]]
    [cljs-dm-client.components.components :refer [logical-division]]
-   [cljs-dm-client.components.forms :refer [text-input-row
+   [cljs-dm-client.components.forms :refer [build-options text-input-row
                                             number-input-row
                                             textarea-input-row
                                             checkbox-input-row
@@ -24,8 +24,20 @@
 (def ITEM_MODAL_KEY :item-modal)
 (def PLAYER_MODAL_KEY :player-modal)
 
+(def proficiency-options
+  [{:label "0" :value 0}
+   {:label "1/2" :value 0.5}
+   {:label "1" :value 1.0}
+   {:label "1-1/2" :value 1.5}
+   {:label "2" :value 2.0}])
+
+(def player-options
+  [{:label "Player" :value "PLAYER"}
+   {:label "NPC" :value "NPC"}])
+
 (defn item-modal []
-  (let [item @(subscribe [:edit-object :edit-item])]
+  (let [item @(subscribe [:edit-object :edit-item])
+        base {:obj item :obj-type "item"}]
     [:> Modal {:is-open @(subscribe [:modal-open? ITEM_MODAL_KEY])
                :toggle  #(dispatch [:toggle-modal ITEM_MODAL_KEY])
                :size    :xl}
@@ -40,7 +52,7 @@
       [text-input-row "Rarity" 10 item "item" :rarity]
       [text-input-row "Cost" 20 item "item" :cost]
       [text-input-row "Requirements" 64 item "item" :requirements]
-      [checkbox-input-row "Is this a container?" item "item" :is-container]
+      [checkbox-input-row (assoc base :label "Is this a container?" :obj-key :is-container)]
       [select-input-row "Carried by / Stored in" item "item" :carried-by
        [{:label "- Not Carried -" :value ""}
         {:label "Item" :value "ITEM"}
@@ -63,50 +75,94 @@
         base {:obj player :obj-type "player"}]
     [:> Modal {:is-open @(subscribe [:modal-open? PLAYER_MODAL_KEY])
                :toggle  #(dispatch [:toggle-modal PLAYER_MODAL_KEY])
-               :size    :xl}
+               :size    :lg}
      [:> ModalHeader
       (if (:id player)
         "Update Player"
         "Add Player")]
      [:> ModalBody {:class :modal-body}
+      [select-input-row "Player Type" player "player" :player-type player-options]
       [text-input-row "Name" 100 player "player" :name]
       [text-input-row "Race" 100 player "player" :race]
       [text-input-row "Class" 100 player "player" :class]
 
-      [number-input-row (merge base {:label "Armor Class"
-                                     :max 30
-                                     :obj-key :armor-class})]
-      [number-input-row (merge base {:label "Hit Points"
-                                     :max 500
-                                     :obj-key :hit-points})]
-      [number-input-row (merge base {:label "Passive Perception"
-                                     :max 30
-                                     :obj-key :passive-perception})]
-      [number-input-row (merge base {:label "Strength"
-                                     :max 40
-                                     :obj-key :strength})]
-      [number-input-row (merge base {:label "Dexterity"
-                                     :max 40
-                                     :obj-key :dexterity})]
-      [number-input-row (merge base {:label "Constitution"
-                                     :max 40
-                                     :obj-key :constitution})]
-      [number-input-row (merge base {:label "Intelligence"
-                                     :max 40
-                                     :obj-key :intelligence})]
-      [number-input-row (merge base {:label "Wisdom"
-                                     :max 40
-                                     :obj-key :wisdom})]
-      [number-input-row (merge base {:label "Charisma"
-                                     :max 40
-                                     :obj-key :charisma})]
-      [number-input-row (merge base {:label "Movement"
-                                     :max 200
-                                     :obj-key :movement})]
+      [:div.input-group
+       [number-input-row (merge base {:label "Hit Points"
+                                      :max 500
+                                      :obj-key :hit-points})]
+       [number-input-row (merge base {:label "Armor Class"
+                                      :max 30
+                                      :obj-key :armor-class})]
+       [number-input-row (merge base {:label "Passive Perception"
+                                      :max 30
+                                      :obj-key :passive-perception})]
+       [number-input-row (merge base {:label "Movement"
+                                      :max 200
+                                      :obj-key :movement})]]
 
+      [:div.input-group
+       [number-input-row (merge base {:label "Strength"
+                                      :max 40
+                                      :obj-key :strength})]
+       [number-input-row (merge base {:label "Dexterity"
+                                      :max 40
+                                      :obj-key :dexterity})]
+       [number-input-row (merge base {:label "Constitution"
+                                      :max 40
+                                      :obj-key :constitution})]
+       [number-input-row (merge base {:label "Intelligence"
+                                      :max 40
+                                      :obj-key :intelligence})]
+       [number-input-row (merge base {:label "Wisdom"
+                                      :max 40
+                                      :obj-key :wisdom})]
+       [number-input-row (merge base {:label "Charisma"
+                                      :max 40
+                                      :obj-key :charisma})]]
+
+      [:hr]
+      [:strong "Save Proficiencies"]
+      [:div.input-group
+       [checkbox-input-row (merge base {:label "Strength"
+                                        :obj-key :strength-save-proficiency})]
+       [checkbox-input-row (merge base {:label "Dexterity"
+                                        :obj-key :dexterity-save-proficiency})]
+       [checkbox-input-row (merge base {:label "Constitution"
+                                        :obj-key :constitution-save-proficiency})]
+       [checkbox-input-row (merge base {:label "Intelligence"
+                                        :obj-key :intelligence-save-proficiency})]
+       [checkbox-input-row (merge base {:label "Wisdom"
+                                        :obj-key :wisdom-save-proficiency})]
+       [checkbox-input-row (merge base {:label "Charisma"
+                                        :obj-key :charisma-save-proficiency})]]
+
+      [:hr]
+      [:strong "Skill Proficiencies"]
+      (let [fields [["Acrobatics" :acrobatics-proficiency-bonus]
+                    ["Animal Handling" :animal-handling-proficiency-bonus]
+                    ["Arcana" :arcana-proficiency-bonus]
+                    ["Athletics" :athletics-proficiency-bonus]
+                    ["Deception" :deception-proficiency-bonus]
+                    ["History" :history-proficiency-bonus]
+                    ["Insight" :insight-proficiency-bonus]
+                    ["Intimidation" :intimidation-proficiency-bonus]
+                    ["Investigation" :investigation-proficiency-bonus]
+                    ["Medicine" :medicine-proficiency-bonus]
+                    ["Nature" :nature-proficiency-bonus]
+                    ["Perception" :perception-proficiency-bonus]
+                    ["Performance" :performance-proficiency-bonus]
+                    ["Persuasion" :persuasion-proficiency-bonus]
+                    ["Religion" :religion-proficiency-bonus]
+                    ["Sleight of Hand" :sleight-of-hand-proficiency-bonus]
+                    ["Stealth" :stealth-proficiency-bonus]
+                    ["Survival" :survival-proficiency-bonus]]]
+           (into [:div.input-group]
+                 (map (fn [[label field]]
+                          [select-input-row label player "player" field proficiency-options])
+                      fields)))
+      [:hr]
       [text-input-row "Languages" 100 player "player" :languages]
-      [text-input-row "Proficiencies" 100 player "player" :proficiencies]
-      [text-input-row "Saving Throws" 100 player "player" :saves]]
+      [text-input-row "Proficiencies" 256 player "player" :proficiencies]]
      [:> ModalFooter {:class :modal-footer-buttons}
       [:button.action-link {:on-click #(dispatch [:toggle-modal PLAYER_MODAL_KEY])}
        "Cancel"]
@@ -115,23 +171,43 @@
       [:button.action-button {:on-click #(dispatch [::events/edit-player player])}
        "Save"]]]))
 
-(defn player-attribute [label value]
-  [:div.attribute
-   [:span.attribute-header label]
-   [:span.attribute-value (or value " -- ")]])
+(defn modifier [attribute]
+      (-> attribute
+          (- 10)
+          (/ 2)
+          js/Math.trunc))
 
-(defn player-attributes [player]
+(defn modified-value [attribute-value proficiency-modifier proficiency-bonus]
+      (-> attribute-value modifier (+ (* proficiency-modifier proficiency-bonus))))
+
+(defn attribute-save [attribute-value proficient? proficiency-bonus]
+      (modified-value attribute-value (if proficient? 1 0) proficiency-bonus))
+
+(defn player-attribute
+      ([label value]
+       (player-attribute label value nil))
+      ([label value subtext]
+       [:div.attribute
+        [:span.attribute-text label]
+        [:span.attribute-value (or value " -- ")]
+        (when subtext
+          [:span.attribute-text subtext])]))
+
+(defn stats [player]
+      [:div.player-attributes
+       [player-attribute "AC" (:armor-class player)]
+       [player-attribute "HP" (:hit-points player)]
+       [player-attribute "PP" (:passive-perception player)]
+       [player-attribute "MV" (:movement player)]])
+
+(defn attributes [{:keys [strength dexterity constitution intelligence wisdom charisma]}]
   [:div.player-attributes
-   [player-attribute "AC" (:armor-class player)]
-   [player-attribute "HP" (:hit-points player)]
-   [player-attribute "PP" (:passive-perception player)]
-   [player-attribute "MV" (:movement player)]
-   [player-attribute "Str" (:strength player)]
-   [player-attribute "Dex" (:dexterity player)]
-   [player-attribute "Con" (:constitution player)]
-   [player-attribute "Int" (:intelligence player)]
-   [player-attribute "Wis" (:wisdom player)]
-   [player-attribute "Cha" (:charisma player)]])
+   [player-attribute "Str" strength (modifier strength)]
+   [player-attribute "Dex" dexterity (modifier dexterity)]
+   [player-attribute "Con" constitution (modifier constitution)]
+   [player-attribute "Int" intelligence (modifier intelligence)]
+   [player-attribute "Wis" wisdom (modifier wisdom)]
+   [player-attribute "Cha" charisma (modifier charisma)]])
 
 (defn item-component [item]
   (let [element-id (str "item-" (:id item))]
@@ -151,13 +227,87 @@
                                 :inner-class-name "component-tooltip wide-description"}
         [markdown-div (:description item)]])]))
 
+(defn saves [player proficiency]
+      [:div.player-attributes
+       [:strong "Saves: "]
+       [player-attribute "Str" (attribute-save (:strength player) (:strength-save-proficiency player) proficiency)]
+       [player-attribute "Dex" (attribute-save (:dexterity player) (:dexterity-save-proficiency player) proficiency)]
+       [player-attribute "Con" (attribute-save (:constitution player) (:constitution-save-proficiency player) proficiency)]
+       [player-attribute "Int" (attribute-save (:intelligence player) (:intelligence-save-proficiency player) proficiency)]
+       [player-attribute "Wis" (attribute-save (:wisdom player) (:wisdom-save-proficiency player) proficiency)]
+       [player-attribute "Cha" (attribute-save (:charisma player) (:charisma-save-proficiency player) proficiency)]])
+
+(defn skills [player proficiency]
+      (let [{:keys [strength dexterity constitution intelligence wisdom charisma]} player
+            skill-fn (fn [v k] (modified-value v (k player) proficiency))]
+           [:div.skills-container
+            [:div.skills-column
+             [:p
+              [:span "Acrobatics"]
+              [:span (skill-fn dexterity :acrobatics-proficiency-bonus)]]
+             [:p
+              [:span "Animal Handling"]
+              [:span (skill-fn wisdom :animal-handling-proficiency-bonus)]]
+             [:p
+              [:span "Arcana"]
+              [:span (skill-fn intelligence :arcana-proficiency-bonus)]]
+             [:p
+              [:span "Athletics"]
+              [:span (skill-fn strength :athletics-proficiency-bonus)]]
+             [:p
+              [:span "Deception"]
+              [:span (skill-fn charisma :deception-proficiency-bonus)]]]
+            [:div.skills-column
+             [:p
+              [:span "History"]
+              [:span (skill-fn intelligence :history-proficiency-bonus)]]
+             [:p
+              [:span "Insight"]
+              [:span (skill-fn wisdom :insight-proficiency-bonus)]]
+             [:p
+              [:span "Intimidation"]
+              [:span (skill-fn charisma :intimidation-proficiency-bonus)]]
+             [:p
+              [:span "Investigation"]
+              [:span (skill-fn intelligence :investigation-proficiency-bonus)]]
+             [:p
+              [:span "Medicine"]
+              [:span (skill-fn wisdom :medicine-proficiency-bonus)]]]
+            [:div.skills-column
+             [:p
+              [:span "Nature"]
+              [:span (skill-fn intelligence :nature-proficiency-bonus)]]
+             [:p
+              [:span "Perception"]
+              [:span (skill-fn wisdom :perception-proficiency-bonus)]]
+             [:p
+              [:span "Performance"]
+              [:span (skill-fn charisma :performance-proficiency-bonus)]]
+             [:p
+              [:span "Persuasion"]
+              [:span (skill-fn charisma :persuasion-proficiency-bonus)]]
+             [:p
+              [:span "Religion"]
+              [:span (skill-fn intelligence :religion-proficiency-bonus)]]]
+            [:div.skills-column
+             [:p
+              [:span "Sleight of Hand"]
+              [:span (skill-fn dexterity :sleight-of-hand-proficiency-bonus)]]
+             [:p
+              [:span "Stealth"]
+              [:span (skill-fn dexterity :stealth-proficiency-bonus)]]
+             [:p
+              [:span "Survival"]
+              [:span (skill-fn wisdom :survival-proficiency-bonus)]]]]))
+
 (defn party-content []
   (let [players             @(subscribe [::subs/players])
         notes               @(subscribe [:notes])
         items-not-carried   @(subscribe [::subs/items-not-carried])
         player-items        @(subscribe [::subs/items-carried-by-players])
         items-as-containers @(subscribe [::subs/items-as-containers])
-        container-items     @(subscribe [::subs/items-carried-by-items])]
+        container-items     @(subscribe [::subs/items-carried-by-items])
+        current-level       @(subscribe [::subs/current-level])]
     [:<>
      [:div.party.panel-content
       [:div.panel-content
@@ -170,13 +320,18 @@
                 [:div
                  [:div.player-name (:name player)]
                  [:div (str (:race player) ", " (:class player))]]
+                [stats player]
                 [:button.edit-button {:on-click #(dispatch [::events/open-edit-player-modal player])}]]
                [:hr]
-               [player-attributes player]
+               [:div.attribute-row
+                [attributes player]
+                [saves player (:proficiency current-level)]]
                [:hr]
+               [:div [:strong "Proficiency Bonus: "] (:proficiency current-level)]
                [:div [:strong "Languages: "] (:languages player)]
                [:div [:strong "Proficiencies: "] (:proficiencies player)]
-               [:div [:strong "Saves: "] (:saves player)]
+               [:hr]
+               [skills player (:proficiency current-level)]
                [:hr]
                (into [:<>]
                      (or (some->> notes
@@ -192,18 +347,20 @@
                       (->> player-items
                            (filter #(= (:id player) (:carried-by-id %)))
                            (map item-component)))]]))
-      [logical-division {:text "Items With Storage"}]
-      (into [:div.panel-content]
-            (for [container items-as-containers]
-              [:div.player-card
-               [:div.player-header
-                [:div.player-name (:name container)]]
-               [:hr]
-               [:div.items
-                (into [:<>]
-                      (->> container-items
-                           (filter #(= (:id container) (:carried-by-id %)))
-                           (map item-component)))]]))]
+      (when (seq items-as-containers)
+            [:<>
+             [logical-division {:text "Items With Storage"}]
+             (into [:div.panel-content]
+                   (for [container items-as-containers]
+                        [:div.player-card
+                         [:div.player-header
+                          [:div.player-name (:name container)]]
+                         [:hr]
+                         [:div.items
+                          (into [:<>]
+                                (->> container-items
+                                     (filter #(= (:id container) (:carried-by-id %)))
+                                     (map item-component)))]]))])]
      [:div.right-panel
       [logical-division {:left [:button {:class [:action-button :skinny]
                                          :on-click #(dispatch [::events/open-edit-item-modal nil])}

@@ -1,7 +1,8 @@
 (ns cljs-dm-client.party.subs
   (:require
    [cljs-dm-client.components.forms :refer [build-options-from-list]]
-   [re-frame.core :refer [reg-sub]]))
+   [re-frame.core :refer [reg-sub]]
+   [cljs-dm-client.utils :as utils]))
 
 (reg-sub
  ::players
@@ -46,3 +47,9 @@
  ::containers-as-select-options
  :<- [::items-as-containers]
  build-options-from-list)
+
+(reg-sub
+ ::current-level
+ :<- [:selected-campaign]
+ (fn [campaign]
+     (utils/level-by-xp (:current-player-xp campaign))))

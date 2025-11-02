@@ -39,7 +39,6 @@
  ::fetch-game-days-failure
  utils/standard-failure-handler)
 
-;; TODO: Wire in initial game post
 (reg-event-fx
  ::post-game-day
  (fn [{:keys [db]} [_]]

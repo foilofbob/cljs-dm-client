@@ -30,7 +30,28 @@
 
   .player-attributes {
     display: flex;
-    gap: 4px;
+    gap: 6px;
+  }
+
+  .skills-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .skills-column {
+    width: 19%;
+
+    p {
+      margin: 2px 0;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .attribute-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .attribute {
@@ -39,15 +60,17 @@
     border: 2px solid components.$mahogany;
     border-radius: 5px;
     padding: 2px 4px;
+    align-content: center;
   }
 
-  .attribute-header {
+  .attribute-text {
     font-size: 12px;
-    margin: auto;
+    margin: 0 auto;
   }
 
   .attribute-value {
     font-size: 20px;
+    line-height: .9;
   }
 }
 

@@ -35,7 +35,7 @@
         "Calculate XP"]]
       [number-input-row (merge base {:label "XP"
                                      :obj-key :xp})]
-      [checkbox-input-row "Finalized?" xp "xp" :finalized]]
+      [checkbox-input-row (assoc base :label "Finalized?" :obj-key :finalized)]]
      [:> ModalFooter {:class :modal-footer-buttons}
       [:button.action-link {:on-click #(dispatch [:toggle-modal XP_MODAL_KEY])}
        "Cancel"]

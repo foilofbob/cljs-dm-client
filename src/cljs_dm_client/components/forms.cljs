@@ -27,7 +27,7 @@
                          :or {min 0 max 999999}}]
       (let [input-id (elem-id obj-type (:id obj) obj-key)
             edit-storage (keyword (str "edit-" obj-type))]
-           [:div.input-row
+           [:div.input-row.short
             [:label {:for input-id}
              label]
             [:input {:id        input-id
@@ -49,7 +49,7 @@
                  :rows       rows
                  :on-change  #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-value)])}]]))
 
-(defn checkbox-input-row [label obj obj-type obj-key]
+(defn checkbox-input-row [{:keys [label obj obj-type obj-key]}]
   (let [input-id (elem-id obj-type (:id obj) obj-key)
         edit-storage (keyword (str "edit-" obj-type))]
     [:div.input-row

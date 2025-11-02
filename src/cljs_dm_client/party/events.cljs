@@ -150,7 +150,24 @@
                           :movement 30
                           :languages ""
                           :proficiencies ""
-                          :saves ""})]
+                          :acrobatics-proficiency-bonus 0
+                          :animal-handling-proficiency-bonus 0
+                          :arcana-proficiency-bonus 0
+                          :athletics-proficiency-bonus 0
+                          :deception-proficiency-bonus 0
+                          :history-proficiency-bonus 0
+                          :insight-proficiency-bonus 0
+                          :intimidation-proficiency-bonus 0
+                          :investigation-proficiency-bonus 0
+                          :medicine-proficiency-bonus 0
+                          :nature-proficiency-bonus 0
+                          :perception-proficiency-bonus 0
+                          :performance-proficiency-bonus 0
+                          :persuasion-proficiency-bonus 0
+                          :religion-proficiency-bonus 0
+                          :sleight-of-hand-proficiency-bonus 0
+                          :stealth-proficiency-bonus 0
+                          :survival-proficiency-bonus 0})]
      {:fx [[:dispatch [:set-edit-object :edit-player edit-player]]
            [:dispatch [:toggle-modal :player-modal]]]})))
 
@@ -160,7 +177,7 @@
    (let [new-player? (nil? (:id player))]
      {:db         (assoc db :action-status :working)
       :http-xhrio {:method          (if new-player? :post :put)
-                   :uri             (cond-> (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/player")
+                   :uri             (cond-> (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/character")
                                       (not new-player?)
                                       (str "/" (:id player)))
                    :params          (rename-keys
@@ -194,7 +211,7 @@
  (fn [{:keys [db]} [_ player-id]]
    {:db         (assoc db :action-status :working)
     :http-xhrio {:method          :delete
-                 :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/player/" player-id)
+                 :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/character/" player-id)
                  :format          (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::delete-player-success player-id]

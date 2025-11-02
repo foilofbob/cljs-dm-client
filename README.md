@@ -6,9 +6,21 @@ The API code is located at [go-dm-api](https://github.com/foilofbob/go-dm-api)
 
 ### Features / Enchancements to Add
 - Campaign Management
+  - [x] Create new campaign
+  - [ ] Delete campaign
 - Campaign Setting management
   - Is this really worth it???
 - User Authentication
+- Character Sheets
+  - Add individual proficiencies
+    - [x] Store mods to db
+    - [x] Calc on sheets
+    - [x] Add to edit modal
+  - [ ] Add styling to indicate proficiency bonus
+- NPC tracking
+  - [x] Add field to differentiate NPCs 
+  - [ ] NPCs need a field to store level, since level drives proficiency bonus (Player level is calculated, NPCs aren't)
+- Persist the most recently viewed location
 
 ## Getting Started
 
