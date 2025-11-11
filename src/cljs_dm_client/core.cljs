@@ -12,23 +12,17 @@
    [cljs-dm-client.layout.events]
    [cljs-dm-client.layout.views]
    [cljs-dm-client.layout.subs]
-   [cljs-dm-client.locations.events]
    [cljs-dm-client.locations.views]
-   [cljs-dm-client.locations.subs]
    [cljs-dm-client.navigation.subs]
    [cljs-dm-client.navigation.views]
-   [cljs-dm-client.party.events]
-   [cljs-dm-client.party.views]
-   [cljs-dm-client.party.subs]
+   [cljs-dm-client.characters.party.events]
+   [cljs-dm-client.characters.party.views]
+   [cljs-dm-client.characters.npcs.events]
+   [cljs-dm-client.characters.npcs.views]
    [cljs-dm-client.player-stories.events]
    [cljs-dm-client.player-stories.views]
-   [cljs-dm-client.player-stories.subs]
-   [cljs-dm-client.timeline.events]
    [cljs-dm-client.timeline.views]
-   [cljs-dm-client.timeline.subs]
-   [cljs-dm-client.xp-tracker.events]
-   [cljs-dm-client.xp-tracker.views]
-   [cljs-dm-client.xp-tracker.subs]))
+   [cljs-dm-client.xp-tracker.views]))
 
 (defn dev-setup []
   (when config/debug?

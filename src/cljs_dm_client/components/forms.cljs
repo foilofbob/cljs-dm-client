@@ -60,17 +60,28 @@
               :value     (obj-key obj)
               :on-change #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-checked)])}]]))
 
-(defn select-input-row [label obj obj-type obj-key options]
-  (let [input-id (elem-id obj-type (:id obj) obj-key)
-        edit-storage (keyword (str "edit-" obj-type))]
-    [:div.input-row
-     [:label {:for input-id}
-      label]
-     (into [:select {:id         input-id
-                     :value      (obj-key obj)
-                     :on-change  #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-value)])}]
-           (for [option options]
-             [:option {:value (:value option)} (:label option)]))]))
+(defn select-input-row
+      ([label obj obj-type obj-key options]
+       (select-input-row {:label    label
+                          :numeric? false
+                          :obj      obj
+                          :obj-key  obj-key
+                          :obj-type obj-type
+                          :options  options}))
+      ([{:keys [label numeric? obj obj-key obj-type options numeric?]}]
+       (let [input-id (elem-id obj-type (:id obj) obj-key)
+             edit-storage (keyword (str "edit-" obj-type))]
+            [:div.input-row
+             [:label {:for input-id}
+              label]
+             (into [:select {:id         input-id
+                             :value      (obj-key obj)
+                             :on-change  #(dispatch [:update-edit-field edit-storage obj-key
+                                                     (if numeric?
+                                                       (-> % .-target .-value js/parseInt)
+                                                       (-> % .-target .-value))])}]
+                   (for [option options]
+                        [:option {:value (:value option)} (:label option)]))])))
 
 (defn build-options
       "This will take a list of objects and return a list of maps with id->value and name->label"

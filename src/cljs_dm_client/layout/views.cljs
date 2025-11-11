@@ -6,9 +6,11 @@
 
 (def page-mappings
   [{:id      :timeline
-    :name    "Timeline / Events"}
+    :name    "Timeline"}
+   {:id      :npcs
+    :name    "NPCs"}
    {:id      :party
-    :name    "Party / Inventory"}
+    :name    "Players"}
    {:id      :player-stories
     :name    "Player Stories"}
    {:id      :locations

@@ -93,6 +93,11 @@
        (filter #(> (:xp %) xp))
        first))
 
+(defn level-by-level [lvl]
+      (->> character-levels
+           (filter #(= lvl (:lvl %)))
+           first))
+
 (defn percentage [numerator denominator]
   (-> numerator (/ denominator) (* 100) Math/floor))
 
