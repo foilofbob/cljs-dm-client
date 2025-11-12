@@ -140,7 +140,7 @@
                             :stealth-proficiency-bonus 0
                             :survival-proficiency-bonus 0
                             :level 0
-                            :party-type "PLAYER"})]
+                            :player-type "PLAYER"})]
           {:fx [[:dispatch [:set-edit-object :edit-player edit-player]]
                 [:dispatch [:toggle-modal :player-modal]]]})))
 
