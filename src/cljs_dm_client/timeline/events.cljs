@@ -51,15 +51,15 @@
                  :on-failure      [:action-failure]}}))
 
 (defn post-game-day-success [db response]
-      (let [new-game-day (utils/tranform-response response)]
-           {:db (-> db
-                    (assoc :action-status :success)
-                    (update-in [:page-data :game-days] #(conj % new-game-day)))}))
+  (let [new-game-day (utils/tranform-response response)]
+    {:db (-> db
+             (assoc :action-status :success)
+             (update-in [:page-data :game-days] #(conj % new-game-day)))}))
 
 (reg-event-fx
  ::post-game-day-success
  (fn [{:keys [db]} [_ response]]
-     (post-game-day-success db response)))
+   (post-game-day-success db response)))
 
 ;; TODO: Consolidate defs
 (def GAME_DAY_MODAL_KEY :game-day-modal-key)
@@ -67,50 +67,50 @@
 (reg-event-fx
  ::open-edit-game-day-modal
  (fn [{:keys [db]} [_ game-day]]
-     (let [edit-game-day (or game-day
-                             (reduce (fn [base cycle]
-                                         (assoc base (->> cycle :id (str "cycle-") keyword) 1))
-                                     {:campaign-id (-> db :selected-campaign :id)
-                                      :in-game-day 1
-                                      :day "1"
-                                      :month "1"
-                                      :year 1}
-                                     (-> db :campaign-setting :calendar-cycles)))]
-          {:fx [[:dispatch [:set-edit-object :edit-game-day edit-game-day]]
-                [:dispatch [:toggle-modal GAME_DAY_MODAL_KEY]]]})))
+   (let [edit-game-day (or game-day
+                           (reduce (fn [base cycle]
+                                     (assoc base (->> cycle :id (str "cycle-") keyword) 1))
+                                   {:campaign-id (-> db :selected-campaign :id)
+                                    :in-game-day 1
+                                    :day "1"
+                                    :month "1"
+                                    :year 1}
+                                   (-> db :campaign-setting :calendar-cycles)))]
+     {:fx [[:dispatch [:set-edit-object :edit-game-day edit-game-day]]
+           [:dispatch [:toggle-modal GAME_DAY_MODAL_KEY]]]})))
 
 (def game-day-keys #{:campaign-id :in-game-day :day :month :year})
 
 (reg-event-fx
  ::initialize-game-day
  (fn [{:keys [db]} [_]]
-     (let [edit-game-day (-> db :page-data :edit-game-day)
-           game-day (-> edit-game-day
-                        (select-keys game-day-keys)
-                        (update-in [:day] js/parseInt)
-                        (update-in [:month] js/parseInt))
-           cycles (reduce (fn [cycles cycle-key]
-                              (when-let [cycle-id (some-> cycle-key name (string/split #"-") last)]
-                                        (conj cycles {:id (js/parseInt cycle-id) :offset (cycle-key edit-game-day)})))
-                          []
-                          (->> edit-game-day keys (remove game-day-keys)))]
-          {:db         (assoc db :action-status :working)
-           :http-xhrio {:method          :post
-                        :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/gameday/initialize")
-                        :params          {:GameDay (rename-keys
-                                                    (cske/transform-keys csk/->PascalCase game-day)
-                                                    {:CampaignId :CampaignID})
-                                          :Cycles (mapv #(rename-keys
-                                                          (cske/transform-keys csk/->PascalCase %)
-                                                          {:Id :ID})
-                                                        cycles)}
-                        :format          (ajax/json-request-format)
-                        :response-format (ajax/json-response-format {:keywords? true})
-                        :on-success      [::initialize-game-day-success] ;; TODO: Dismiss modal
-                        :on-failure      [:action-failure]}})))
+   (let [edit-game-day (-> db :page-data :edit-game-day)
+         game-day (-> edit-game-day
+                      (select-keys game-day-keys)
+                      (update-in [:day] js/parseInt)
+                      (update-in [:month] js/parseInt))
+         cycles (reduce (fn [cycles cycle-key]
+                          (when-let [cycle-id (some-> cycle-key name (string/split #"-") last)]
+                            (conj cycles {:id (js/parseInt cycle-id) :offset (cycle-key edit-game-day)})))
+                        []
+                        (->> edit-game-day keys (remove game-day-keys)))]
+     {:db         (assoc db :action-status :working)
+      :http-xhrio {:method          :post
+                   :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/gameday/initialize")
+                   :params          {:GameDay (rename-keys
+                                               (cske/transform-keys csk/->PascalCase game-day)
+                                               {:CampaignId :CampaignID})
+                                     :Cycles (mapv #(rename-keys
+                                                     (cske/transform-keys csk/->PascalCase %)
+                                                     {:Id :ID})
+                                                   cycles)}
+                   :format          (ajax/json-request-format)
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success      [::initialize-game-day-success] ;; TODO: Dismiss modal
+                   :on-failure      [:action-failure]}})))
 
 (reg-event-fx
  ::initialize-game-day-success
  (fn [{:keys [db]} [_ response]]
-     (merge (post-game-day-success db response)
-            {:fx [[:dispatch [:toggle-modal GAME_DAY_MODAL_KEY]]]})))
+   (merge (post-game-day-success db response)
+          {:fx [[:dispatch [:toggle-modal GAME_DAY_MODAL_KEY]]]})))

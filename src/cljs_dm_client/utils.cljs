@@ -5,16 +5,16 @@
    [cognitect.transit :as t]))
 
 (defn page-loader
-      ([dispatcher-fn page-ready-events page-error-events]
-       (page-loader dispatcher-fn page-ready-events page-error-events true))
-      ([dispatcher-fn page-ready-events page-error-events force-campaign-select?]
-       (fn [{:keys [db]} _]
-           (if (and (-> db :selected-campaign nil?) force-campaign-select?)
-             {:navigate :campaign-select}
-             {:db         (assoc db :loading-status :loading)
-              :async-flow {:first-dispatch dispatcher-fn
-                           :rules [{:when :seen-all-of? :events page-ready-events :dispatch [:page-ready]}
-                                   {:when :seen-any-of? :events page-error-events :halt? true}]}}))))
+  ([dispatcher-fn page-ready-events page-error-events]
+   (page-loader dispatcher-fn page-ready-events page-error-events true))
+  ([dispatcher-fn page-ready-events page-error-events force-campaign-select?]
+   (fn [{:keys [db]} _]
+     (if (and (-> db :selected-campaign nil?) force-campaign-select?)
+       {:navigate :campaign-select}
+       {:db         (assoc db :loading-status :loading)
+        :async-flow {:first-dispatch dispatcher-fn
+                     :rules [{:when :seen-all-of? :events page-ready-events :dispatch [:page-ready]}
+                             {:when :seen-any-of? :events page-error-events :halt? true}]}}))))
 
 (defn write-to-session
   "Expecting to write a map containing active-panel and selected-campaign"
@@ -94,9 +94,9 @@
        first))
 
 (defn level-by-level [lvl]
-      (->> character-levels
-           (filter #(= lvl (:lvl %)))
-           first))
+  (->> character-levels
+       (filter #(= lvl (:lvl %)))
+       first))
 
 (defn percentage [numerator denominator]
   (-> numerator (/ denominator) (* 100) Math/floor))

@@ -18,23 +18,23 @@
 (reg-event-fx
  ::page-load-dispatcher
  (fn [_ _]
-     {:dispatch-n [[::fetch-npcs]
-                   [::events/fetch-items]
-                   [:fetch-notes "character"]]}))
+   {:dispatch-n [[::fetch-npcs]
+                 [::events/fetch-items]
+                 [:fetch-notes "character"]]}))
 
 (reg-event-fx
  ::fetch-npcs
  (fn [{:keys [db]} _]
-     {:http-xhrio {:method          :get
-                   :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/npcs")
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success      [::fetch-npcs-success]
-                   :on-failure      [::fetch-npcs-failure]}}))
+   {:http-xhrio {:method          :get
+                 :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/npcs")
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [::fetch-npcs-success]
+                 :on-failure      [::fetch-npcs-failure]}}))
 
 (reg-event-db
  ::fetch-npcs-success
  (fn [db [_ response]]
-     (utils/standard-success-handler db :npcs response)))
+   (utils/standard-success-handler db :npcs response)))
 
 (reg-event-fx
  ::fetch-npcs-failure

@@ -10,5 +10,5 @@
 (reg-sub
  ::campaign-setting
  (fn [db]
-     (or (:campaign-setting db)
-         [])))
+   (or (:campaign-setting db)
+       [])))

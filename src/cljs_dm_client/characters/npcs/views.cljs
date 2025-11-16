@@ -13,9 +13,9 @@
    [cljs-dm-client.characters.subs :as subs]))
 
 (defn npcs-content []
-      (let [players      @(subscribe [::subs/npcs])
-            player-items @(subscribe [::subs/items-carried-by-npcs])]
-           (character-content players player-items)))
+  (let [players      @(subscribe [::subs/npcs])
+        player-items @(subscribe [::subs/items-carried-by-npcs])]
+    (character-content players player-items)))
 
 (defn npcs []
   [:<>

@@ -7,25 +7,25 @@
 (reg-sub
  ::items
  (fn [db]
-     (sort-by :name (-> db :page-data :items (or [])))))
+   (sort-by :name (-> db :page-data :items (or [])))))
 
 (reg-sub
  ::items-not-carried
  :<- [::items]
  (fn [items]
-     (filter #(-> % (or 0) :carried-by-id (= 0)) items)))
+   (filter #(-> % (or 0) :carried-by-id (= 0)) items)))
 
 (reg-sub
  ::items-carried-by-items
  :<- [::items]
  (fn [items]
-     (filter #(-> % :carried-by #{"ITEM"}) items)))
+   (filter #(-> % :carried-by #{"ITEM"}) items)))
 
 (reg-sub
  ::items-as-containers
  :<- [::items]
  (fn [items]
-     (filter #(:is-container %) items)))
+   (filter #(:is-container %) items)))
 
 (reg-sub
  ::containers-as-select-options
@@ -36,20 +36,20 @@
  ::current-party-level
  :<- [:selected-campaign]
  (fn [campaign]
-     (utils/level-by-xp (:current-player-xp campaign))))
+   (utils/level-by-xp (:current-player-xp campaign))))
 
 ;;;;;;;;;;;;; PLAYERS ;;;;;;;;;;;;;;;
 
 (reg-sub
  ::players
  (fn [db]
-     (sort-by :name (-> db :page-data :players (or [])))))
+   (sort-by :name (-> db :page-data :players (or [])))))
 
 (reg-sub
  ::items-carried-by-players
  :<- [::items]
  (fn [items]
-     (filter #(-> % :carried-by #{"PLAYER"}) items)))
+   (filter #(-> % :carried-by #{"PLAYER"}) items)))
 
 (reg-sub
  ::players-as-select-options
@@ -61,13 +61,13 @@
 (reg-sub
  ::npcs
  (fn [db]
-     (sort-by :name (-> db :page-data :npcs (or [])))))
+   (sort-by :name (-> db :page-data :npcs (or [])))))
 
 (reg-sub
  ::items-carried-by-npcs
  :<- [::items]
  (fn [items]
-     (filter #(-> % :carried-by #{"NPC"}) items)))
+   (filter #(-> % :carried-by #{"NPC"}) items)))
 
 (reg-sub
  ::npcs-as-select-options

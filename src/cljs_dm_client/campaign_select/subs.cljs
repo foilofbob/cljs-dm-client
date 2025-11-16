@@ -11,8 +11,8 @@
 (reg-sub
  ::campaign-settings
  (fn [db _]
-     (or (-> db :page-data :campaign-settings)
-         [])))
+   (or (-> db :page-data :campaign-settings)
+       [])))
 
 (reg-sub
  ::campaign-settings-as-select-options

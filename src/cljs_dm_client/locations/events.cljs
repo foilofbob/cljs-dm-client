@@ -33,10 +33,11 @@
                  :on-success      [::fetch-locations-success]
                  :on-failure      [::fetch-locations-failure]}}))
 
-(reg-event-db
+(reg-event-fx
  ::fetch-locations-success
- (fn [db [_ response]]
-   (utils/standard-success-handler db :locations response)))
+ (fn [{:keys [db]} [_ response]]
+   {:db (utils/standard-success-handler db :locations response)
+    :fx [[:dispatch [::resume-last-viewed]]]}))
 
 (reg-event-fx
  ::fetch-locations-failure
@@ -271,7 +272,14 @@
             (update-in [:page-data :points-of-interest] #(remove (fn [poi] (= poi-id (:id poi))) %)))
     :fx [[:dispatch [:toggle-modal :poi-modal]]]}))
 
-(reg-event-db
+(reg-event-fx
  ::select-location
- (fn [db [_ location-id]]
-   (assoc-in db [:page-data :selected-location-id] location-id)))
+ (fn [{:keys [db]} [_ location-id]]
+   {:db (assoc-in db [:page-data :selected-location-id] location-id)
+    :update-in-session {:last-viewed-location-id location-id}}))
+
+(reg-event-fx
+ ::resume-last-viewed
+ (fn [{:keys [db]} [_]]
+   (when-let [last-viewed-location-id (some-> (utils/read-from-session) :last-viewed-location-id)]
+     {:fx [[:dispatch [::select-location last-viewed-location-id]]]})))

@@ -21,44 +21,44 @@
 
 ;; Currently just meant for adding initial day
 (defn game-day-modal []
-      (let [game-day @(subscribe [:edit-object :edit-game-day])
-            campaign-setting @(subscribe [::subs/campaign-setting])
-            {:keys [months week-days calendar-cycles]} campaign-setting
-            month-options (build-options {:objects months
-                                          :blank? false
-                                          :sort :order})
-            selected-month (->> months (filter #(= (:month game-day) (str (:id %)))) first)
-            day-options (map (fn [n] {:value n :label n})
-                             (range 1 (-> selected-month :num-days js/parseInt (+ 1))))
-            base {:obj game-day :obj-type "game-day"}]
-           [:> Modal {:is-open @(subscribe [:modal-open? GAME_DAY_MODAL_KEY])
-                      :toggle  #(dispatch [:toggle-modal GAME_DAY_MODAL_KEY])
-                      :size    :sm}
-            [:> ModalHeader "Starting Game Day"]
-            [:> ModalBody {:class :modal-body}
+  (let [game-day @(subscribe [:edit-object :edit-game-day])
+        campaign-setting @(subscribe [::subs/campaign-setting])
+        {:keys [months week-days calendar-cycles]} campaign-setting
+        month-options (build-options {:objects months
+                                      :blank? false
+                                      :sort :order})
+        selected-month (->> months (filter #(= (:month game-day) (str (:id %)))) first)
+        day-options (map (fn [n] {:value n :label n})
+                         (range 1 (-> selected-month :num-days js/parseInt (+ 1))))
+        base {:obj game-day :obj-type "game-day"}]
+    [:> Modal {:is-open @(subscribe [:modal-open? GAME_DAY_MODAL_KEY])
+               :toggle  #(dispatch [:toggle-modal GAME_DAY_MODAL_KEY])
+               :size    :sm}
+     [:> ModalHeader "Starting Game Day"]
+     [:> ModalBody {:class :modal-body}
 
              ;; TODO: Reset day when month is changed
 
-             [number-input-row (merge base {:label "In Game Day"
-                                            :max 9999
-                                            :obj-key :in-game-day})]
-             [select-input-row "Day" game-day "game-day" :day day-options]
-             [select-input-row "Month" game-day "game-day" :month month-options]
-             [number-input-row (merge base {:label "Year"
-                                            :max 99999
-                                            :obj-key :year})]
+      [number-input-row (merge base {:label "In Game Day"
+                                     :max 9999
+                                     :obj-key :in-game-day})]
+      [select-input-row "Day" game-day "game-day" :day day-options]
+      [select-input-row "Month" game-day "game-day" :month month-options]
+      [number-input-row (merge base {:label "Year"
+                                     :max 99999
+                                     :obj-key :year})]
 
-             (into [:<>]
-                   (for [cycle calendar-cycles]
-                          [number-input-row (merge base {:label (:name cycle)
-                                                         :min 1
-                                                         :max (:period cycle)
-                                                         :obj-key (->> cycle :id (str "cycle-") keyword)})]))]
-            [:> ModalFooter {:class :modal-footer-buttons}
-             [:button.action-link {:on-click #(dispatch [:toggle-modal GAME_DAY_MODAL_KEY])}
-              "Cancel"]
-             [:button.action-button {:on-click #(dispatch [::events/initialize-game-day])}
-              "Save"]]]))
+      (into [:<>]
+            (for [cycle calendar-cycles]
+              [number-input-row (merge base {:label (:name cycle)
+                                             :min 1
+                                             :max (:period cycle)
+                                             :obj-key (->> cycle :id (str "cycle-") keyword)})]))]
+     [:> ModalFooter {:class :modal-footer-buttons}
+      [:button.action-link {:on-click #(dispatch [:toggle-modal GAME_DAY_MODAL_KEY])}
+       "Cancel"]
+      [:button.action-button {:on-click #(dispatch [::events/initialize-game-day])}
+       "Save"]]]))
 
 (defn open-edit-modal [game-day category]
   (dispatch [:open-edit-note-modal game-day "GAME_DAY" category]))

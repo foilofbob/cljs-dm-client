@@ -18,8 +18,8 @@
 (reg-event-fx
  ::page-load-dispatcher
  (fn [_ _]
-     {:dispatch-n [[::fetch-campaigns]
-                   [::fetch-campaign-settings]]}))
+   {:dispatch-n [[::fetch-campaigns]
+                 [::fetch-campaign-settings]]}))
 
 (reg-event-fx
  ::fetch-campaigns
@@ -44,16 +44,16 @@
 (reg-event-fx
  ::fetch-campaign-settings
  (fn [{:keys [db]} _]
-     {:http-xhrio {:method          :get
-                   :uri             "http://localhost:8090/campaign-settings"
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success      [::fetch-campaign-settings-success]
-                   :on-failure      [::fetch-campaign-settings-failure]}}))
+   {:http-xhrio {:method          :get
+                 :uri             "http://localhost:8090/campaign-settings"
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [::fetch-campaign-settings-success]
+                 :on-failure      [::fetch-campaign-settings-failure]}}))
 
 (reg-event-db
  ::fetch-campaign-settings-success
  (fn [db [_ response]]
-     (assoc-in db [:page-data :campaign-settings] (utils/tranform-response response))))
+   (assoc-in db [:page-data :campaign-settings] (utils/tranform-response response))))
 
 (reg-event-fx
  ::fetch-campaign-settings-failure
@@ -98,36 +98,36 @@
 (reg-event-fx
  ::edit-campaign
  (fn [{:keys [db]} [_ campaign]]
-     (let [new-campaign? (nil? (:id campaign))]
-          {:db         (assoc db :action-status :working)
-           :http-xhrio {:method          (if new-campaign? :post :put)
-                        :uri             (cond-> "http://localhost:8090/campaign"
-                                                 (not new-campaign?)
-                                                 (str "/" (:id campaign)))
-                        :params          (update-in (rename-keys
-                                                     (cske/transform-keys csk/->PascalCase campaign)
-                                                     {:Id :ID :CampaignSettingId :CampaignSettingID :CurrentPlayerXp :CurrentPlayerXP})
-                                                    [:CampaignSettingID]
-                                                    #(some-> % js/parseInt))
-                        :format          (ajax/json-request-format)
-                        :response-format (ajax/json-response-format {:keywords? true})
-                        :on-success      [::edit-campaign-success new-campaign?]
-                        :on-failure      [:action-failure]}})))
+   (let [new-campaign? (nil? (:id campaign))]
+     {:db         (assoc db :action-status :working)
+      :http-xhrio {:method          (if new-campaign? :post :put)
+                   :uri             (cond-> "http://localhost:8090/campaign"
+                                      (not new-campaign?)
+                                      (str "/" (:id campaign)))
+                   :params          (update-in (rename-keys
+                                                (cske/transform-keys csk/->PascalCase campaign)
+                                                {:Id :ID :CampaignSettingId :CampaignSettingID :CurrentPlayerXp :CurrentPlayerXP})
+                                               [:CampaignSettingID]
+                                               #(some-> % js/parseInt))
+                   :format          (ajax/json-request-format)
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success      [::edit-campaign-success new-campaign?]
+                   :on-failure      [:action-failure]}})))
 
 (reg-event-fx
  ::edit-campaign-success
  (fn [{:keys [db]} [_ new-campaign? response]]
-     (let [updated-campaign (utils/tranform-response response)]
-          {:db (cond-> (assoc db :action-status :success)
+   (let [updated-campaign (utils/tranform-response response)]
+     {:db (cond-> (assoc db :action-status :success)
 
-                       new-campaign?
-                       (update-in [:page-data :campaigns] concat [updated-campaign])
+            new-campaign?
+            (update-in [:page-data :campaigns] concat [updated-campaign])
 
-                       (not new-campaign?)
-                       (update-in [:page-data :campaigns]
-                                  #(map (fn [campaign]
-                                            (if (= (:id campaign) (:id updated-campaign))
-                                              updated-campaign
-                                              campaign))
-                                        %)))
-           :fx [[:dispatch [:toggle-modal :campaign-modal]]]})))
+            (not new-campaign?)
+            (update-in [:page-data :campaigns]
+                       #(map (fn [campaign]
+                               (if (= (:id campaign) (:id updated-campaign))
+                                 updated-campaign
+                                 campaign))
+                             %)))
+      :fx [[:dispatch [:toggle-modal :campaign-modal]]]})))
