@@ -36,14 +36,14 @@
                :size    :sm}
      [:> ModalHeader "Starting Game Day"]
      [:> ModalBody {:class :modal-body}
-
-             ;; TODO: Reset day when month is changed
-
       [number-input-row (merge base {:label "In Game Day"
                                      :max 9999
                                      :obj-key :in-game-day})]
       [select-input-row "Day" game-day "game-day" :day day-options]
-      [select-input-row "Month" game-day "game-day" :month month-options]
+      [select-input-row (merge base {:label "Month"
+                                     :obj-key :month
+                                     :options month-options
+                                     :after-change-handler [:update-edit-field :edit-game-day :day 1]})]
       [number-input-row (merge base {:label "Year"
                                      :max 99999
                                      :obj-key :year})]

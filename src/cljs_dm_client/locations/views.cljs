@@ -153,4 +153,3 @@
    [loading-wrapper
     {:container [campaign-panel]
      :content   [locations-content]}]])
-

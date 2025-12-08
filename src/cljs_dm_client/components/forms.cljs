@@ -23,7 +23,7 @@
       (> value max) max
       :else value)))
 
-(defn number-input-row [{:keys [label min max obj obj-type obj-key]
+(defn number-input-row [{:keys [label min max obj obj-type obj-key after-change-handler]
                          :or {min 0 max 999999}}]
   (let [input-id (elem-id obj-type (:id obj) obj-key)
         edit-storage (keyword (str "edit-" obj-type))]
@@ -35,7 +35,8 @@
               :min       min
               :max       max
               :value     (obj-key obj)
-              :on-change #(dispatch [:update-edit-field edit-storage obj-key (bound-numeric-input min max %)])}]]))
+              :on-change #(do (dispatch [:update-edit-field edit-storage obj-key (bound-numeric-input min max %)])
+                              (some-> after-change-handler dispatch))}]]))
 
 (defn textarea-input-row [label length rows obj obj-type obj-key]
   (let [input-id (elem-id obj-type (:id obj) obj-key)
@@ -68,7 +69,7 @@
                       :obj-key  obj-key
                       :obj-type obj-type
                       :options  options}))
-  ([{:keys [label numeric? obj obj-key obj-type options numeric?]}]
+  ([{:keys [after-change-handler label numeric? obj obj-key obj-type options]}]
    (let [input-id (elem-id obj-type (:id obj) obj-key)
          edit-storage (keyword (str "edit-" obj-type))]
      [:div.input-row
@@ -76,10 +77,11 @@
        label]
       (into [:select {:id         input-id
                       :value      (obj-key obj)
-                      :on-change  #(dispatch [:update-edit-field edit-storage obj-key
-                                              (if numeric?
-                                                (-> % .-target .-value js/parseInt)
-                                                (-> % .-target .-value))])}]
+                      :on-change  #(do (dispatch [:update-edit-field edit-storage obj-key
+                                                  (if numeric?
+                                                    (-> % .-target .-value js/parseInt)
+                                                    (-> % .-target .-value))])
+                                       (some-> after-change-handler dispatch))}]
             (for [option options]
               [:option {:value (:value option)} (:label option)]))])))
 

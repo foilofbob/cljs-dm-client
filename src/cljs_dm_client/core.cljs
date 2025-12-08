@@ -13,6 +13,7 @@
    [cljs-dm-client.layout.views]
    [cljs-dm-client.layout.subs]
    [cljs-dm-client.locations.views]
+   [cljs-dm-client.miscellaneous.views]
    [cljs-dm-client.navigation.subs]
    [cljs-dm-client.navigation.views]
    [cljs-dm-client.characters.party.events]

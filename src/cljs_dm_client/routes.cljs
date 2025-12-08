@@ -13,6 +13,7 @@
   (atom
    ["/" {""               :campaign-select
          "locations"      :locations
+         "miscellaneous"  :miscellaneous
          "npcs"           :npcs
          "party"          :party
          "player-stories" :player-stories

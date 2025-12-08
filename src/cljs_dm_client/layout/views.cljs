@@ -5,18 +5,20 @@
    [re-frame.core :refer [dispatch subscribe] :as re-frame]))
 
 (def page-mappings
-  [{:id      :timeline
-    :name    "Timeline"}
-   {:id      :npcs
-    :name    "NPCs"}
-   {:id      :party
-    :name    "Players"}
-   {:id      :player-stories
-    :name    "Player Stories"}
-   {:id      :locations
-    :name    "Locations"}
-   {:id      :xp-tracker
-    :name    "XP Tracker"}])
+  [{:id   :timeline
+    :name "Timeline"}
+   {:id   :npcs
+    :name "NPCs"}
+   {:id   :party
+    :name "Players"}
+   {:id   :player-stories
+    :name "Player Stories"}
+   {:id   :locations
+    :name "Locations"}
+   {:id   :xp-tracker
+    :name "XP Tracker"}
+   {:id   :miscellaneous
+    :name "Miscellaneous"}])
 
 (defn header-content []
   (let [campaign @(subscribe [:selected-campaign])

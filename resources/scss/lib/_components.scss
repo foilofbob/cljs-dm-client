@@ -264,3 +264,12 @@ hr {
 .contains-task-list {
   padding-left: 0;
 }
+
+// _reboot.scss clears the table borders
+thead, tbody, tfoot, tr, td, th {
+  border-width: 1px;
+}
+td, th {
+  padding-left: 2px;
+  padding-right: 4px;
+}
