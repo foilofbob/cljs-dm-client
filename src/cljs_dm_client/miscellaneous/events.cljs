@@ -18,7 +18,7 @@
  ::page-load-dispatcher
  (fn [_ _]
    {:dispatch-n [[::fetch-categories]
-                 [:fetch-notes "category"]]}))
+                 [:fetch-notes "miscellaneous"]]}))
 
 (reg-event-fx
  ::fetch-categories
