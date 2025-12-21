@@ -59,6 +59,7 @@
      [:input {:id        input-id
               :type      :checkbox
               :value     (obj-key obj)
+              :checked   (-> obj obj-key boolean) ;(if (obj-key obj) true false)
               :on-change #(dispatch [:update-edit-field edit-storage obj-key (-> % .-target .-checked)])}]]))
 
 (defn select-input-row

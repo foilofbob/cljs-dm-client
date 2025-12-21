@@ -130,6 +130,7 @@
  (fn [{:keys [db]} [_ sublocation]]
    (let [edit-sublocation (or sublocation
                               {:campaign-id (-> db :selected-campaign :id)
+                               :location-id (-> db :page-data :selected-location-id)
                                :name ""
                                :description ""})]
      {:fx [[:dispatch [:set-edit-object :edit-sublocation edit-sublocation]]
