@@ -2,6 +2,7 @@
   (:require
    [clojure.string :refer [lower-case]]
    [re-frame.core :refer [dispatch subscribe]]
+   [camel-snake-kebab.core :as csk]
    [cljs-dm-client.components.components :refer [logical-division]]
    [cljs-dm-client.components.forms :refer [build-options text-input-row
                                             number-input-row
@@ -221,7 +222,7 @@
     [:<>
      [:div.item {:key element-id}
       [:span.name {:id    element-id
-                   :class (some-> item :rarity lower-case)}
+                   :class (some-> item :rarity csk/->kebab-case-keyword)}
        (str (:name item))]
       (when (seq (:link item))
         [:a.dnd-icon {:href (:link item)
