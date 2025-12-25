@@ -21,9 +21,10 @@
   (let [campaign @(subscribe [:edit-object :edit-campaign])
         campaign-setting-options @(subscribe [::subs/campaign-settings-as-select-options])
         base {:obj campaign :obj-type "campaign"}]
-    [:> Modal {:is-open @(subscribe [:modal-open? CAMPAIGN_MODAL_KEY])
-               :toggle  #(dispatch [:toggle-modal CAMPAIGN_MODAL_KEY])
-               :size    :md}
+    [:> Modal {:is-open  @(subscribe [:modal-open? CAMPAIGN_MODAL_KEY])
+               :toggle   #(dispatch [:toggle-modal CAMPAIGN_MODAL_KEY])
+               :size     :md
+               :backdrop :static}
      [:> ModalHeader
       (if (:id campaign)
         "Update Campaign"

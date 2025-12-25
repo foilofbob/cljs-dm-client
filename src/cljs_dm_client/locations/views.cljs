@@ -26,9 +26,10 @@
 
 (defn location-modal []
   (let [location @(subscribe [:edit-object :edit-location])]
-    [:> Modal {:is-open @(subscribe [:modal-open? LOCATION_MODAL_KEY])
-               :toggle  #(dispatch [:toggle-modal LOCATION_MODAL_KEY])
-               :size    :lg}
+    [:> Modal {:is-open  @(subscribe [:modal-open? LOCATION_MODAL_KEY])
+               :toggle   #(dispatch [:toggle-modal LOCATION_MODAL_KEY])
+               :size     :lg
+               :backdrop :static}
      [:> ModalHeader
       (if (:id location)
         "Update Location"
@@ -45,9 +46,10 @@
 
 (defn sublocation-modal []
   (let [sublocation @(subscribe [:edit-object :edit-sublocation])]
-    [:> Modal {:is-open @(subscribe [:modal-open? SUBLOCATION_MODAL_KEY])
-               :toggle  #(dispatch [:toggle-modal SUBLOCATION_MODAL_KEY])
-               :size    :lg}
+    [:> Modal {:is-open  @(subscribe [:modal-open? SUBLOCATION_MODAL_KEY])
+               :toggle   #(dispatch [:toggle-modal SUBLOCATION_MODAL_KEY])
+               :size     :lg
+               :backdrop :static}
      [:> ModalHeader
       (if (:id sublocation)
         "Update Sublocation"
@@ -65,9 +67,10 @@
 
 (defn poi-modal []
   (let [poi @(subscribe [:edit-object :edit-poi])]
-    [:> Modal {:is-open @(subscribe [:modal-open? POI_MODAL_KEY])
-               :toggle  #(dispatch [:toggle-modal POI_MODAL_KEY])
-               :size    :lg}
+    [:> Modal {:is-open  @(subscribe [:modal-open? POI_MODAL_KEY])
+               :toggle   #(dispatch [:toggle-modal POI_MODAL_KEY])
+               :size     :lg
+               :backdrop :static}
      [:> ModalHeader
       (if (:id poi)
         "Update Point of Interest"

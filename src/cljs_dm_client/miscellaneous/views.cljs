@@ -21,9 +21,10 @@
 
 (defn category-modal []
   (let [category @(subscribe [:edit-object :edit-category])]
-    [:> Modal {:is-open @(subscribe [:modal-open? CATEGORY_MODAL_KEY])
-               :toggle  #(dispatch [:toggle-modal CATEGORY_MODAL_KEY])
-               :size    :lg}
+    [:> Modal {:is-open  @(subscribe [:modal-open? CATEGORY_MODAL_KEY])
+               :toggle   #(dispatch [:toggle-modal CATEGORY_MODAL_KEY])
+               :size     :lg
+               :backdrop :static}
      [:> ModalHeader
       (if (:id category)
         "Update Category"

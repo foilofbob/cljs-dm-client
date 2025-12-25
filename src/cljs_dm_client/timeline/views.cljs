@@ -31,9 +31,10 @@
         day-options (map (fn [n] {:value n :label n})
                          (range 1 (-> selected-month :num-days js/parseInt (+ 1))))
         base {:obj game-day :obj-type "game-day"}]
-    [:> Modal {:is-open @(subscribe [:modal-open? GAME_DAY_MODAL_KEY])
-               :toggle  #(dispatch [:toggle-modal GAME_DAY_MODAL_KEY])
-               :size    :sm}
+    [:> Modal {:is-open  @(subscribe [:modal-open? GAME_DAY_MODAL_KEY])
+               :toggle   #(dispatch [:toggle-modal GAME_DAY_MODAL_KEY])
+               :size     :sm
+               :backdrop :static}
      [:> ModalHeader "Starting Game Day"]
      [:> ModalBody {:class :modal-body}
       [number-input-row (merge base {:label "In Game Day"

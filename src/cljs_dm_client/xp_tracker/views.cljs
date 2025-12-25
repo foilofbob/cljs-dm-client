@@ -21,9 +21,10 @@
 (defn xp-modal []
   (let [xp @(subscribe [:edit-object :edit-xp])
         base {:obj xp :obj-type "xp"}]
-    [:> Modal {:is-open @(subscribe [:modal-open? XP_MODAL_KEY])
-               :toggle  #(dispatch [:toggle-modal XP_MODAL_KEY])
-               :size    :md}
+    [:> Modal {:is-open  @(subscribe [:modal-open? XP_MODAL_KEY])
+               :toggle   #(dispatch [:toggle-modal XP_MODAL_KEY])
+               :size     :md
+               :backdrop :static}
      [:> ModalHeader
       (if (:id xp)
         "Update XP"

@@ -81,7 +81,12 @@
    {:lvl 17 :xp 225000 :proficiency 6}
    {:lvl 18 :xp 265000 :proficiency 6}
    {:lvl 19 :xp 305000 :proficiency 6}
-   {:lvl 20 :xp 355000 :proficiency 6}])
+   {:lvl 20 :xp 355000 :proficiency 6}
+   ;; Cutoff for players; easier for tracking  high levels for NPCs
+   {:lvl 21 :xp 405000 :proficiency 7}
+   {:lvl 22 :xp 455000 :proficiency 7}
+   {:lvl 23 :xp 505000 :proficiency 7}
+   {:lvl 24 :xp 555000 :proficiency 7}])
 
 (defn level-by-xp [xp]
   (->> character-levels

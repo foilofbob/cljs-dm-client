@@ -16,9 +16,10 @@
 
 (defn note-modal []
   (let [note @(subscribe [:edit-object :edit-note])]
-    [:> Modal {:is-open @(subscribe [:modal-open? NOTE_MODAL_KEY])
-               :toggle  #(dispatch [:toggle-modal NOTE_MODAL_KEY])
-               :size    :xl}
+    [:> Modal {:is-open  @(subscribe [:modal-open? NOTE_MODAL_KEY])
+               :toggle   #(dispatch [:toggle-modal NOTE_MODAL_KEY])
+               :size     :xl
+               :backdrop :static}
      [:> ModalHeader
       (if (:id note)
         "Update Note"

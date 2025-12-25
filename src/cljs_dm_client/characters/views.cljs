@@ -38,9 +38,10 @@
 (defn item-modal []
   (let [item @(subscribe [:edit-object :edit-item])
         base {:obj item :obj-type "item"}]
-    [:> Modal {:is-open @(subscribe [:modal-open? ITEM_MODAL_KEY])
-               :toggle  #(dispatch [:toggle-modal ITEM_MODAL_KEY])
-               :size    :xl}
+    [:> Modal {:is-open  @(subscribe [:modal-open? ITEM_MODAL_KEY])
+               :toggle   #(dispatch [:toggle-modal ITEM_MODAL_KEY])
+               :size     :xl
+               :backdrop :static}
      [:> ModalHeader
       (if (:id item)
         "Update Item"
@@ -75,9 +76,10 @@
 (defn character-modal []
   (let [player @(subscribe [:edit-object :edit-player])
         base {:obj player :obj-type "player"}]
-    [:> Modal {:is-open @(subscribe [:modal-open? CHARACTER_MODAL_KEY])
-               :toggle  #(dispatch [:toggle-modal CHARACTER_MODAL_KEY])
-               :size    :lg}
+    [:> Modal {:is-open  @(subscribe [:modal-open? CHARACTER_MODAL_KEY])
+               :toggle   #(dispatch [:toggle-modal CHARACTER_MODAL_KEY])
+               :size     :lg
+               :backdrop :static}
      [:> ModalHeader
       (if (:id player)
         "Update Character"
@@ -92,7 +94,7 @@
                          :obj      player
                          :obj-key  :level
                          :obj-type "player"
-                         :options  (mapv (fn [n] {:label n :value n}) (range 21))}]
+                         :options  (mapv (fn [n] {:label n :value n}) (range 25))}]
 
       [:div.input-group
        [number-input-row (merge base {:label "Hit Points"
