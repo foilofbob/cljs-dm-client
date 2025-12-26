@@ -4,8 +4,9 @@
    [re-frame.core :refer [dispatch subscribe]]
    [camel-snake-kebab.core :as csk]
    [cljs-dm-client.components.components :refer [logical-division]]
-   [cljs-dm-client.components.forms :refer [build-options text-input-row
+   [cljs-dm-client.components.forms :refer [build-options
                                             number-input-row
+                                            text-input-row
                                             textarea-input-row
                                             checkbox-input-row
                                             select-input-row]]

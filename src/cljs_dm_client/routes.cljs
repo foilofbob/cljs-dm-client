@@ -18,7 +18,8 @@
          "party"          :party
          "player-stories" :player-stories
          "timeline"       :timeline
-         "xp-tracker"     :xp-tracker}]))
+         "xp-tracker"     :xp-tracker
+         "spells"         :spells}]))
 
 (defn parse
   [url]

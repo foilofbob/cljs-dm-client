@@ -1,0 +1,30 @@
+@use "../lib/components";
+
+table.spells {
+  td, th {
+    text-align: left;
+    vertical-align: top;
+    border: none;
+    &:not(:first-child) {
+      border-left: 1px solid components.$shadow;
+    }
+    &:not(:last-child) {
+      border-right: 1px solid components.$shadow;
+    }
+  }
+
+  thead {
+    background-color: components.$pastel-purple;
+    color: components.$navy;
+    border-color: components.$mahogany;
+  }
+
+  tbody {
+    background-color: white;
+    border-color: components.$mahogany;
+  }
+}
+
+.spell-search {
+  width: 100%;
+}

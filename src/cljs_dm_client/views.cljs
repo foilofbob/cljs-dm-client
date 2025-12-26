@@ -1,14 +1,15 @@
 (ns cljs-dm-client.views
   (:require
    [re-frame.core :refer [dispatch subscribe] :as re-frame]
-   [cljs-dm-client.routes :as routes]
    [cljs-dm-client.campaign-select.views :refer [campaign-select]]
-   [cljs-dm-client.timeline.views :refer [timeline]]
-   [cljs-dm-client.miscellaneous.views :refer [miscellaneous]]
    [cljs-dm-client.characters.npcs.views :refer [npcs]]
    [cljs-dm-client.characters.party.views :refer [party]]
-   [cljs-dm-client.player-stories.views :refer [player-stories]]
    [cljs-dm-client.locations.views :refer [locations]]
+   [cljs-dm-client.miscellaneous.views :refer [miscellaneous]]
+   [cljs-dm-client.player-stories.views :refer [player-stories]]
+   [cljs-dm-client.routes :as routes]
+   [cljs-dm-client.spells.views :refer [spells]]
+   [cljs-dm-client.timeline.views :refer [timeline]]
    [cljs-dm-client.xp-tracker.views :refer [xp-tracker]]))
 
 (defmethod routes/panels :campaign-select-panel [] [campaign-select])
@@ -17,6 +18,7 @@
 (defmethod routes/panels :npcs-panel [] [npcs])
 (defmethod routes/panels :party-panel [] [party])
 (defmethod routes/panels :player-stories-panel [] [player-stories])
+(defmethod routes/panels :spells-panel [] [spells])
 (defmethod routes/panels :timeline-panel [] [timeline])
 (defmethod routes/panels :xp-tracker-panel [] [xp-tracker])
 

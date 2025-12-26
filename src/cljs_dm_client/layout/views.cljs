@@ -18,7 +18,9 @@
    {:id   :xp-tracker
     :name "XP Tracker"}
    {:id   :miscellaneous
-    :name "Miscellaneous"}])
+    :name "Miscellaneous"}
+   {:id   :spells
+    :name "Spells"}])
 
 (defn header-content []
   (let [campaign @(subscribe [:selected-campaign])
