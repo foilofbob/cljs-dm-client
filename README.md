@@ -12,15 +12,16 @@ The API code is located at [go-dm-api](https://github.com/foilofbob/go-dm-api)
   - Is this really worth it???
 - User Authentication
 - Character Sheets
-  - Add individual proficiencies
-    - [x] Store mods to db
-    - [x] Calc on sheets
-    - [x] Add to edit modal
   - [ ] Add styling to indicate proficiency bonus
 - NPC tracking
   - [x] Add field to differentiate NPCs 
-  - [ ] NPCs need a field to store level, since level drives proficiency bonus (Player level is calculated, NPCs aren't)
+  - [x] NPCs need a field to store level, since level drives proficiency bonus (Player level is calculated, NPCs aren't)
 - Persist the most recently viewed location
+- QoL Todos:
+  - [ ] Edit / Delete locations
+  - [ ] Edit / Delete misc. categories
+  - [ ] Sort spells
+  - [ ] Fix error on adding misc. category
 
 ## Getting Started
 

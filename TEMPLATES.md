@@ -16,6 +16,6 @@
 
 ### Actions
 
-| Action | Attack | Damage | Range | Type     | Notes               |
-|--------|--------|--------|-------|----------|---------------------|
-| Dagger | +8     | 1d4+4  | 20/60 | Piercing | Finese Light Thrown |
+| Action | Attack | Damage | Range | Type     | Notes                |
+|--------|--------|--------|-------|----------|----------------------|
+| Dagger | +8     | 1d4+4  | 20/60 | Piercing | Finesse Light Thrown |

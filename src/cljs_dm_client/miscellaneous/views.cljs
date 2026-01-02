@@ -65,7 +65,7 @@
                                          :on-click #(dispatch [::events/open-edit-category-modal nil])}
                                 "Add Category"]
                          :text "Categories"}]
-      (into [:<>]
+      (into [:div.inline-actions]
             (for [category categories]
               [:button.action-button {:on-click #(dispatch [::events/select-category (:id category)])}
                (:name category)]))]]))

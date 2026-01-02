@@ -311,12 +311,18 @@
        [:span "Survival"]
        [:span (skill-fn wisdom :survival-proficiency-bonus)]]]]))
 
-(defn character-content [characters character-items]
+(defn character-content [player-characters?]
   (let [notes               @(subscribe [:notes])
         items-not-carried   @(subscribe [::subs/items-not-carried])
-        items-as-containers @(subscribe [::subs/items-as-containers])
-        container-items     @(subscribe [::subs/items-carried-by-items])
-        current-party-level @(subscribe [::subs/current-party-level])]
+        items-as-containers (when player-characters? @(subscribe [::subs/items-as-containers]))
+        container-items     (when player-characters? @(subscribe [::subs/items-carried-by-items]))
+        current-party-level @(subscribe [::subs/current-party-level])
+        characters          (if player-characters?
+                              @(subscribe [::subs/players])
+                              @(subscribe [::subs/npcs]))
+        character-items     (if player-characters?
+                              @(subscribe [::subs/items-carried-by-players])
+                              @(subscribe [::subs/items-carried-by-npcs]))]
     [:<>
      [:div.party.panel-content
       [:div.panel-content

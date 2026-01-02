@@ -142,7 +142,7 @@
                                          :on-click #(dispatch [::events/open-edit-location-modal nil])}
                                 "Add Location"]
                          :text "Locations"}]
-      (into [:<>]
+      (into [:div.inline-actions]
             (for [location locations]
               [:button.action-button {:on-click #(dispatch [::events/select-location (:id location)])}
                (:name location)]))]]))

@@ -9,13 +9,7 @@
    [cljs-dm-client.characters.views :refer [character-content
                                             character-modal
                                             item-component
-                                            item-modal]]
-   [cljs-dm-client.characters.subs :as subs]))
-
-(defn npcs-content []
-  (let [players      @(subscribe [::subs/npcs])
-        player-items @(subscribe [::subs/items-carried-by-npcs])]
-    (character-content players player-items)))
+                                            item-modal]]))
 
 (defn npcs []
   [:<>
@@ -24,5 +18,5 @@
    [character-modal]
    [loading-wrapper
     {:container [campaign-panel]
-     :content   [npcs-content]}]])
+     :content   [character-content false]}]])
 
