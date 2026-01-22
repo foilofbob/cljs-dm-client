@@ -74,6 +74,11 @@
   }
 }
 
+.spell-casting {
+  display: flex;
+  justify-content: space-between;
+}
+
 .item {
   display: flex;
   background-color: white;
@@ -106,9 +111,6 @@
     &.other {
       color: turquoise;
     }
-  }
-  .edit-button {
-
   }
 }
 

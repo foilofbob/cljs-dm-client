@@ -38,6 +38,11 @@
  (fn [campaign]
    (utils/level-by-xp (:current-player-xp campaign))))
 
+(reg-sub
+ ::spellbooks
+ (fn [db]
+     (-> db :page-data :spellbooks (or []))))
+
 ;;;;;;;;;;;;; PLAYERS ;;;;;;;;;;;;;;;
 
 (reg-sub

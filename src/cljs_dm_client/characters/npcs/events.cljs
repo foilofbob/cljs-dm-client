@@ -12,15 +12,16 @@
  :npcs-page-load
  (utils/page-loader
   [::page-load-dispatcher]
-  [::fetch-npcs-success ::events/fetch-items-success :fetch-notes-success]
-  [::fetch-npcs-failure ::events/fetch-items-failure :fetch-notes-failure]))
+  [::fetch-npcs-success ::events/fetch-items-success :fetch-notes-success ::events/fetch-spellbooks-success]
+  [::fetch-npcs-failure ::events/fetch-items-failure :fetch-notes-failure ::events/fetch-spellbooks-failure]))
 
 (reg-event-fx
  ::page-load-dispatcher
  (fn [_ _]
    {:dispatch-n [[::fetch-npcs]
                  [::events/fetch-items]
-                 [:fetch-notes "character"]]}))
+                 [:fetch-notes "character"]
+                 [::events/fetch-spellbooks]]}))
 
 (reg-event-fx
  ::fetch-npcs

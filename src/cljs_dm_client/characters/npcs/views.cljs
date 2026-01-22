@@ -9,13 +9,15 @@
    [cljs-dm-client.characters.views :refer [character-content
                                             character-modal
                                             item-component
-                                            item-modal]]))
+                                            item-modal
+                                            spellbook-modal]]))
 
 (defn npcs []
   [:<>
    [note-modal]
    [item-modal]
    [character-modal]
+   [spellbook-modal]
    [loading-wrapper
     {:container [campaign-panel]
      :content   [character-content false]}]])

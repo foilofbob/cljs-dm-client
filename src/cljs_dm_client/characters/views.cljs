@@ -24,6 +24,7 @@
 
 (def CHARACTER_MODAL_KEY :player-modal)
 (def ITEM_MODAL_KEY :item-modal)
+(def SPELLBOOK_MODAL_KEY :spellbook-modal)
 
 (def proficiency-options
   [{:label "0" :value 0}
@@ -311,6 +312,27 @@
        [:span "Survival"]
        [:span (skill-fn wisdom :survival-proficiency-bonus)]]]]))
 
+(defn spellbook-modal []
+      (let [spellbook @(subscribe [:edit-object :edit-spellbook])
+            base {:obj spellbook :obj-type "spellbook"}]
+           [:> Modal {:is-open  @(subscribe [:modal-open? SPELLBOOK_MODAL_KEY])
+                      :toggle   #(dispatch [:toggle-modal SPELLBOOK_MODAL_KEY])
+                      :size     :lg
+                      :backdrop :static}
+            [:> ModalHeader
+             (if (:id spellbook)
+               "Update Spell Casting"
+               "Add Spell Casting")]
+            [:> ModalBody {:class :modal-body}
+             [textarea-input-row "Spell Stats" 5000 15 spellbook "spellbook" :spell-stats]]
+            [:> ModalFooter {:class :modal-footer-buttons}
+             [:button.action-link {:on-click #(dispatch [:toggle-modal SPELLBOOK_MODAL_KEY])}
+              "Cancel"]
+             [:button.action-link {:on-click #(dispatch [::events/delete-spellbook (:id spellbook)])}
+              "Delete"]
+             [:button.action-button {:on-click #(dispatch [::events/edit-spellbook spellbook])}
+              "Save"]]]))
+
 (defn character-content [player-characters?]
   (let [notes               @(subscribe [:notes])
         items-not-carried   @(subscribe [::subs/items-not-carried])
@@ -322,7 +344,8 @@
                               @(subscribe [::subs/npcs]))
         character-items     (if player-characters?
                               @(subscribe [::subs/items-carried-by-players])
-                              @(subscribe [::subs/items-carried-by-npcs]))]
+                              @(subscribe [::subs/items-carried-by-npcs]))
+        spellbooks          @(subscribe [::subs/spellbooks])]
     [:<>
      [:div.party.panel-content
       [:div.panel-content
@@ -332,7 +355,10 @@
             (for [character characters]
               (let [character-level (if (some-> character :level (> 0))
                                       (-> character :level utils/level-by-level)
-                                      current-party-level)]
+                                      current-party-level)
+                    spellbook       (some->> spellbooks
+                                             (filter #(= (:character-id %) (:id character)))
+                                             first)]
                 [:div.player-card
                  [:div.player-header
                   [:div
@@ -359,6 +385,19 @@
                            [[:button.action-link {:on-click #(dispatch [:open-edit-note-modal character "CHARACTER" ""])}
                              "Add Note"]
                             [:hr]]))
+
+                 (if (seq spellbook)
+                   [:<>
+                    [:div.spell-casting
+                     [:strong "Spell Casting"]
+                     [:button.edit-button {:on-click #(dispatch [::events/open-edit-spellbook-modal (:id character) spellbook])}]]
+                    [markdown-div (:spell-stats spellbook)]
+                    ;; TODO: Spell table
+                    ]
+                   [:button.action-link {:on-click #(dispatch [::events/open-edit-spellbook-modal (:id character) nil])}
+                    "Add Spell Casting"])
+                 [:hr]
+
                  [:div [:strong "Inventory"]]
                  [:div.items
                   (into [:<>]
