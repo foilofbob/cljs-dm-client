@@ -140,7 +140,7 @@
      [:div.right-panel
       [logical-division {:left [:button {:class [:action-button :skinny]
                                          :on-click #(dispatch [::events/open-edit-location-modal nil])}
-                                "Add Location"]
+                                "Add"]
                          :text "Locations"}]
       (into [:div.inline-actions]
             (for [location locations]

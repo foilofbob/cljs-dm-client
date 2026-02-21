@@ -118,3 +118,8 @@
   display: grid;
   grid-template-columns: 33% 33% 33%;
 }
+
+.spell-list {
+  max-height: 400px;
+  overflow: auto;
+}

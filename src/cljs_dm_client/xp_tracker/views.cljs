@@ -104,7 +104,7 @@
     [summary]
     [logical-division {:left [:button {:class [:action-button :skinny]
                                        :on-click #(dispatch [::events/open-edit-xp-modal nil])}
-                              "Add XP"]
+                              "Add"]
                        :text "Planned XP"
                        :class :no-bottom}]
     [planned-xp]]

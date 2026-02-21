@@ -15,6 +15,7 @@
    [cljs-dm-client.components.markdown :refer [markdown-div]]
    [cljs-dm-client.characters.events :as events]
    [cljs-dm-client.characters.subs :as subs]
+   [cljs-dm-client.spells.spellbook :refer [add-spell-button]]
    [cljs-dm-client.utils :as utils]
    ["reactstrap/lib/Modal" :default Modal]
    ["reactstrap/lib/ModalBody" :default ModalBody]
@@ -333,6 +334,65 @@
              [:button.action-button {:on-click #(dispatch [::events/edit-spellbook spellbook])}
               "Save"]]]))
 
+(defn spells-for-level [spell-list]
+      (for [spell spell-list]
+           (let [element-id (str "spell-entry-" (:id spell) )]
+                [:<>
+                 [:span {:id element-id}
+                  (:name spell)]
+                 [:> UncontrolledTooltip {:target           element-id
+                                          :placement        "bottom"
+                                          :inner-class-name "component-tooltip wide-description"}
+                  [:div [:strong "Components: "] (:components spell)]
+                  [:div [:strong "Casting Time: "] (:casting-time spell)]
+                  [:div [:strong "Duration: "] (:duration spell)]
+                  [:div [:strong "Range: "] (:range spell)]
+                  [:div (:description spell)]
+                  (when (seq (:higher-casting spell))
+                        [:div [:strong "Higher Casting: "] (:higher-casting spell)])]])))
+
+(defn spell-tables [spellbook]
+      (let [{:keys [cantrip first second third fourth fifth sixth seventh eighth ninth]} (:spells spellbook)
+            lower? (or cantrip first second third fourth)
+            higher? (or fifth sixth seventh eighth ninth)]
+           [:<>
+            (when lower?
+                  [:table
+                   [:thead
+                    [:tr
+                     [:th "Cantrips"]
+                     [:th "1st Level"]
+                     [:th "2nd Level"]
+                     [:th "3rd Level"]
+                     [:th "4th Level"]]]
+                   [:tbody
+                    [:tr
+                     (into [:td] (spells-for-level cantrip))
+                     (into [:td] (spells-for-level first))
+                     (into [:td] (spells-for-level second))
+                     (into [:td] (spells-for-level third))
+                     (into [:td] (spells-for-level fourth))]]])
+
+            (when (and lower? higher?)
+                  [:hr])
+
+            (when higher?
+                  [:table
+                   [:thead
+                    [:tr
+                     [:th "5th Level"]
+                     [:th "6th Level"]
+                     [:th "7th Level"]
+                     [:th "8th Level"]
+                     [:th "9th Level"]]]
+                   [:tbody
+                    [:tr
+                     (into [:td] (spells-for-level fifth))
+                     (into [:td] (spells-for-level sixth))
+                     (into [:td] (spells-for-level seventh))
+                     (into [:td] (spells-for-level eighth))
+                     (into [:td] (spells-for-level ninth))]]])]))
+
 (defn character-content [player-characters?]
   (let [notes               @(subscribe [:notes])
         items-not-carried   @(subscribe [::subs/items-not-carried])
@@ -345,7 +405,7 @@
         character-items     (if player-characters?
                               @(subscribe [::subs/items-carried-by-players])
                               @(subscribe [::subs/items-carried-by-npcs]))
-        spellbooks          @(subscribe [::subs/spellbooks])]
+        spellbooks          @(subscribe [::subs/complete-spellbooks])]
     [:<>
      [:div.party.panel-content
       [:div.panel-content
@@ -392,8 +452,12 @@
                      [:strong "Spell Casting"]
                      [:button.edit-button {:on-click #(dispatch [::events/open-edit-spellbook-modal (:id character) spellbook])}]]
                     [markdown-div (:spell-stats spellbook)]
-                    ;; TODO: Spell table
-                    ]
+
+                    ;; TODO: Add / Remove Spells
+                    #_[:button.action-button {:on-click #(dispatch [::events/open-edit-player-modal nil])}
+                     "Add Spell"]
+                    (add-spell-button (:id spellbook))
+                    (spell-tables spellbook)]
                    [:button.action-link {:on-click #(dispatch [::events/open-edit-spellbook-modal (:id character) nil])}
                     "Add Spell Casting"])
                  [:hr]
@@ -421,7 +485,7 @@
      [:div.right-panel
       [logical-division {:left [:button {:class [:action-button :skinny]
                                          :on-click #(dispatch [::events/open-edit-item-modal nil])}
-                                "Add Item"]
+                                "Add"]
                          :text "Unassigned Items"}]
       (into [:<>]
             (map item-component items-not-carried))]]))

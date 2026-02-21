@@ -2,7 +2,8 @@
   (:require
    [cljs-dm-client.components.forms :refer [build-options-from-list]]
    [re-frame.core :refer [reg-sub]]
-   [cljs-dm-client.utils :as utils]))
+   [cljs-dm-client.utils :as utils]
+   [clojure.set :refer [rename-keys]]))
 
 (reg-sub
  ::items
@@ -42,6 +43,36 @@
  ::spellbooks
  (fn [db]
      (-> db :page-data :spellbooks (or []))))
+
+(reg-sub
+ ::spells
+ (fn [db]
+     (-> db :page-data :spells (or []))))
+
+(reg-sub
+ ::complete-spellbooks
+ :<- [::spellbooks]
+ :<- [::spells]
+ (fn [[spellbooks all-spells]]
+     (map
+      (fn [spellbook]
+          (let [spell-ids (->> spellbook :spell-book-entries (mapv :spell-id) set)
+                spells (filter #(contains? spell-ids (:id %)) all-spells)]
+               (assoc spellbook
+                      :spells
+                      (rename-keys
+                       (group-by :level spells)
+                       {"cantrip" :cantrip
+                        "1st" :first
+                        "2nd" :second
+                        "3rd" :third
+                        "4th" :fourth
+                        "5th" :fifth
+                        "6th" :sixth
+                        "7th" :seventh
+                        "8th" :eighth
+                        "9th" :ninth}))))
+      spellbooks)))
 
 ;;;;;;;;;;;;; PLAYERS ;;;;;;;;;;;;;;;
 

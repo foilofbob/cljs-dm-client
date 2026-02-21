@@ -10,10 +10,12 @@
                                             character-modal
                                             item-component
                                             item-modal
-                                            spellbook-modal]]))
+                                            spellbook-modal]]
+   [cljs-dm-client.spells.spellbook :refer [add-spell-modal]]))
 
 (defn npcs []
   [:<>
+   [add-spell-modal]
    [note-modal]
    [item-modal]
    [character-modal]

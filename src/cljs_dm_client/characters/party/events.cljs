@@ -12,8 +12,16 @@
  :party-page-load
  (utils/page-loader
   [::page-load-dispatcher]
-  [::fetch-players-success ::events/fetch-items-success ::events/fetch-spellbooks-success :fetch-notes-success]
-  [::fetch-players-failure ::events/fetch-items-failure ::events/fetch-spellbooks-failure :fetch-notes-failure]))
+  [::fetch-players-success
+   ::events/fetch-items-success
+   ::events/fetch-spellbooks-success
+   :fetch-notes-success
+   :fetch-spells-success]
+  [::fetch-players-failure
+   ::events/fetch-items-failure
+   ::events/fetch-spellbooks-failure
+   :fetch-notes-failure
+   :fetch-spells-failure]))
 
 (reg-event-fx
  ::page-load-dispatcher
@@ -21,7 +29,8 @@
    {:dispatch-n [[::fetch-players]
                  [::events/fetch-items]
                  [::events/fetch-spellbooks]
-                 [:fetch-notes "character"]]}))
+                 [:fetch-notes "character"]
+                 [:fetch-spells]]}))
 
 (reg-event-fx
  ::fetch-players
