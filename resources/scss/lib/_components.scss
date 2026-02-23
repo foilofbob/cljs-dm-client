@@ -60,6 +60,11 @@ hr {
       margin-top: 0;
     }
   }
+
+  &.clear {
+    border: none;
+    margin: 2px 0;
+  }
 }
 
 .logical-division {

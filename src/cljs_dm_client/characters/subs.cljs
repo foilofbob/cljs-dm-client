@@ -42,37 +42,42 @@
 (reg-sub
  ::spellbooks
  (fn [db]
-     (-> db :page-data :spellbooks (or []))))
+   (-> db :page-data :spellbooks (or []))))
 
 (reg-sub
  ::spells
  (fn [db]
-     (-> db :page-data :spells (or []))))
+   (-> db :page-data :spells (or []))))
 
 (reg-sub
  ::complete-spellbooks
  :<- [::spellbooks]
  :<- [::spells]
  (fn [[spellbooks all-spells]]
-     (map
-      (fn [spellbook]
-          (let [spell-ids (->> spellbook :spell-book-entries (mapv :spell-id) set)
-                spells (filter #(contains? spell-ids (:id %)) all-spells)]
-               (assoc spellbook
-                      :spells
-                      (rename-keys
-                       (group-by :level spells)
-                       {"cantrip" :cantrip
-                        "1st" :first
-                        "2nd" :second
-                        "3rd" :third
-                        "4th" :fourth
-                        "5th" :fifth
-                        "6th" :sixth
-                        "7th" :seventh
-                        "8th" :eighth
-                        "9th" :ninth}))))
-      spellbooks)))
+   (map
+    (fn [spellbook]
+      (let [spell-ids (->> spellbook :spell-book-entries (mapv :spell-id) set)
+            spells (->> spellbook
+                        :spell-book-entries
+                        (map (fn [entry]
+                               (-> (filter #(= (:id %) (:spell-id entry)) all-spells)
+                                   first
+                                   (assoc :spellbook-entry-id (:id entry))))))]
+        (assoc spellbook
+               :spells
+               (rename-keys
+                (group-by :level spells)
+                {"Cantrip" :cantrip
+                 "1st" :first
+                 "2nd" :second
+                 "3rd" :third
+                 "4th" :fourth
+                 "5th" :fifth
+                 "6th" :sixth
+                 "7th" :seventh
+                 "8th" :eighth
+                 "9th" :ninth}))))
+    spellbooks)))
 
 ;;;;;;;;;;;;; PLAYERS ;;;;;;;;;;;;;;;
 

@@ -314,84 +314,98 @@
        [:span (skill-fn wisdom :survival-proficiency-bonus)]]]]))
 
 (defn spellbook-modal []
-      (let [spellbook @(subscribe [:edit-object :edit-spellbook])
-            base {:obj spellbook :obj-type "spellbook"}]
-           [:> Modal {:is-open  @(subscribe [:modal-open? SPELLBOOK_MODAL_KEY])
-                      :toggle   #(dispatch [:toggle-modal SPELLBOOK_MODAL_KEY])
-                      :size     :lg
-                      :backdrop :static}
-            [:> ModalHeader
-             (if (:id spellbook)
-               "Update Spell Casting"
-               "Add Spell Casting")]
-            [:> ModalBody {:class :modal-body}
-             [textarea-input-row "Spell Stats" 5000 15 spellbook "spellbook" :spell-stats]]
-            [:> ModalFooter {:class :modal-footer-buttons}
-             [:button.action-link {:on-click #(dispatch [:toggle-modal SPELLBOOK_MODAL_KEY])}
-              "Cancel"]
-             [:button.action-link {:on-click #(dispatch [::events/delete-spellbook (:id spellbook)])}
-              "Delete"]
-             [:button.action-button {:on-click #(dispatch [::events/edit-spellbook spellbook])}
-              "Save"]]]))
+  (let [spellbook @(subscribe [:edit-object :edit-spellbook])
+        base {:obj spellbook :obj-type "spellbook"}]
+    [:> Modal {:is-open  @(subscribe [:modal-open? SPELLBOOK_MODAL_KEY])
+               :toggle   #(dispatch [:toggle-modal SPELLBOOK_MODAL_KEY])
+               :size     :lg
+               :backdrop :static}
+     [:> ModalHeader
+      (if (:id spellbook)
+        "Update Spell Casting"
+        "Add Spell Casting")]
+     [:> ModalBody {:class :modal-body}
+      [textarea-input-row "Spell Stats" 5000 15 spellbook "spellbook" :spell-stats]]
+     [:> ModalFooter {:class :modal-footer-buttons}
+      [:button.action-link {:on-click #(dispatch [:toggle-modal SPELLBOOK_MODAL_KEY])}
+       "Cancel"]
+      [:button.action-link {:on-click #(dispatch [::events/delete-spellbook (:id spellbook)])}
+       "Delete"]
+      [:button.action-button {:on-click #(dispatch [::events/edit-spellbook spellbook])}
+       "Save"]]]))
 
 (defn spells-for-level [spell-list]
-      (for [spell spell-list]
-           (let [element-id (str "spell-entry-" (:id spell) )]
-                [:<>
-                 [:span {:id element-id}
-                  (:name spell)]
-                 [:> UncontrolledTooltip {:target           element-id
-                                          :placement        "bottom"
-                                          :inner-class-name "component-tooltip wide-description"}
-                  [:div [:strong "Components: "] (:components spell)]
-                  [:div [:strong "Casting Time: "] (:casting-time spell)]
-                  [:div [:strong "Duration: "] (:duration spell)]
-                  [:div [:strong "Range: "] (:range spell)]
-                  [:div (:description spell)]
-                  (when (seq (:higher-casting spell))
-                        [:div [:strong "Higher Casting: "] (:higher-casting spell)])]])))
+  (for [spell spell-list]
+    (let [element-id (str "spell-entry-" (:spellbook-entry-id spell))]
+      [:<>
+       [:div {:id element-id}
+        (:name spell)
+                  ;; TODO: Remove button / icon / link
+        ]
+       [:> UncontrolledTooltip {:target           element-id
+                                :placement        "bottom"
+                                :inner-class-name "component-tooltip wide-description"}
+        [:div [:strong "Components: "] (:components spell)]
+        [:div [:strong "Casting Time: "] (:casting-time spell)]
+        [:div [:strong "Duration: "] (:duration spell)]
+        [:div [:strong "Range: "] (:range spell)]
+        [:div (:description spell)]
+        (when (seq (:higher-casting spell))
+          [:div [:strong "Higher Casting: "] (:higher-casting spell)])]])))
 
 (defn spell-tables [spellbook]
-      (let [{:keys [cantrip first second third fourth fifth sixth seventh eighth ninth]} (:spells spellbook)
-            lower? (or cantrip first second third fourth)
-            higher? (or fifth sixth seventh eighth ninth)]
-           [:<>
-            (when lower?
-                  [:table
-                   [:thead
-                    [:tr
-                     [:th "Cantrips"]
-                     [:th "1st Level"]
-                     [:th "2nd Level"]
-                     [:th "3rd Level"]
-                     [:th "4th Level"]]]
-                   [:tbody
-                    [:tr
-                     (into [:td] (spells-for-level cantrip))
-                     (into [:td] (spells-for-level first))
-                     (into [:td] (spells-for-level second))
-                     (into [:td] (spells-for-level third))
-                     (into [:td] (spells-for-level fourth))]]])
+  (let [{:keys [cantrip first second third fourth fifth sixth seventh eighth ninth]} (:spells spellbook)
+        lower? (or cantrip first second third fourth)
+        higher? (or fifth sixth seventh eighth ninth)]
+    [:<>
+     (when lower?
+       [:table
+        [:thead
+         [:tr
+          [:th "Cantrips"]
+          [:th "1st Level"]
+          [:th "2nd Level"]
+          [:th "3rd Level"]
+          [:th "4th Level"]]]
+        [:tbody
+         [:tr
+          (into [:td.spell-column] (spells-for-level cantrip))
+          (into [:td.spell-column] (spells-for-level first))
+          (into [:td.spell-column] (spells-for-level second))
+          (into [:td.spell-column] (spells-for-level third))
+          (into [:td.spell-column] (spells-for-level fourth))]]])
 
-            (when (and lower? higher?)
-                  [:hr])
+     (when (and lower? higher?)
+       [:hr.clear])
 
-            (when higher?
-                  [:table
-                   [:thead
-                    [:tr
-                     [:th "5th Level"]
-                     [:th "6th Level"]
-                     [:th "7th Level"]
-                     [:th "8th Level"]
-                     [:th "9th Level"]]]
-                   [:tbody
-                    [:tr
-                     (into [:td] (spells-for-level fifth))
-                     (into [:td] (spells-for-level sixth))
-                     (into [:td] (spells-for-level seventh))
-                     (into [:td] (spells-for-level eighth))
-                     (into [:td] (spells-for-level ninth))]]])]))
+     (when higher?
+       [:table
+        [:thead
+         [:tr
+          [:th "5th Level"]
+          [:th "6th Level"]
+          [:th "7th Level"]
+          [:th "8th Level"]
+          [:th "9th Level"]]]
+        [:tbody
+         [:tr
+          (into [:td.spell-column] (spells-for-level fifth))
+          (into [:td.spell-column] (spells-for-level sixth))
+          (into [:td.spell-column] (spells-for-level seventh))
+          (into [:td.spell-column] (spells-for-level eighth))
+          (into [:td.spell-column] (spells-for-level ninth))]]])]))
+
+(defn spell-casting [spellbook character]
+  (if (seq spellbook)
+    [:<>
+     [:div.spell-casting
+      [:strong "Spell Casting"]
+      [:button.edit-button {:on-click #(dispatch [::events/open-edit-spellbook-modal (:id character) spellbook])}]]
+     [markdown-div (:spell-stats spellbook)]
+     (add-spell-button (:id spellbook))
+     (spell-tables spellbook)]
+    [:button.action-link {:on-click #(dispatch [::events/open-edit-spellbook-modal (:id character) nil])}
+     "Add Spell Casting"]))
 
 (defn character-content [player-characters?]
   (let [notes               @(subscribe [:notes])
@@ -420,54 +434,42 @@
                                              (filter #(= (:character-id %) (:id character)))
                                              first)]
                 [:div.player-card
-                 [:div.player-header
-                  [:div
-                   [:div.player-name (:name character)]
-                   [:div (str (:race character) ", " (:class character) " (lvl " (:lvl character-level) ")")]]
-                  [stats character]
-                  [:button.edit-button {:on-click #(dispatch [::events/open-edit-player-modal character])}]]
-                 [:hr]
-                 [:div.attribute-row
-                  [attributes character]
-                  [saves character (:proficiency character-level)]]
-                 [:hr]
-                 [:div [:strong "Proficiency Bonus: "] (:proficiency character-level)]
-                 [:div [:strong "Languages: "] (:languages character)]
-                 [:div [:strong "Proficiencies: "] (:proficiencies character)]
-                 [:hr]
-                 [skills character (:proficiency character-level)]
-                 [:hr]
-                 (into [:<>]
-                       (or (some->> notes
-                                    (filter #(= (:id character) (:reference-id %)))
-                                    seq
-                                    build-notes)
-                           [[:button.action-link {:on-click #(dispatch [:open-edit-note-modal character "CHARACTER" ""])}
-                             "Add Note"]
-                            [:hr]]))
+                 [:div.player-card-left
+                  [:div.player-header
+                   [:div
+                    [:div.player-name (:name character)]
+                    [:div (str (:race character) ", " (:class character) " (lvl " (:lvl character-level) ")")]]
+                   [stats character]
+                   [:button.edit-button {:on-click #(dispatch [::events/open-edit-player-modal character])}]]
+                  [:hr]
+                  [:div.attribute-row
+                   [attributes character]
+                   [saves character (:proficiency character-level)]]
+                  [:hr]
+                  [:div [:strong "Proficiency Bonus: "] (:proficiency character-level)]
+                  [:div [:strong "Languages: "] (:languages character)]
+                  [:div [:strong "Proficiencies: "] (:proficiencies character)]
+                  [:hr]
+                  [skills character (:proficiency character-level)]
+                  [:hr]
 
-                 (if (seq spellbook)
-                   [:<>
-                    [:div.spell-casting
-                     [:strong "Spell Casting"]
-                     [:button.edit-button {:on-click #(dispatch [::events/open-edit-spellbook-modal (:id character) spellbook])}]]
-                    [markdown-div (:spell-stats spellbook)]
+                  [:div [:strong "Inventory"]]
+                  [:div.items
+                   (into [:<>]
+                         (->> character-items
+                              (filter #(= (:id character) (:carried-by-id %)))
+                              (map item-component)))]]
 
-                    ;; TODO: Add / Remove Spells
-                    #_[:button.action-button {:on-click #(dispatch [::events/open-edit-player-modal nil])}
-                     "Add Spell"]
-                    (add-spell-button (:id spellbook))
-                    (spell-tables spellbook)]
-                   [:button.action-link {:on-click #(dispatch [::events/open-edit-spellbook-modal (:id character) nil])}
-                    "Add Spell Casting"])
-                 [:hr]
-
-                 [:div [:strong "Inventory"]]
-                 [:div.items
+                 [:div.player-card-right
                   (into [:<>]
-                        (->> character-items
-                             (filter #(= (:id character) (:carried-by-id %)))
-                             (map item-component)))]])))
+                        (or (some->> notes
+                                     (filter #(= (:id character) (:reference-id %)))
+                                     seq
+                                     build-notes)
+                            [[:button.action-link {:on-click #(dispatch [:open-edit-note-modal character "CHARACTER" ""])}
+                              "Add Note"]
+                             [:hr]]))
+                  (spell-casting spellbook character)]])))
       (when (seq items-as-containers)
         [:<>
          [logical-division {:text "Items With Storage"}]

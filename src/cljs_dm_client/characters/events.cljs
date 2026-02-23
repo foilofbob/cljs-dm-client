@@ -32,16 +32,16 @@
 (reg-event-fx
  ::fetch-spellbooks
  (fn [{:keys [db]} _]
-     {:http-xhrio {:method          :get
-                   :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/spellbooks")
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success      [::fetch-spellbooks-success]
-                   :on-failure      [::fetch-spellbooks-failure]}}))
+   {:http-xhrio {:method          :get
+                 :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/spellbooks")
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [::fetch-spellbooks-success]
+                 :on-failure      [::fetch-spellbooks-failure]}}))
 
 (reg-event-db
  ::fetch-spellbooks-success
  (fn [db [_ response]]
-     (utils/standard-success-handler db :spellbooks response)))
+   (utils/standard-success-handler db :spellbooks response)))
 
 (reg-event-fx
  ::fetch-spellbooks-failure
@@ -238,63 +238,63 @@
 (reg-event-fx
  ::open-edit-spellbook-modal
  (fn [{:keys [db]} [_ character-id spellbook]]
-     (let [edit-spellbook (or spellbook
-                              {:campaign-id  (-> db :selected-campaign :id)
-                               :character-id character-id
-                               :spell-stats  blank-spell-stats})]
-          {:fx [[:dispatch [:set-edit-object :edit-spellbook edit-spellbook]]
-                [:dispatch [:toggle-modal :spellbook-modal]]]})))
+   (let [edit-spellbook (or spellbook
+                            {:campaign-id  (-> db :selected-campaign :id)
+                             :character-id character-id
+                             :spell-stats  blank-spell-stats})]
+     {:fx [[:dispatch [:set-edit-object :edit-spellbook edit-spellbook]]
+           [:dispatch [:toggle-modal :spellbook-modal]]]})))
 
 (reg-event-fx
  ::edit-spellbook
  (fn [{:keys [db]} [_ spellbook]]
-     (let [new-spellbook? (nil? (:id spellbook))]
-          {:db         (assoc db :action-status :working)
-           :http-xhrio {:method          (if new-spellbook? :post :put)
-                        :uri             (cond-> (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/spellbook")
-                                                 (not new-spellbook?)
-                                                 (str "/" (:id spellbook)))
-                        :params          (rename-keys
-                                          (cske/transform-keys csk/->PascalCase spellbook)
-                                          {:Id :ID :CampaignId :CampaignID})
-                        :format          (ajax/json-request-format)
-                        :response-format (ajax/json-response-format {:keywords? true})
-                        :on-success      [::edit-spellbook-success new-spellbook?]
-                        :on-failure      [:action-failure]}})))
+   (let [new-spellbook? (nil? (:id spellbook))]
+     {:db         (assoc db :action-status :working)
+      :http-xhrio {:method          (if new-spellbook? :post :put)
+                   :uri             (cond-> (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/spellbook")
+                                      (not new-spellbook?)
+                                      (str "/" (:id spellbook)))
+                   :params          (rename-keys
+                                     (cske/transform-keys csk/->PascalCase spellbook)
+                                     {:Id :ID :CampaignId :CampaignID})
+                   :format          (ajax/json-request-format)
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success      [::edit-spellbook-success new-spellbook?]
+                   :on-failure      [:action-failure]}})))
 
 (reg-event-fx
  ::edit-spellbook-success
  (fn [{:keys [db]} [_ new-spellbook? response]]
-     (let [updated-spellbook (utils/tranform-response response)]
-          {:db (cond-> (assoc db :action-status :success)
+   (let [updated-spellbook (utils/tranform-response response)]
+     {:db (cond-> (assoc db :action-status :success)
 
-                       new-spellbook?
-                       (update-in SPELLBOOK_PATH concat [updated-spellbook])
+            new-spellbook?
+            (update-in SPELLBOOK_PATH concat [updated-spellbook])
 
-                       (not new-spellbook?)
-                       (update-in SPELLBOOK_PATH
-                                  #(map (fn [spellbook]
-                                            (if (= (:id spellbook) (:id updated-spellbook))
-                                              updated-spellbook
-                                              spellbook))
-                                        %)))
-           :fx [[:dispatch [:toggle-modal :spellbook-modal]]]})))
+            (not new-spellbook?)
+            (update-in SPELLBOOK_PATH
+                       #(map (fn [spellbook]
+                               (if (= (:id spellbook) (:id updated-spellbook))
+                                 updated-spellbook
+                                 spellbook))
+                             %)))
+      :fx [[:dispatch [:toggle-modal :spellbook-modal]]]})))
 
 (reg-event-fx
  ::delete-spellbook
  (fn [{:keys [db]} [_ spellbook-id]]
-     {:db         (assoc db :action-status :working)
-      :http-xhrio {:method          :delete
-                   :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/spellbook/" spellbook-id)
-                   :format          (ajax/json-request-format)
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success      [::delete-spellbook-success spellbook-id]
-                   :on-failure      [:action-failure]}}))
+   {:db         (assoc db :action-status :working)
+    :http-xhrio {:method          :delete
+                 :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/spellbook/" spellbook-id)
+                 :format          (ajax/json-request-format)
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [::delete-spellbook-success spellbook-id]
+                 :on-failure      [:action-failure]}}))
 
 (reg-event-fx
  ::delete-spellbook-success
  (fn [{:keys [db]} [_ spellbook-id _response]]
-     {:db (-> db
-                   (assoc :action-status :success)
-                   (update-in SPELLBOOK_PATH #(remove (fn [spellbook] (= spellbook-id (:id spellbook))) %)))
-           :fx [[:dispatch [:toggle-modal :spellbook-modal]]]}))
+   {:db (-> db
+            (assoc :action-status :success)
+            (update-in SPELLBOOK_PATH #(remove (fn [spellbook] (= spellbook-id (:id spellbook))) %)))
+    :fx [[:dispatch [:toggle-modal :spellbook-modal]]]}))
