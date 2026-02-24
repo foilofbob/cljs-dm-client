@@ -15,7 +15,8 @@
    [cljs-dm-client.components.markdown :refer [markdown-div]]
    [cljs-dm-client.characters.events :as events]
    [cljs-dm-client.characters.subs :as subs]
-   [cljs-dm-client.spells.spellbook :refer [add-spell-button]]
+   [cljs-dm-client.spells.spellbook :refer [add-spell-button
+                                            remove-spell-button]]
    [cljs-dm-client.utils :as utils]
    ["reactstrap/lib/Modal" :default Modal]
    ["reactstrap/lib/ModalBody" :default ModalBody]
@@ -338,10 +339,10 @@
   (for [spell spell-list]
     (let [element-id (str "spell-entry-" (:spellbook-entry-id spell))]
       [:<>
-       [:div {:id element-id}
-        (:name spell)
-                  ;; TODO: Remove button / icon / link
-        ]
+       [:div.spell-entry
+        [remove-spell-button (:spellbook-id spell) (:spellbook-entry-id spell)]
+        [:span {:id element-id}
+         (:name spell)]]
        [:> UncontrolledTooltip {:target           element-id
                                 :placement        "bottom"
                                 :inner-class-name "component-tooltip wide-description"}

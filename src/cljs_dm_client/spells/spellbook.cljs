@@ -39,3 +39,7 @@
 (defn add-spell-button [spellbook-id]
   [:button.action-link {:on-click #(dispatch [::events/open-add-spell-modal spellbook-id])}
    "Add Spell"])
+
+(defn remove-spell-button [spellbook-id spellbook-entry-id]
+  [:button.remove-button {:on-click #(dispatch [::events/remove-spellbook-entry spellbook-entry-id spellbook-id])}
+   "x"])

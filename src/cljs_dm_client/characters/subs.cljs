@@ -62,7 +62,8 @@
                         (map (fn [entry]
                                (-> (filter #(= (:id %) (:spell-id entry)) all-spells)
                                    first
-                                   (assoc :spellbook-entry-id (:id entry))))))]
+                                   (assoc :spellbook-entry-id (:id entry))
+                                   (assoc :spellbook-id (:id spellbook))))))]
         (assoc spellbook
                :spells
                (rename-keys

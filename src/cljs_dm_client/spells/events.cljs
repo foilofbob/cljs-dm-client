@@ -69,3 +69,33 @@
                               (update-in spellbook [:spell-book-entries] conj new-entry)
                               spellbook))
                           %))))))
+
+(reg-event-fx
+ ::remove-spellbook-entry
+ (fn [{:keys [db]} [_ spellbook-entry-id spellbook-id]]
+   {:db         (assoc db :action-status :working)
+    :http-xhrio {:method          :delete
+                 :uri             (str "http://localhost:8090/campaign/"
+                                       (-> db :selected-campaign :id)
+                                       "/spellbook/"
+                                       spellbook-id
+                                       "/spell/"
+                                       spellbook-entry-id)
+                 :format          (ajax/json-request-format)
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [::remove-spellbook-entry-success spellbook-entry-id spellbook-id]
+                 :on-failure      [:action-failure]}}))
+
+(reg-event-db
+ ::remove-spellbook-entry-success
+ (fn [db [_ spellbook-entry-id spellbook-id response]]
+   (-> db
+       (assoc :action-status :success)
+       (update-in [:page-data :spellbooks]
+                  (fn [spellbooks]
+                    (map (fn [spellbook]
+                           (if (= (:id spellbook) spellbook-id)
+                             (update-in spellbook [:spell-book-entries]
+                                        #(remove (fn [entry] (= spellbook-entry-id (:id entry))) %))
+                             spellbook))
+                         spellbooks))))))

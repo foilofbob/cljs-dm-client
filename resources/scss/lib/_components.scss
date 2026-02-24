@@ -17,6 +17,7 @@ $copper: #B87333;
 $mocha: #654321;
 $mahogany: #420D09;
 $umber: #3D2D13;
+$crimson: #DC143C;
 
 // Accents
 $air-force: #598BAF;
@@ -193,6 +194,19 @@ hr {
 
   &:hover {
     background-image: url("/assets/svg/pencil-taupe.svg");
+  }
+}
+
+.remove-button {
+  border: none;
+  background-color: transparent;
+  padding: 0 2px;
+  font-size: 13px;
+  color: $shadow;
+  height: fit-content;
+
+  &:hover {
+    color: $crimson;
   }
 }
 
