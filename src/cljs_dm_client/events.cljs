@@ -81,3 +81,12 @@
  :toggle-modal
  (fn [db [_ modal-key]]
    (update-in db [:page-data :modal modal-key :is-open] not)))
+
+(reg-event-db
+ :update-toggles
+ (fn [db [_ toggle-id]]
+   (let [current-toggles (or (-> db :page-data :toggles) #{})]
+     (update-in db [:page-data :toggles]
+                #(if (contains? current-toggles toggle-id)
+                   (disj current-toggles toggle-id)
+                   (conj current-toggles toggle-id))))))

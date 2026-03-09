@@ -31,3 +31,8 @@
  :modal-open?
  (fn [db [_ modal-key]]
    (some-> db :page-data :modal modal-key :is-open)))
+
+(reg-sub
+ :toggle-toggled?
+ (fn [db [_ toggle-id]]
+   (-> db :page-data :toggles (contains? toggle-id))))

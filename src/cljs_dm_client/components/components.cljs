@@ -1,7 +1,10 @@
 (ns cljs-dm-client.components.components
   (:require
    [reagent.core :as r]
-   [re-frame.core :refer [reg-event-db reg-sub]]))
+   [re-frame.core :refer [dispatch
+                          reg-event-db
+                          reg-sub
+                          subscribe]]))
 
 (reg-event-db
  :set-edit-object
@@ -38,17 +41,16 @@
 (defn idx->accent-class [idx]
   (get accent-colors (mod idx (count accent-colors))))
 
-(defn toggle-container [{:keys [title desc header-class edit-fn]} content]
-  (let [toggle-atom (r/atom false)]
-    (fn [{:keys [title desc edit-fn]} content]
-      [:div.toggle-container
-       [:div.toggle-header {:class header-class}
-        [:button.action-button.toggle {:type     :button
-                                       :on-click #(do (swap! toggle-atom not) (print (str @toggle-atom)))}
-         (if @toggle-atom "-" "+")]
-        [:div.toggle-title title]
-        [:div.toggle-description desc]
-        (when edit-fn
-          [:button.edit-button {:type     :button
-                                :on-click edit-fn}])]
-       (when @toggle-atom content)])))
+(defn toggle-container [{:keys [id title desc header-class edit-fn]} content]
+  (let [toggled? @(subscribe [:toggle-toggled? id])]
+    [:div.toggle-container
+     [:div.toggle-header {:class header-class}
+      [:button.action-button.toggle {:type     :button
+                                     :on-click #(dispatch [:update-toggles id])}
+       (if toggled? "-" "+")]
+      [:div.toggle-title title]
+      [:div.toggle-description desc]
+      (when edit-fn
+        [:button.edit-button {:type     :button
+                              :on-click edit-fn}])]
+     (when toggled? content)]))

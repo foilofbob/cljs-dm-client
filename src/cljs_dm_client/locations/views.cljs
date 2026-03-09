@@ -1,5 +1,6 @@
 (ns cljs-dm-client.locations.views
   (:require
+   [camel-snake-kebab.core :as csk]
    [reagent.core :as r]
    [re-frame.core :refer [dispatch subscribe]]
    [cljs-dm-client.components.components :refer [idx->accent-class
@@ -127,7 +128,8 @@
       (let [sublocations @(subscribe [::subs/sublocations-to-show])]
         (into [:div.sublocations]
               (for [[idx sublocation] (map-indexed vector sublocations)]
-                [toggle-container {:header-class (idx->accent-class idx)
+                [toggle-container {:id           (str "toggle-" (:id selected-location) "-" (-> sublocation :name csk/->PascalCase))
+                                   :header-class (idx->accent-class idx)
                                    :title        (:name sublocation)
                                    :desc         (:description sublocation)
                                    :edit-fn      #(dispatch [::events/open-edit-sublocation-modal sublocation])}

@@ -23,7 +23,8 @@
   (let [players @(subscribe [::subs/players])]
     (into [:div.player-stories-page.panel-content]
           (for [[idx player] (map-indexed vector players)]
-            [toggle-container {:header-class (idx->accent-class idx)
+            [toggle-container {:id           (str "toggle-" (:id player))
+                               :header-class (idx->accent-class idx)
                                :title        (:name player)}
              [player-notes player]]))))
 
