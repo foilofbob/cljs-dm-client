@@ -3,7 +3,8 @@
    [clojure.math :as math]
    [re-frame.core :refer [dispatch subscribe]]
    [cljs-dm-client.layout.views :refer [campaign-panel
-                                        loading-wrapper]]
+                                        loading-wrapper
+                                        right-panel-toggle]]
    [cljs-dm-client.spells.events :as events]
    [cljs-dm-client.spells.subs :as subs]))
 
@@ -37,7 +38,7 @@
             [:td components]
             [:td description]
             [:td higher-casting]])]]]]
-     [:div.right-panel
+     [right-panel-toggle "Search"
       [:input {:id          :spell-search-text
                :class       :spell-search
                :value       spell-search-text

@@ -40,15 +40,43 @@
            :name)]
      [:div.header-align-right]]))
 
+(defn toggle [{:keys [container-class
+                      content-class
+                      label
+                      position-class
+                      toggle-key]}
+              & content]
+      (let [expanded? @(subscribe [:toggle-toggled? toggle-key])]
+           [:div {:class [container-class (if expanded? :expanded :closed)]}
+            [:div.container-toggle {:class position-class
+                                    :on-mouse-enter #(dispatch [:set-toggle toggle-key])}
+             [:span label]]
+            [:div {:class content-class
+                   :on-mouse-leave #(dispatch [:clear-toggle toggle-key])}
+             content]]))
+
 (defn left-nav []
   (let [current-panel @(subscribe [:active-panel-key])]
-    (into [:div.left-nav]
-          (for [{id :id name :name handler :handler} page-mappings]
-            [nav-button {:key     id
-                         :active? (= current-panel id)
-                         :content name
-                         :handler handler
-                         :target  id}]))))
+       [toggle {:container-class :left-nav-container
+                :content-class   :left-nav
+                :label           "Navigation"
+                :position-class  :left-toggle
+                :toggle-key      :nav}
+        (for [{id :id name :name handler :handler} page-mappings]
+             ^{:key id}
+             [nav-button {:key     id
+                          :active? (= current-panel id)
+                          :content name
+                          :handler handler
+                          :target  id}])]))
+
+(defn right-panel-toggle [label & content]
+      [toggle {:container-class :right-toggle-container
+               :content-class   [:right-panel :toggle]
+               :label           label
+               :position-class  :right-toggle
+               :toggle-key      :right-toggle}
+       content])
 
 (defn campaign-panel [& panel-content]
   [:div.campaign-manager {:key :campaign-panel}

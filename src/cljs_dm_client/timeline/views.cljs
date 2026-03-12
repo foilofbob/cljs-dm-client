@@ -2,13 +2,15 @@
   (:require
    [clojure.math :as math]
    [re-frame.core :refer [dispatch subscribe]]
+   [cljs-dm-client.components.components :refer [logical-division]]
    [cljs-dm-client.components.forms :refer [build-options
                                             number-input-row
                                             select-input-row]]
    [cljs-dm-client.components.notes :refer [build-notes
                                             note-modal]]
    [cljs-dm-client.layout.views :refer [campaign-panel
-                                        loading-wrapper]]
+                                        loading-wrapper
+                                        right-panel-toggle]]
    [cljs-dm-client.timeline.events :as events]
    [cljs-dm-client.timeline.subs :as subs]
    ["reactstrap/lib/Modal" :default Modal]
@@ -161,9 +163,11 @@
         "Add Game Day"]]
       (for [game-day game-days] ^{:key (str "game-day-" (:id game-day))}
            [game-day-card game-day (filter #(= (:id game-day) (:reference-id %)) notes)])]
-     [:div.right-panel
-      [:button.action-button {:on-click #(open-edit-modal {:campaign-id 1} "global")}
-       "Add Global Note"]
+     [right-panel-toggle "Global Notes"
+      [logical-division {:left [:button {:class [:action-button :skinny]
+                                         :on-click  #(open-edit-modal {:campaign-id 1} "global")}
+                                "Add"]
+                         :text "Global Notes"}]
       (build-notes (filter #(= "global" (some-> % :category :string)) notes) [:common-panel :notes-entry])]]))
 
 (defn timeline []

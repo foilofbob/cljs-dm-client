@@ -31,8 +31,20 @@
   }
 }
 
-@mixin bp-desktop {
-  @media all and (min-width: 1280px) {
+@mixin bp-small-screen-down {
+  @media all and (max-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin bp-laptop-down {
+  @media all and (max-width: 1600px) {
+    @content;
+  }
+}
+
+@mixin bp-desktop-down {
+  @media all and (max-width: 1900px) {
     @content;
   }
 }

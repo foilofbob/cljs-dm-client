@@ -13,7 +13,8 @@
                                             open-edit-note-modal
                                             standard-note-columns]]
    [cljs-dm-client.layout.views :refer [campaign-panel
-                                        loading-wrapper]]
+                                        loading-wrapper
+                                        right-panel-toggle]]
    [cljs-dm-client.locations.events :as events]
    [cljs-dm-client.locations.subs :as subs]
    ["reactstrap/lib/Modal" :default Modal]
@@ -117,7 +118,6 @@
 (defn location-details []
   (when-let [selected-location @(subscribe [::subs/selected-location])]
     [:div.locations-page.panel-content
-     [:div.panel-content
       [logical-division {:left [:button {:class [:action-button :skinny]
                                          :on-click #(dispatch [::events/open-edit-sublocation-modal nil])}
                                 "Add Sublocation"]
@@ -133,21 +133,21 @@
                                    :title        (:name sublocation)
                                    :desc         (:description sublocation)
                                    :edit-fn      #(dispatch [::events/open-edit-sublocation-modal sublocation])}
-                 [sublocation-details sublocation]])))]]))
+                 [sublocation-details sublocation]])))]))
 
 (defn locations-content []
   (let [locations @(subscribe [::subs/locations])]
     [:<>
      [location-details]
-     [:div.right-panel
+     [right-panel-toggle "Locations"
       [logical-division {:left [:button {:class [:action-button :skinny]
                                          :on-click #(dispatch [::events/open-edit-location-modal nil])}
                                 "Add"]
                          :text "Locations"}]
       (into [:div.inline-actions]
             (for [location locations]
-              [:button.action-button {:on-click #(dispatch [::events/select-location (:id location)])}
-               (:name location)]))]]))
+                 [:button.action-button {:on-click #(dispatch [::events/select-location (:id location)])}
+                  (:name location)]))]]))
 
 (defn locations []
   [:<>

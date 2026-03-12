@@ -19,7 +19,6 @@
   .player-card {
     @extend .common-panel;
     display: flex;
-    width: 100%;
 
     .player-card-left {
       width: 650px;

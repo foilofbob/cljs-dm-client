@@ -15,6 +15,7 @@
    [cljs-dm-client.components.markdown :refer [markdown-div]]
    [cljs-dm-client.characters.events :as events]
    [cljs-dm-client.characters.subs :as subs]
+   [cljs-dm-client.layout.views :refer [right-panel-toggle]]
    [cljs-dm-client.spells.spellbook :refer [add-spell-button
                                             remove-spell-button]]
    [cljs-dm-client.utils :as utils]
@@ -423,10 +424,10 @@
         spellbooks          @(subscribe [::subs/complete-spellbooks])]
     [:<>
      [:div.party.panel-content
-      [:div.panel-content
+      [:div
        [:button.action-button {:on-click #(dispatch [::events/open-edit-player-modal nil])}
         "Add Character"]]
-      (into [:div.panel-content]
+      (into [:div]
             (for [character characters]
               (let [character-level (if (some-> character :level (> 0))
                                       (-> character :level utils/level-by-level)
@@ -485,10 +486,10 @@
                          (->> container-items
                               (filter #(= (:id container) (:carried-by-id %)))
                               (map item-component)))]]))])]
-     [:div.right-panel
+
+     [right-panel-toggle "Unassigned Items"
       [logical-division {:left [:button {:class [:action-button :skinny]
                                          :on-click #(dispatch [::events/open-edit-item-modal nil])}
                                 "Add"]
                          :text "Unassigned Items"}]
-      (into [:<>]
-            (map item-component items-not-carried))]]))
+      (map item-component items-not-carried)]]))

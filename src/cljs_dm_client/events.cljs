@@ -84,9 +84,30 @@
 
 (reg-event-db
  :update-toggles
+ "This will toggle a key, either disj or conj - like a true toggle"
  (fn [db [_ toggle-id]]
    (let [current-toggles (or (-> db :page-data :toggles) #{})]
      (update-in db [:page-data :toggles]
                 #(if (contains? current-toggles toggle-id)
                    (disj current-toggles toggle-id)
                    (conj current-toggles toggle-id))))))
+
+(reg-event-db
+ :set-toggle
+ "This will safely only conj"
+ (fn [db [_ toggle-id]]
+     (let [current-toggles (or (-> db :page-data :toggles) #{})]
+          (update-in db [:page-data :toggles]
+                     #(if (contains? current-toggles toggle-id)
+                        current-toggles
+                        (conj current-toggles toggle-id))))))
+
+(reg-event-db
+ :clear-toggle
+ "This will safely only disj"
+ (fn [db [_ toggle-id]]
+     (let [current-toggles (or (-> db :page-data :toggles) #{})]
+          (update-in db [:page-data :toggles]
+                     #(if (contains? current-toggles toggle-id)
+                        (disj current-toggles toggle-id)
+                        current-toggles)))))

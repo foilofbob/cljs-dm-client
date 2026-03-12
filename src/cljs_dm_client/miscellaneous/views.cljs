@@ -9,7 +9,8 @@
                                             open-edit-note-modal
                                             standard-note-columns]]
    [cljs-dm-client.layout.views :refer [campaign-panel
-                                        loading-wrapper]]
+                                        loading-wrapper
+                                        right-panel-toggle]]
    [cljs-dm-client.miscellaneous.events :as events]
    [cljs-dm-client.miscellaneous.subs :as subs]
    ["reactstrap/lib/Modal" :default Modal]
@@ -51,24 +52,23 @@
 (defn category-details []
   (when-let [selected-category @(subscribe [::subs/selected-category])]
     [:div.locations-page.panel-content
-     [:div.panel-content
-      [logical-division {:text (:name selected-category)
-                         :class :no-bottom}]
-      [category-notes]]]))
+     [logical-division {:text (:name selected-category)
+                        :class :no-bottom}]
+     [category-notes]]))
 
 (defn miscellaneous-content []
   (let [categories @(subscribe [::subs/categories])]
     [:<>
      [category-details]
-     [:div.right-panel
+     [right-panel-toggle "Categories"
       [logical-division {:left [:button {:class [:action-button :skinny]
                                          :on-click #(dispatch [::events/open-edit-category-modal nil])}
                                 "Add"]
                          :text "Categories"}]
       (into [:div.inline-actions]
             (for [category categories]
-              [:button.action-button {:on-click #(dispatch [::events/select-category (:id category)])}
-               (:name category)]))]]))
+                 [:button.action-button {:on-click #(dispatch [::events/select-category (:id category)])}
+                  (:name category)]))]]))
 
 (defn miscellaneous []
   [:<>

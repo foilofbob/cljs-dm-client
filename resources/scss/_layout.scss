@@ -49,10 +49,88 @@
   .left-nav {
     display: flex;
     flex-direction: column;
-    height: 400px;
     width: 250px;
     min-width: 250px;
-    margin-left: 6px;
+    padding-left: 6px;
+    z-index: 99;
+  }
+
+  .container-toggle {
+    display: none;
+    background-color: components.$sable;
+    height: min-content;
+    position: fixed;
+    color: components.$mahogany;
+    border: 2px solid components.$mahogany;
+    text-wrap: nowrap;
+
+    &.left-toggle {
+      writing-mode: vertical-lr;
+      transform: rotate(180deg);
+      text-align: left;
+      border-radius: 15px 0 0 15px;
+      border-left: none;
+    }
+
+    &.right-toggle {
+      writing-mode: vertical-rl;
+      text-align: right;
+      border-radius: 15px 0 0 15px;
+      border-right: none;
+      right: 2px;
+    }
+  }
+
+  @include breakpoints.bp-desktop-down {
+    .left-nav-container {
+      margin-right: 30px;
+    }
+
+    .right-toggle-container {
+      margin-left: 30px;
+    }
+
+    .container-toggle {
+      display: block;
+      padding: 20px 2px;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .left-nav,
+    .right-panel.toggle {
+      position: fixed;
+      padding: 0 6px;
+      background-color: components.$shadow;
+      border: 2px solid components.$mahogany;
+    }
+
+    .right-panel.toggle {
+      right: 0;
+      padding: 0 2px;
+      max-height: calc(100% - 150px);
+
+      .section-divider {
+        margin-left: -2px;
+
+        &.top {
+          margin-top: 0;
+        }
+      }
+    }
+
+    .expanded {
+      .container-toggle {
+        display: none;
+      }
+    }
+
+    .closed {
+      .left-nav,
+      .right-panel.toggle {
+        display: none;
+      }
+    }
   }
 
   .panel-content {
@@ -66,10 +144,13 @@
   .right-panel {
     width: 450px;
     min-width: 450px;
-    margin-right: 12px;
+    margin-right: 8px;
     overflow-y: auto;
     scrollbar-color: components.$umber components.$sable;
     scrollbar-width: thin;
+    padding-right: 4px;
+    z-index: 99;
+    max-height: 100%;
   }
 }
 
