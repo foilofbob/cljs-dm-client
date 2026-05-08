@@ -20,6 +20,6 @@
 		"sass": "^1.83.3"
 	},
 	"devDependencies": {
-		"shadow-cljs": "2.26.2"
+		"shadow-cljs": "^3.4.9"
 	}
 }
