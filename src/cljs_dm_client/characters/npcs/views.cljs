@@ -16,7 +16,7 @@
 (defn npcs []
   [:<>
    [add-spell-modal]
-   [note-modal]
+   [note-modal {:includes #{:action-block}}]
    [item-modal]
    [character-modal]
    [spellbook-modal]

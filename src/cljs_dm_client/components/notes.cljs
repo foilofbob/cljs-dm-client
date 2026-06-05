@@ -12,9 +12,18 @@
    ["reactstrap/lib/ModalHeader" :default ModalHeader]
    [re-frame.core :refer [dispatch reg-event-db reg-event-fx subscribe]]))
 
-(def NOTE_MODAL_KEY :note-modal)
+(defonce NOTE_MODAL_KEY :note-modal)
 
-(defn note-modal []
+(defonce action-block
+  "
+| Action | Attack | Damage | Range | Type | Notes |
+|--|--|--|--|--|--|
+|  |  |  |  |  |  |
+|  |  |  |  |  |  |
+|  |  |  |  |  |  |
+|  |  |  |  |  |  |")
+
+(defn note-modal [{:keys [includes] :or {includes #{}}}]
   (let [note @(subscribe [:edit-object :edit-note])]
     [:> Modal {:is-open  @(subscribe [:modal-open? NOTE_MODAL_KEY])
                :toggle   #(dispatch [:toggle-modal NOTE_MODAL_KEY])
@@ -31,7 +40,12 @@
       [:textarea {:value      (:content note)
                   :max-length 10000
                   :rows       20
-                  :on-change  #(dispatch [:update-edit-field :edit-note :content (-> % .-target .-value)])}]]
+                  :on-change  #(dispatch [:update-edit-field :edit-note :content (-> % .-target .-value)])}]
+      (when (count includes)
+        [:div
+         (when (:action-block includes)
+           [:button.action-button {:on-click #(dispatch [:update-edit-field :edit-note :content (str (:content note) action-block)])}
+            "Action Block"])])]
      [:> ModalFooter {:class :modal-footer-buttons}
       [:button.action-link {:on-click #(dispatch [:toggle-modal NOTE_MODAL_KEY])}
        "Cancel"]

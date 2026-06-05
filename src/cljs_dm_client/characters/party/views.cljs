@@ -14,7 +14,7 @@
 
 (defn party []
   [:<>
-   [note-modal]
+   [note-modal {:includes #{:action-block}}]
    [item-modal]
    [character-modal]
    [spellbook-modal]
