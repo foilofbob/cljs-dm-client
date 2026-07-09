@@ -38,8 +38,8 @@
 
 (reg-event-fx
  ::fetch-campaigns-failure
- (fn [db [_ response]]
-   utils/standard-failure-handler))
+ (fn [{:keys [db]} [_ response]]
+   utils/standard-failure-fx))
 
 (reg-event-fx
  ::fetch-campaign-settings

@@ -67,8 +67,8 @@
                          :text "Categories"}]
       (into [:div.inline-actions]
             (for [category categories]
-                 [:button.action-button {:on-click #(dispatch [::events/select-category (:id category)])}
-                  (:name category)]))]]))
+              [:button.action-button {:on-click #(dispatch [::events/select-category (:id category)])}
+               (:name category)]))]]))
 
 (defn miscellaneous []
   [:<>

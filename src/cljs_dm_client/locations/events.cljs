@@ -41,7 +41,7 @@
 
 (reg-event-fx
  ::fetch-locations-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)
 
 (reg-event-fx
  ::open-edit-location-modal
@@ -123,7 +123,7 @@
 
 (reg-event-fx
  ::fetch-sublocations-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)
 
 (reg-event-fx
  ::open-edit-sublocation-modal
@@ -207,7 +207,7 @@
 
 (reg-event-fx
  ::fetch-points-of-interest-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)
 
 (reg-event-fx
  ::open-edit-poi-modal

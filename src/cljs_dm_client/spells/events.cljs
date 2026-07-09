@@ -27,7 +27,7 @@
 
 (reg-event-fx
  :fetch-spells-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)
 
 (reg-event-db
  ::spell-search-text

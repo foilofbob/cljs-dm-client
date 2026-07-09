@@ -48,4 +48,4 @@
 
 (reg-event-fx
  ::fetch-players-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)

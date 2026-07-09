@@ -18,5 +18,8 @@
 
 (reg-sub
  :page-error
- (fn [db _]
-   (str "Error: " (-> db :page-data :status-text) " (" (-> db :page-data :status) ")")))
+ (fn [{:keys [page-error]} _]
+   (when (seq page-error)
+     (let [code (:status page-error)
+           msg (:status-text page-error)]
+       (str "Error: " (or msg "Unknown") " with code " (or code "N/A"))))))

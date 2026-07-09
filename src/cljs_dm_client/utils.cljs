@@ -61,6 +61,13 @@
       (assoc :loading-status :failure)
       (assoc :page-error response)))
 
+(defn standard-failure-fx [{:keys [db]} [_ response]]
+  {:db (-> db
+           (assoc :loading-status :failure)
+           (assoc :page-error response))
+   ;; On 401 redirect to login page
+   :dispatch-later [{:ms 5000 :dispatch [::clear-page-error]}]})
+
 (def character-levels
   [{:lvl 1 :xp 0 :proficiency 2}
    {:lvl 2 :xp 300 :proficiency 2}

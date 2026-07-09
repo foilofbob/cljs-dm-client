@@ -37,7 +37,7 @@
 
 (reg-event-fx
  ::fetch-experiences-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)
 
 (reg-event-fx
  ::fetch-players
@@ -55,7 +55,7 @@
 
 (reg-event-fx
  ::fetch-players-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)
 
 (reg-event-fx
  ::open-edit-xp-modal

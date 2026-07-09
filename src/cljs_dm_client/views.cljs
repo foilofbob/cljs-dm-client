@@ -3,9 +3,10 @@
    [re-frame.core :refer [dispatch subscribe] :as re-frame]
    [cljs-dm-client.campaign-select.views :refer [campaign-select]]
    [cljs-dm-client.characters.npcs.views :refer [npcs]]
-   [cljs-dm-client.characters.party.views :refer [party]]
    [cljs-dm-client.locations.views :refer [locations]]
+   [cljs-dm-client.login.views :refer [login]]
    [cljs-dm-client.miscellaneous.views :refer [miscellaneous]]
+   [cljs-dm-client.characters.party.views :refer [party]]
    [cljs-dm-client.player-stories.views :refer [player-stories]]
    [cljs-dm-client.routes :as routes]
    [cljs-dm-client.spells.views :refer [spells]]
@@ -14,6 +15,7 @@
 
 (defmethod routes/panels :campaign-select-panel [] [campaign-select])
 (defmethod routes/panels :locations-panel [] [locations])
+(defmethod routes/panels :login-panel [] [login])
 (defmethod routes/panels :miscellaneous-panel [] [miscellaneous])
 (defmethod routes/panels :npcs-panel [] [npcs])
 (defmethod routes/panels :party-panel [] [party])

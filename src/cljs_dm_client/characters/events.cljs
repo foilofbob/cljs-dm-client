@@ -27,7 +27,7 @@
 
 (reg-event-fx
  ::fetch-items-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)
 
 (reg-event-fx
  ::fetch-spellbooks
@@ -45,7 +45,7 @@
 
 (reg-event-fx
  ::fetch-spellbooks-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)
 
 (reg-event-fx
  ::open-edit-item-modal

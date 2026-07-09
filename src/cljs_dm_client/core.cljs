@@ -23,7 +23,9 @@
    [cljs-dm-client.player-stories.events]
    [cljs-dm-client.player-stories.views]
    [cljs-dm-client.timeline.views]
-   [cljs-dm-client.xp-tracker.views]))
+   [cljs-dm-client.xp-tracker.views]
+   [cljs-dm-client.login.views]
+   [cljs-dm-client.login.events]))
 
 (defn dev-setup []
   (when config/debug?
@@ -34,9 +36,41 @@
   (let [root-el (.getElementById js/document "app")]
     (rdom/unmount-component-at-node root-el)
     (rdom/render [views/main-panel] root-el)
-    (re-frame/dispatch [::events/resume-session-if-present])))
+       ;; TODO: This needs to move to the post-auth handler
+    (re-frame/dispatch [:resume-session-if-present])))
+
+(defn- add-credentials [request-map]
+  (if (map? request-map)
+    (assoc request-map :with-credentials true)
+    request-map))
+
+(def with-global-credentials
+  (re-frame/->interceptor
+   :id      :with-global-credentials
+   :after   (fn [context]
+              (let [effects (re-frame/get-effect context)]
+                (if-let [http-fx (:http-xhrio effects)]
+                  (let [updated-http (if (vector? http-fx)
+                                       (mapv add-credentials http-fx)
+                                       (add-credentials http-fx))]
+                    (re-frame/assoc-effect context :http-xhrio updated-http))
+                  context)))))
+
+(def check-auth
+  (re-frame/->interceptor
+   :id      :check-auth
+   :before  (fn [context]
+              (let [db             (get-in context [:coeffects :db])
+                    authenticated? (get-in db [:auth :authenticated?])]
+                (js/console.error "Not authenticated - redirecting to login")
+                (if authenticated?
+                  context
+                  (-> context
+                      (re-frame/enqueue [])
+                      (assoc-in [:effects :dispatch] [:navigate :login])))))))
 
 (defn init []
+  (re-frame/reg-global-interceptor with-global-credentials)
   (routes/start!)
   (dev-setup)
   (re-frame/dispatch-sync [::events/initialize-db])

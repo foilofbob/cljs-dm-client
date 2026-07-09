@@ -37,7 +37,7 @@
 
 (reg-event-fx
  ::fetch-categories-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)
 
 (reg-event-fx
  ::select-category

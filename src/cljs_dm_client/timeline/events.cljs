@@ -37,7 +37,7 @@
 
 (reg-event-fx
  ::fetch-game-days-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)
 
 (reg-event-fx
  ::post-game-day

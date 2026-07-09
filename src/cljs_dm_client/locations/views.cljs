@@ -118,22 +118,22 @@
 (defn location-details []
   (when-let [selected-location @(subscribe [::subs/selected-location])]
     [:div.locations-page.panel-content
-      [logical-division {:left [:button {:class [:action-button :skinny]
-                                         :on-click #(dispatch [::events/open-edit-sublocation-modal nil])}
-                                "Add Sublocation"]
-                         :text (:name selected-location)
-                         :class :no-bottom}]
-      [location-notes]
+     [logical-division {:left [:button {:class [:action-button :skinny]
+                                        :on-click #(dispatch [::events/open-edit-sublocation-modal nil])}
+                               "Add Sublocation"]
+                        :text (:name selected-location)
+                        :class :no-bottom}]
+     [location-notes]
 
-      (let [sublocations @(subscribe [::subs/sublocations-to-show])]
-        (into [:div.sublocations]
-              (for [[idx sublocation] (map-indexed vector sublocations)]
-                [toggle-container {:id           (str "toggle-" (:id selected-location) "-" (-> sublocation :name csk/->PascalCase))
-                                   :header-class (idx->accent-class idx)
-                                   :title        (:name sublocation)
-                                   :desc         (:description sublocation)
-                                   :edit-fn      #(dispatch [::events/open-edit-sublocation-modal sublocation])}
-                 [sublocation-details sublocation]])))]))
+     (let [sublocations @(subscribe [::subs/sublocations-to-show])]
+       (into [:div.sublocations]
+             (for [[idx sublocation] (map-indexed vector sublocations)]
+               [toggle-container {:id           (str "toggle-" (:id selected-location) "-" (-> sublocation :name csk/->PascalCase))
+                                  :header-class (idx->accent-class idx)
+                                  :title        (:name sublocation)
+                                  :desc         (:description sublocation)
+                                  :edit-fn      #(dispatch [::events/open-edit-sublocation-modal sublocation])}
+                [sublocation-details sublocation]])))]))
 
 (defn locations-content []
   (let [locations @(subscribe [::subs/locations])]
@@ -146,8 +146,8 @@
                          :text "Locations"}]
       (into [:div.inline-actions]
             (for [location locations]
-                 [:button.action-button {:on-click #(dispatch [::events/select-location (:id location)])}
-                  (:name location)]))]]))
+              [:button.action-button {:on-click #(dispatch [::events/select-location (:id location)])}
+               (:name location)]))]]))
 
 (defn locations []
   [:<>

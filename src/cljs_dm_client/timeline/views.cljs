@@ -152,8 +152,9 @@
       [cycle-elems game-day campaign-setting]]]))
 
 (defn timeline-content []
-  (let [game-days @(subscribe [::subs/game-days])
-        notes     @(subscribe [:notes])]
+  (let [campaign-id (:id @(subscribe [:selected-campaign]))
+        game-days   @(subscribe [::subs/game-days])
+        notes       @(subscribe [:notes])]
     [:<>
      [:div.panel-content
       [:div
@@ -165,7 +166,7 @@
            [game-day-card game-day (filter #(= (:id game-day) (:reference-id %)) notes)])]
      [right-panel-toggle "Global Notes"
       [logical-division {:left [:button {:class [:action-button :skinny]
-                                         :on-click  #(open-edit-modal {:campaign-id 1} "global")}
+                                         :on-click #(open-edit-modal {:campaign-id campaign-id} "global")}
                                 "Add"]
                          :text "Global Notes"}]
       (build-notes (filter #(= "global" (some-> % :category :string)) notes) [:common-panel :notes-entry])]]))

@@ -12,11 +12,15 @@
    (merge default-db (utils/read-from-session))))
 
 (reg-event-fx
- ::resume-session-if-present
+ :resume-session-if-present
  (fn [{:keys [db]} [_]]
-   (let [current-page (some-> (utils/read-from-session) :current-page)]
-     (print (str "Session page: " current-page))
-     {:fx [[:dispatch [::nav/navigate (or current-page :campaign-select)]]]})))
+   (let [current-page (some-> (utils/read-from-session) :current-page)
+         authenticated? (some-> db :auth :authenticated?)
+         target-page (cond
+                       (not authenticated?)     :login
+                       (= "login" current-page) :campaign-select
+                       :else                    (or current-page :campaign-select))]
+     {:fx [[:dispatch [::nav/navigate target-page]]]})))
 
 (reg-fx
  :update-in-session
@@ -44,6 +48,15 @@
  :standard-failure
  utils/standard-failure-handler)
 
+(reg-event-db
+ ::clear-page-error
+ (fn [db [_]]
+   (dissoc db :page-error)))
+
+(reg-event-fx
+ :standard-failure-fx
+ utils/standard-failure-fx)
+
 (reg-event-fx
  :fetch-notes
  (fn [{:keys [db]} [_ reference-type]]
@@ -63,19 +76,22 @@
 
 (reg-event-fx
  :fetch-notes-failure
- utils/standard-failure-handler)
+ utils/standard-failure-fx)
 
 (reg-event-db
  :page-ready
  (fn [db [_]]
    (assoc db :loading-status :success)))
 
-(reg-event-db
+(reg-event-fx
  :action-failure
- (fn [db [_ response]]
-   (-> db
-       (assoc :action-status :failure)
-       (assoc :page-error response))))
+ (fn [{:keys [db]} [_ response]]
+   {:db (-> db
+            (assoc :action-status :failure)
+            (assoc :page-error response))
+    :dispatch-later (cond-> [{:ms 5000 :dispatch [::clear-page-error]}]
+                      (-> response :status #{401 403})
+                      (conj {:ms 5000 :dispatch [:navigate :login]}))}))
 
 (reg-event-db
  :toggle-modal
@@ -96,18 +112,18 @@
  :set-toggle
  "This will safely only conj"
  (fn [db [_ toggle-id]]
-     (let [current-toggles (or (-> db :page-data :toggles) #{})]
-          (update-in db [:page-data :toggles]
-                     #(if (contains? current-toggles toggle-id)
-                        current-toggles
-                        (conj current-toggles toggle-id))))))
+   (let [current-toggles (or (-> db :page-data :toggles) #{})]
+     (update-in db [:page-data :toggles]
+                #(if (contains? current-toggles toggle-id)
+                   current-toggles
+                   (conj current-toggles toggle-id))))))
 
 (reg-event-db
  :clear-toggle
  "This will safely only disj"
  (fn [db [_ toggle-id]]
-     (let [current-toggles (or (-> db :page-data :toggles) #{})]
-          (update-in db [:page-data :toggles]
-                     #(if (contains? current-toggles toggle-id)
-                        (disj current-toggles toggle-id)
-                        current-toggles)))))
+   (let [current-toggles (or (-> db :page-data :toggles) #{})]
+     (update-in db [:page-data :toggles]
+                #(if (contains? current-toggles toggle-id)
+                   (disj current-toggles toggle-id)
+                   current-toggles)))))

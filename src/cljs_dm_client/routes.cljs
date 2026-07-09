@@ -11,7 +11,8 @@
 
 (def routes
   (atom
-   ["/" {""               :campaign-select
+   ["/" {""               :login
+         "campaigns"      :campaign-select
          "locations"      :locations
          "miscellaneous"  :miscellaneous
          "npcs"           :npcs
