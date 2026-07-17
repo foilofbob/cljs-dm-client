@@ -10,10 +10,12 @@
                                             character-content
                                             item-component
                                             item-modal
-                                            spellbook-modal]]))
+                                            spellbook-modal]]
+   [cljs-dm-client.spells.spellbook :refer [add-spell-modal]]))
 
 (defn party []
   [:<>
+   [add-spell-modal]
    [note-modal {:includes #{:action-block}}]
    [item-modal]
    [character-modal]

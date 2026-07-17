@@ -460,12 +460,24 @@
                    (into [:<>]
                          (->> character-items
                               (filter #(= (:id character) (:carried-by-id %)))
-                              (map item-component)))]]
+                              (map item-component)))]
+
+                  [:hr]
+                  [:div.character-note
+                   (into [:<>]
+                         (some->> notes
+                                  (filter #(and (= (:id character) (:reference-id %))
+                                                (= "MAIN" (-> % :category :string))))
+                                  seq
+                                  build-notes))
+                   [:button.action-link {:on-click #(dispatch [:open-edit-note-modal character "CHARACTER" "MAIN"])}
+                    "Add Note"]]]
 
                  [:div.player-card-right
                   (into [:<>]
                         (or (some->> notes
-                                     (filter #(= (:id character) (:reference-id %)))
+                                     (filter #(and (= (:id character) (:reference-id %))
+                                                   (= "" (-> % :category :string))))
                                      seq
                                      build-notes)
                             [[:button.action-link {:on-click #(dispatch [:open-edit-note-modal character "CHARACTER" ""])}
