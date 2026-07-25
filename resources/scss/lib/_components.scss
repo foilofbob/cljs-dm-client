@@ -299,3 +299,26 @@ td, th {
   padding-left: 2px;
   padding-right: 4px;
 }
+
+// classes for markdown-it-classy
+.highlight {
+  padding: 0 3px;
+  border-radius: 8px;
+
+  &.red {
+    background-color: #ffbbbb;
+    border: 1px solid #cc6666;
+  }
+  &.green {
+    background-color: #bbffbb;
+    border: 1px solid #66cc66;
+  }
+  &.yellow {
+    background-color: #ffffbb;
+    border: 1px solid #cccc66;
+  }
+  &.blue {
+    background-color: #bbbbff;
+    border: 1px solid #6666cc;
+  }
+}
