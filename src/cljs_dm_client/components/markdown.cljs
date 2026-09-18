@@ -2,12 +2,12 @@
   (:require
    ["markdown-it" :as md]
    ["markdown-it-admon" :as mda]
-   ["markdown-it-classy" :as mdclassy]
-   ["markdown-it-collapsible" :as mdcollapse]
+   ;["markdown-it-classy" :as mdclassy]
+   ;["markdown-it-collapsible" :as mdcollapse]
    ["markdown-it-task-lists" :as mdts]
-   ["markdown-it-link-attributes" :as mdla]
-   ["markdown-it-image-figures" :as mdif]
-   #_["markdown-it-plantuml" :as plantuml]
+   ;["markdown-it-link-attributes" :as mdla]
+   ;["markdown-it-image-figures" :as mdif]
+   ;["markdown-it-plantuml" :as plantuml]
    #_["markdown-it-regexp" :as regexp]))
 
 (defonce markdown
@@ -29,13 +29,14 @@
 
       ;; Could be useful for custom tag classes
       ;; https://www.npmjs.com/package/markdown-it-classy
-      (.use mdclassy)
+      ;; TODO: Something about this is breaking on the player pages
+      ;(.use mdclassy)
 
       ;; Collapsible components
       ;; https://www.npmjs.com/package/markdown-it-collapsible
-      (.use mdcollapse)
+      ;(.use mdcollapse)
 
-      (.use mdif #js {:lazy true :async true}))) ;; ex.: [![](fig.png)](page.html)
+      #_(.use mdif #js {:lazy true :async true}))) ;; ex.: [![](fig.png)](page.html)
 
 (defn render-markdown [content]
   (.render markdown content))

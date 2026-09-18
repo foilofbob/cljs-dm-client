@@ -25,7 +25,8 @@
   [:div.logical-division (when class {:class class})
    [:hr.section-divider.top]
    [:div
-    (when left [:div.left left])
+    (when left
+      [:div.left left])
     [:h3 text]
     (when right [:div.right right])]
    [:hr.section-divider.bottom]])
@@ -53,4 +54,5 @@
       (when edit-fn
         [:button.edit-button {:type     :button
                               :on-click edit-fn}])]
-     (when toggled? content)]))
+     (when toggled?
+       content)]))

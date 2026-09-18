@@ -3,6 +3,11 @@
    [re-frame.core :refer [reg-sub]]))
 
 (reg-sub
+ :page-data
+ (fn [db _]
+   (:page-data db)))
+
+(reg-sub
  :selected-campaign
  (fn [db _]
    (:selected-campaign db)))
@@ -14,11 +19,17 @@
 
 ;; Global since notes will be frequently used across many pages
 ;; TODO: worth scoping to a utils?
-;; TODO: Scope further versions by Reference / Category?
 (reg-sub
  :notes
- (fn [db _]
-   (some-> db :page-data :notes)))
+ :<- [:page-data]
+ (fn [page-data _]
+   (:notes page-data)))
+
+(reg-sub
+ :notes-by-category
+ :<- [:notes]
+ (fn [notes category _]
+   (filter #(= category (-> % :category :string)) notes)))
 
 (reg-sub
  :notes-for-ref
