@@ -1,3 +1,5 @@
+@use "breakpoints";
+
 // Light
 $shadow: #C6C6C6;
 $pale-cream: #FFFEE0;
@@ -104,6 +106,12 @@ hr {
   font-size: 36px;
   font-weight: normal;
   margin: 0;
+
+  @include breakpoints.bp-tablet {
+    font-size: 18px;
+    width: 400px;
+    min-width: 400px;
+  }
 }
 
 .action-button {
@@ -161,6 +169,11 @@ hr {
 
   &:first-child {
     margin-top: 0;
+  }
+
+  @include breakpoints.bp-tablet {
+    margin: 6px 2px;
+    padding: 4px;
   }
 }
 

@@ -28,7 +28,7 @@
     [:div.header-content
      [:div.campaign
       [:h2.subtitle (:name campaign)]
-      [nav-button {:content "Back to Campaign Select"
+      [nav-button {:content "Campaign Select"
                    :handler [::campaign-events/select-campaign nil]
                    :target  :campaign-select
                    :link?   true}]]

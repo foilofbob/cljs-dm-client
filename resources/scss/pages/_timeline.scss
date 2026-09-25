@@ -5,9 +5,20 @@
   display: flex;
   margin-right: 4px;
 
+  @include breakpoints.bp-tablet {
+    flex-direction: column;
+  }
+
   &-tracker {
     width: 130px;
     min-width: 130px;
+
+    @include breakpoints.bp-tablet {
+      width: 100%;
+      display: flex;
+      gap: 8px;
+      background-color: components.$pastel-teal;
+    }
   }
 
   &-events {
@@ -25,6 +36,10 @@
       width: 400px;
       min-width: 400px;
     }
+
+    @include breakpoints.bp-tablet {
+      width: 100%;
+    }
   }
 
   &-controls {
@@ -34,6 +49,11 @@
 
     @include breakpoints.bp-modern-down {
       margin-right: 330px;
+    }
+
+    @include breakpoints.bp-tablet {
+      margin: 0;
+      justify-content: space-around;
     }
   }
 

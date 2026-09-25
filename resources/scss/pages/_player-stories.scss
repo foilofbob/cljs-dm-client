@@ -1,3 +1,4 @@
+@use "../lib/breakpoints";
 @use "../lib/components";
 
 .player-stories-page {
@@ -20,6 +21,14 @@
 
     .secondary {
       width: 40%;
+    }
+
+    @include breakpoints.bp-tablet {
+      flex-direction: column;
+
+      .primary, .secondary {
+        width: 100%;
+      }
     }
   }
 }

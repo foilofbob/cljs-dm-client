@@ -9,14 +9,26 @@
   padding: 12px;
   color: components.$pale-sand;
 
+  @include breakpoints.bp-tablet {
+    margin-bottom: 0;
+  }
+
   // These are to account for the width of the left nav and right panels
   // so these keep the banner actually centered over the main panel
   .header-align-left {
     width: 250px;
+
+    @include breakpoints.bp-tablet {
+      width: 150px;
+    }
   }
 
   .header-align-right {
     width: 450px;
+
+    @include breakpoints.bp-tablet {
+      width: 150px;
+    }
   }
 
   .campaign {
@@ -36,6 +48,13 @@
     text-align: center;
     align-content: center;
     color: components.$mahogany;
+
+    @include breakpoints.bp-tablet {
+      font-size: 24px;
+      background-size: 300px 60px;
+      width: 300px;
+      height: 60px;
+    }
   }
 }
 
@@ -45,6 +64,10 @@
   max-height: calc(100% - 150px);
   position: absolute;
   width: 100%;
+
+  @include breakpoints.bp-tablet {
+    max-height: calc(100% - 110px);
+  }
 
   .left-nav {
     display: flex;
@@ -109,6 +132,10 @@
       right: 0;
       padding: 0 2px;
       max-height: calc(100% - 150px);
+
+      @include breakpoints.bp-tablet {
+        max-height: calc(100% - 110px);
+      }
 
       .section-divider {
         margin-left: -2px;
