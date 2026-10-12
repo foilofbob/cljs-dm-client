@@ -136,6 +136,12 @@ hr {
     padding: 1px 4px;
     margin: 2px;
   }
+
+  &.admonition-button {
+    border: none;
+    padding: 0;
+    margin-right: 4px;
+  }
 }
 
 .inline-actions {

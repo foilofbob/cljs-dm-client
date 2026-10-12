@@ -23,6 +23,19 @@
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |")
 
+(defn- admonition-str [type]
+  (str "
+!!! " (name type) " \"\"
+    "))
+
+(defonce admonition-types #{:note :summary :info :hint :success :question :warning :attention :fail :danger :error :quote})
+
+(defn- admonition-button [type note]
+  [:button {:class [:action-button :admonition-button]
+            :on-click #(dispatch [:update-edit-field :edit-note :content (str (:content note) (admonition-str type))])}
+   [:span {:class [:admonition type]}
+    (name type)]])
+
 (defn note-modal [{:keys [includes] :or {includes #{}}}]
   (let [note @(subscribe [:edit-object :edit-note])]
     [:> Modal {:is-open  @(subscribe [:modal-open? NOTE_MODAL_KEY])
@@ -41,6 +54,9 @@
                   :max-length 10000
                   :rows       20
                   :on-change  #(dispatch [:update-edit-field :edit-note :content (-> % .-target .-value)])}]
+      (into [:div]
+            (for [type admonition-types]
+              [admonition-button type note]))
       (when (count includes)
         [:div
          (when (:action-block includes)
