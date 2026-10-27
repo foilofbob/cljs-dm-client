@@ -14,8 +14,10 @@
 (reg-event-fx
  :resume-session-if-present
  (fn [{:keys [db]} [_]]
-   (let [current-page (some-> (utils/read-from-session) :current-page)
-         authenticated? (some-> db :auth :authenticated?)
+   (let [session (utils/read-from-session)
+         current-page (some-> session :current-page)
+         authenticated? (or (some-> db :auth :authenticated?)
+                            (some-> session :auth :authenticated?))
          target-page (cond
                        (not authenticated?)     :login
                        (= "login" current-page) :campaign-select

@@ -34,7 +34,11 @@
 (reg-event-fx
  ::auth-success
  (fn [{:keys [db]} [_ response]]
-   {:db (assoc db :auth {:authenticated? true
-                         :expires        (:expires response)
-                         :user           (:username response)})
-    :fx [[:dispatch [:resume-session-if-present]]]}))
+   (let [auth {:authenticated? true
+               :expires        (:expires response)
+               :user           (:username response)}]
+     {:db                (assoc db :auth auth)
+      :update-in-session {:auth              auth
+                          :selected-campaign nil
+                          :campaign-setting  nil}
+      :fx                [[:dispatch [:resume-session-if-present]]]})))

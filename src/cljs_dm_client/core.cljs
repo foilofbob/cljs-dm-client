@@ -36,7 +36,6 @@
   (let [root-el (.getElementById js/document "app")]
     (rdom/unmount-component-at-node root-el)
     (rdom/render [views/main-panel] root-el)
-       ;; TODO: This needs to move to the post-auth handler
     (re-frame/dispatch [:resume-session-if-present])))
 
 (defn- add-credentials [request-map]
@@ -60,6 +59,7 @@
   (re-frame/->interceptor
    :id      :check-auth
    :before  (fn [context]
+              (js/console.warn "check-auth interceptor")
               (let [db             (get-in context [:coeffects :db])
                     authenticated? (get-in db [:auth :authenticated?])]
                 (js/console.error "Not authenticated - redirecting to login")
