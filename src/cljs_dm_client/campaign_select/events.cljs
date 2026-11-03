@@ -29,7 +29,9 @@
                  :uri             "http://localhost:8090/campaign"
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-campaigns-success]
-                 :on-failure      [::fetch-campaigns-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [::fetch-campaigns]
+                                   [::fetch-campaigns-failure]]}}))
 
 (reg-event-db
  ::fetch-campaigns-success
@@ -38,8 +40,7 @@
 
 (reg-event-fx
  ::fetch-campaigns-failure
- (fn [{:keys [db]} [_ response]]
-   utils/standard-failure-fx))
+ identity)
 
 (reg-event-fx
  ::fetch-campaign-settings
@@ -48,7 +49,9 @@
                  :uri             "http://localhost:8090/campaign-settings"
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-campaign-settings-success]
-                 :on-failure      [::fetch-campaign-settings-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [::fetch-campaign-settings]
+                                   [::fetch-campaign-settings-failure]]}}))
 
 (reg-event-db
  ::fetch-campaign-settings-success
@@ -57,7 +60,7 @@
 
 (reg-event-fx
  ::fetch-campaign-settings-failure
- utils/standard-failure-handler)
+ identity)
 
 (reg-event-fx
  ::select-campaign

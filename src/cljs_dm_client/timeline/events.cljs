@@ -28,7 +28,9 @@
                  :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/gameday")
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-game-days-success]
-                 :on-failure      [::fetch-game-days-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [::fetch-game-days]
+                                   [::fetch-game-days-failure]]}}))
 
 (reg-event-db
  ::fetch-game-days-success
@@ -37,7 +39,7 @@
 
 (reg-event-fx
  ::fetch-game-days-failure
- utils/standard-failure-fx)
+ identity)
 
 (reg-event-fx
  ::post-game-day

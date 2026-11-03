@@ -39,7 +39,9 @@
                  :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/npcs")
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-npcs-success]
-                 :on-failure      [::fetch-npcs-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [::fetch-npcs]
+                                   [::fetch-npcs-failure]]}}))
 
 (reg-event-db
  ::fetch-npcs-success
@@ -48,4 +50,4 @@
 
 (reg-event-fx
  ::fetch-npcs-failure
- utils/standard-failure-fx)
+ identity)

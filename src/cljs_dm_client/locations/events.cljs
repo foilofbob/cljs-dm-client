@@ -31,7 +31,9 @@
                  :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/locations")
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-locations-success]
-                 :on-failure      [::fetch-locations-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [::fetch-locations]
+                                   [::fetch-locations-failure]]}}))
 
 (reg-event-fx
  ::fetch-locations-success
@@ -41,7 +43,7 @@
 
 (reg-event-fx
  ::fetch-locations-failure
- utils/standard-failure-fx)
+ identity)
 
 (reg-event-fx
  ::open-edit-location-modal
@@ -114,7 +116,9 @@
                  :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/sublocations")
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-sublocations-success]
-                 :on-failure      [::fetch-sublocations-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [::fetch-sublocations]
+                                   [::fetch-sublocations-failure]]}}))
 
 (reg-event-db
  ::fetch-sublocations-success
@@ -123,7 +127,7 @@
 
 (reg-event-fx
  ::fetch-sublocations-failure
- utils/standard-failure-fx)
+ identity)
 
 (reg-event-fx
  ::open-edit-sublocation-modal
@@ -198,7 +202,9 @@
                  :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/points-of-interest")
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-points-of-interest-success]
-                 :on-failure      [::fetch-points-of-interest-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [::fetch-points-of-interest]
+                                   [::fetch-points-of-interest-failure]]}}))
 
 (reg-event-db
  ::fetch-points-of-interest-success
@@ -207,7 +213,7 @@
 
 (reg-event-fx
  ::fetch-points-of-interest-failure
- utils/standard-failure-fx)
+ identity)
 
 (reg-event-fx
  ::open-edit-poi-modal

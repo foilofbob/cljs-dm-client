@@ -27,7 +27,9 @@
                  :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/categories")
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-categories-success]
-                 :on-failure      [::fetch-categories-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [::fetch-categories]
+                                   [::fetch-categories-failure]]}}))
 
 (reg-event-fx
  ::fetch-categories-success
@@ -37,7 +39,7 @@
 
 (reg-event-fx
  ::fetch-categories-failure
- utils/standard-failure-fx)
+ identity)
 
 (reg-event-fx
  ::select-category

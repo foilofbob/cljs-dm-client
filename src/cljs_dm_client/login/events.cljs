@@ -35,10 +35,32 @@
  ::auth-success
  (fn [{:keys [db]} [_ response]]
    (let [auth {:authenticated? true
+               :refreshing?    false
                :expires        (:expires response)
-               :user           (:username response)}]
+               :user           (:username response)
+               :retry-queue    []}]
      {:db                (assoc db :auth auth)
       :update-in-session {:auth              auth
                           :selected-campaign nil
                           :campaign-setting  nil}
       :fx                [[:dispatch [:resume-session-if-present]]]})))
+
+(reg-event-fx
+ :refresh
+ (fn [_ [_]]
+   {:http-xhrio {:method          :post
+                 :uri             "http://localhost:8090/refresh"
+                 :format          (ajax/json-request-format)
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success      [::refresh-success]
+                 :on-failure      [:standard-failure-fx]}}))
+
+(reg-event-fx
+ ::refresh-success
+ (fn [{:keys [db]} [_ response]]
+   {:db (-> db
+            (assoc-in [:auth :refreshing?] false)
+            (assoc-in [:auth :expires] (:expires response))
+            (assoc-in [:auth :retry-queue] []))
+    :fx (mapv #(vector :dispatch %) (some-> db :auth :retry-queue))
+    :update-in-session {:auth {:expires (:expires response)}}}))

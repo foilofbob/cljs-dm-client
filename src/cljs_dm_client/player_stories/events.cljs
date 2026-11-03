@@ -27,7 +27,9 @@
                  :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/players")
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-players-success]
-                 :on-failure      [::fetch-players-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [::fetch-players]
+                                   [::fetch-players-failure]]}}))
 
 (reg-event-db
  ::fetch-players-success
@@ -36,4 +38,4 @@
 
 (reg-event-fx
  ::fetch-players-failure
- utils/standard-failure-fx)
+ identity)

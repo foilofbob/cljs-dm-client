@@ -25,7 +25,8 @@
    [cljs-dm-client.timeline.views]
    [cljs-dm-client.xp-tracker.views]
    [cljs-dm-client.login.views]
-   [cljs-dm-client.login.events]))
+   [cljs-dm-client.login.events]
+   [clojure.string :refer [ends-with?]]))
 
 (defn dev-setup []
   (when config/debug?
@@ -54,20 +55,6 @@
                                        (add-credentials http-fx))]
                     (re-frame/assoc-effect context :http-xhrio updated-http))
                   context)))))
-
-(def check-auth
-  (re-frame/->interceptor
-   :id      :check-auth
-   :before  (fn [context]
-              (js/console.warn "check-auth interceptor")
-              (let [db             (get-in context [:coeffects :db])
-                    authenticated? (get-in db [:auth :authenticated?])]
-                (js/console.error "Not authenticated - redirecting to login")
-                (if authenticated?
-                  context
-                  (-> context
-                      (re-frame/enqueue [])
-                      (assoc-in [:effects :dispatch] [:navigate :login])))))))
 
 (defn init []
   (re-frame/reg-global-interceptor with-global-credentials)

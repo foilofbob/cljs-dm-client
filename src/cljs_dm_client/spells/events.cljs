@@ -18,7 +18,9 @@
                  :uri             (str "http://localhost:8090/spells")
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [:fetch-spells-success]
-                 :on-failure      [:fetch-spells-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [:fetch-spells]
+                                   [:fetch-spells-failure]]}}))
 
 (reg-event-db
  :fetch-spells-success
@@ -27,7 +29,7 @@
 
 (reg-event-fx
  :fetch-spells-failure
- utils/standard-failure-fx)
+ identity)
 
 (reg-event-db
  ::spell-search-text

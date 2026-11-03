@@ -18,7 +18,9 @@
                  :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/items")
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-items-success]
-                 :on-failure      [::fetch-items-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [::fetch-items]
+                                   [::fetch-items-failure]]}}))
 
 (reg-event-db
  ::fetch-items-success
@@ -27,7 +29,7 @@
 
 (reg-event-fx
  ::fetch-items-failure
- utils/standard-failure-fx)
+ identity)
 
 (reg-event-fx
  ::fetch-spellbooks
@@ -36,7 +38,9 @@
                  :uri             (str "http://localhost:8090/campaign/" (-> db :selected-campaign :id) "/spellbooks")
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success      [::fetch-spellbooks-success]
-                 :on-failure      [::fetch-spellbooks-failure]}}))
+                 :on-failure      [:failure-with-refresh-fx
+                                   [::fetch-spellbooks]
+                                   [::fetch-spellbooks-failure]]}}))
 
 (reg-event-db
  ::fetch-spellbooks-success
@@ -45,7 +49,7 @@
 
 (reg-event-fx
  ::fetch-spellbooks-failure
- utils/standard-failure-fx)
+ identity)
 
 (reg-event-fx
  ::open-edit-item-modal

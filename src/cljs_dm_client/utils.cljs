@@ -2,7 +2,8 @@
   (:require
    [camel-snake-kebab.core :as csk]
    [camel-snake-kebab.extras :as cske]
-   [cognitect.transit :as t]))
+   [cognitect.transit :as t]
+   [re-frame.core :refer [reg-event-fx]]))
 
 (defn page-loader
   ([dispatcher-fn page-ready-events page-error-events]
@@ -56,16 +57,11 @@
   [db path response]
   (update-in db [:page-data path] #(concat (or % []) (tranform-response response))))
 
-(defn standard-failure-handler [db [_ response]]
-  (-> db
-      (assoc :loading-status :failure)
-      (assoc :page-error response)))
-
 (defn standard-failure-fx [{:keys [db]} [_ response]]
   {:db (-> db
            (assoc :loading-status :failure)
            (assoc :page-error response))
-   ;; On 401 redirect to login page
+       ;; On 401 redirect to login page
    :dispatch-later [{:ms 5000 :dispatch [::clear-page-error]}]})
 
 (def character-levels

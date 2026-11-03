@@ -47,13 +47,39 @@
        (assoc-in [:page-data path] (utils/tranform-response response)))))
 
 (reg-event-db
- :standard-failure
- utils/standard-failure-handler)
-
-(reg-event-db
  ::clear-page-error
  (fn [db [_]]
    (dissoc db :page-error)))
+
+;; This will handle error responses with retries on 401s. On a 401 it will queue the original
+;; event for retry and trigger a token refresh if one is not already in flight. For non-401s
+;; it will call the supplied failure handler. This is especially useful for async-flow as those
+;; will stop watching once the expected error events occur. Standard error handling is included
+;; here so typically the additional failure-event is just used as a signal.
+(reg-event-fx
+ :failure-with-refresh-fx
+ (fn [{:keys [db]} [_ original-event failure-event response]]
+   (let [status (:status response)
+         refreshing? (-> db :auth :refreshing?)]
+     (cond
+           ;; Not an auth error
+       (not= status 401)
+       {:db (-> db
+                (assoc :loading-status :failure)
+                (assoc :page-error response))
+        :fx [[:dispatch failure-event]]
+        :dispatch-later [{:ms 5000 :dispatch [::clear-page-error]}]}
+
+           ;; Already refreshing, enqueue for retry
+       refreshing?
+       {:db (update-in db [:auth :retry-queue] conj original-event)}
+
+           ;; Otherwise trigger
+       :else
+       {:db (-> db
+                (update-in [:auth :retry-queue] conj original-event)
+                (assoc-in [:auth :refreshing?] true))
+        :fx [[:dispatch [:refresh]]]}))))
 
 (reg-event-fx
  :standard-failure-fx
@@ -69,7 +95,9 @@
                    :timeout         10000
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success      [:fetch-notes-success]
-                   :on-failure      [:fetch-notes-failure]}})))
+                   :on-failure      [:failure-with-refresh-fx
+                                     [:fetch-notes reference-type]
+                                     [:fetch-notes-failure]]}})))
 
 (reg-event-db
  :fetch-notes-success
@@ -78,7 +106,7 @@
 
 (reg-event-fx
  :fetch-notes-failure
- utils/standard-failure-fx)
+ identity)
 
 (reg-event-db
  :page-ready
@@ -88,12 +116,15 @@
 (reg-event-fx
  :action-failure
  (fn [{:keys [db]} [_ response]]
-   {:db (-> db
-            (assoc :action-status :failure)
-            (assoc :page-error response))
-    :dispatch-later (cond-> [{:ms 5000 :dispatch [::clear-page-error]}]
-                      (-> response :status #{401 403})
-                      (conj {:ms 5000 :dispatch [:navigate :login]}))}))
+   (cond-> {:db (-> db
+                    (assoc :action-status :failure)
+                    (assoc :page-error response))
+            :dispatch-later (cond-> [{:ms 5000 :dispatch [::clear-page-error]}]
+                              (-> response :status #{401 403})
+                              (conj {:ms 5000 :dispatch [:navigate :login]}))}
+
+     (= 401 (:status response))
+     (assoc :fx [[:dispatch [:refresh]]]))))
 
 (reg-event-db
  :toggle-modal
