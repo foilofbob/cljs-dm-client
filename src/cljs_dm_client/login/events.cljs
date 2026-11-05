@@ -58,9 +58,11 @@
 (reg-event-fx
  ::refresh-success
  (fn [{:keys [db]} [_ response]]
-   {:db (-> db
-            (assoc-in [:auth :refreshing?] false)
-            (assoc-in [:auth :expires] (:expires response))
-            (assoc-in [:auth :retry-queue] []))
-    :fx (mapv #(vector :dispatch %) (some-> db :auth :retry-queue))
-    :update-in-session {:auth {:expires (:expires response)}}}))
+   (let [auth {:authenticated? true
+               :refreshing?    false
+               :expires        (:expires response)
+               :user           (:username response)
+               :retry-queue    []}]
+     {:db                (assoc db :auth auth)
+      :fx                (mapv #(vector :dispatch %) (some-> db :auth :retry-queue))
+      :update-in-session {:auth auth}})))
