@@ -16,6 +16,7 @@ run = "npx sass --watch resources/scss/main.scss:resources/public/css/main.css"
 
 [tasks.release]
 description = "package for release"
+depends = ["prerelease"]
 run = "npm run release"
 
 [tasks.default]
@@ -33,3 +34,22 @@ run = "..\\cljfmt.exe check"
 [tasks.cljfmt-fix]
 description = "On a windows machine I run cljfmt from a bin"
 run = "..\\cljfmt.exe fix"
+
+[tasks.prerelease]
+description = "Runs OS specific cleaning"
+run = "mise run clean-mac"
+run_windows = "mise run clean-win"
+
+[tasks.clean-mac]
+description = "Clean build output"
+run = """
+#!/usr/bin/env bash
+rm -rf resources/public/js/compiled/*;
+"""
+
+[tasks.clean-win]
+description = "Clean build output"
+shell = "powershell -Command"
+run = """
+Remove-Item -Path ".\\resources\\public\\js\\compiled\\*" -Recurse -Force
+"""
