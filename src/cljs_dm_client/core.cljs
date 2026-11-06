@@ -26,6 +26,8 @@
    [cljs-dm-client.xp-tracker.views]
    [cljs-dm-client.login.views]
    [cljs-dm-client.login.events]
+   [cljs-dm-client.logout.views]
+   [cljs-dm-client.logout.events]
    [clojure.string :refer [ends-with?]]))
 
 (defn dev-setup []

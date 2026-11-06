@@ -7,6 +7,7 @@
                                             number-input-row
                                             select-input-row]]
    [cljs-dm-client.layout.views :refer [loading-wrapper]]
+   [cljs-dm-client.logout.views :refer [logout-link]]
    [cljs-dm-client.navigation.views :refer [nav-button]]
    [re-frame.core :refer [dispatch
                           subscribe]]
@@ -60,4 +61,5 @@
                                     :target  :timeline}])
                      [:p "No campaigns!"])])
                 [logical-division {:text [:button.action-link {:on-click #(dispatch [:toggle-modal CAMPAIGN_MODAL_KEY])}
-                                          "Create New Campaign"]}]]}])
+                                          "Create New Campaign"]}]
+                [logout-link]]}])

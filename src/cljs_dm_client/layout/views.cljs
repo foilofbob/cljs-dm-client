@@ -2,6 +2,7 @@
   (:require
    [cljs-dm-client.campaign-select.events :as campaign-events]
    [cljs-dm-client.navigation.views :refer [nav-button]]
+   [cljs-dm-client.logout.views :refer [logout-link]]
    [re-frame.core :refer [dispatch subscribe] :as re-frame]))
 
 (def page-mappings
@@ -83,7 +84,8 @@
    [header-content]
    (into [:div.campaign-body-content
           [left-nav]]
-         panel-content)])
+         panel-content)
+   [logout-link]])
 
 (def loading-spinner
   [:div.loader {:key :loading-spinner}])
