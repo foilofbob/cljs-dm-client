@@ -12,14 +12,13 @@
  :timeline-page-load
  (utils/page-loader
   [::page-load-dispatcher]
-  [::fetch-game-days-success :fetch-notes-success]
-  [::fetch-game-days-failure :fetch-notes-failure]))
+  [::fetch-game-days-success]
+  [::fetch-game-days-failure]))
 
 (reg-event-fx
  ::page-load-dispatcher
  (fn [_ _]
-   {:dispatch-n [[::fetch-game-days]
-                 [:fetch-notes "game_day"]]}))
+   {:dispatch-n [[::fetch-game-days]]}))
 
 (reg-event-fx
  ::fetch-game-days

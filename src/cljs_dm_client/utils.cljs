@@ -50,7 +50,14 @@
 (defn standard-success-handler
   "This will replace existing data"
   [db path response]
-  (assoc-in db [:page-data path] (tranform-response response)))
+      (let [transformed-response (tranform-response response)]
+           (if (-> transformed-response :data nil?)
+             ;; Response is a single JSON entity, update in path
+             (assoc-in db [:page-data path] (tranform-response response))
+             ;; Response is a JSON map containing :data and :notes
+             (-> db
+                 (assoc-in [:page-data path] (:data transformed-response))
+                 (update-in [:page-data :notes] #(concat (or % []) (:notes transformed-response)))))))
 
 (defn append-success-handler
   "This will add onto existing data, expecting to joining lists"

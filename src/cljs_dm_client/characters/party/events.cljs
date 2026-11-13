@@ -15,12 +15,10 @@
   [::fetch-players-success
    ::events/fetch-items-success
    ::events/fetch-spellbooks-success
-   :fetch-notes-success
    :fetch-spells-success]
   [::fetch-players-failure
    ::events/fetch-items-failure
    ::events/fetch-spellbooks-failure
-   :fetch-notes-failure
    :fetch-spells-failure]))
 
 (reg-event-fx
@@ -29,7 +27,6 @@
    {:dispatch-n [[::fetch-players]
                  [::events/fetch-items]
                  [::events/fetch-spellbooks]
-                 [:fetch-notes "character"]
                  [:fetch-spells]]}))
 
 (reg-event-fx

@@ -9,19 +9,33 @@ The API code is located at [go-dm-api](https://github.com/foilofbob/go-dm-api)
   - [x] Create new campaign
   - [ ] Delete campaign
 - Campaign Setting management
-  - Is this really worth it???
+  - Would be needed long term, but would require distinction of Admin rights
 - User Authentication
+  - [x] Login
+  - [x] Session persistence
+  - [x] Logout 
+  - [ ] Reset password
+  - [ ] Signup?
 - Character Sheets
   - [ ] Add styling to indicate proficiency bonus
 - NPC tracking
   - [x] Add field to differentiate NPCs 
   - [x] NPCs need a field to store level, since level drives proficiency bonus (Player level is calculated, NPCs aren't)
 - Persist the most recently viewed location
+  - [x] Tracked in session
 - QoL Todos:
   - [ ] Edit / Delete locations
   - [ ] Edit / Delete misc. categories
-  - [ ] Sort spells
+  - [ ] Sort/filter spells
   - [ ] Fix error on adding misc. category
+- Path to pagination: Most pages have multiple fetches, including a fetch of associated notes
+  - Paginated results pattern
+    - [ ] Implement backend pattern for endpoints
+    - [ ] Common UI component for page navigation
+  - Notes would then need to be scoped to the relevant associated entities
+    - [ ] Include related notes directly in the fetch requests
+      - [ ] How to handle multiple notes sets from different fetches?
+      - [ ] New handler (versioned?) that parses the immediate data as well as the associated notes
 
 ## Getting Started
 

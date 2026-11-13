@@ -11,15 +11,14 @@
  :xp-tracker-page-load
  (utils/page-loader
   [::page-load-dispatcher]
-  [::fetch-experiences-success ::fetch-players-success :fetch-notes-success]
-  [::fetch-experiences-failure ::fetch-players-failure :fetch-notes-failure]))
+  [::fetch-experiences-success ::fetch-players-success]
+  [::fetch-experiences-failure ::fetch-players-failure]))
 
 (reg-event-fx
  ::page-load-dispatcher
  (fn [_ _]
    {:dispatch-n [[::fetch-experiences]
-                 [::fetch-players]
-                 [:fetch-notes "experience"]]}))
+                 [::fetch-players]]}))
 
 (reg-event-fx
  ::fetch-experiences

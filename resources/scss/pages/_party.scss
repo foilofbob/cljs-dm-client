@@ -20,6 +20,7 @@
   .player-card {
     @extend .common-panel;
     display: flex;
+    margin: 0;
 
     @include breakpoints.bp-tablet {
       flex-direction: column;

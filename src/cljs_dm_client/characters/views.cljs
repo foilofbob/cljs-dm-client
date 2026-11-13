@@ -3,7 +3,9 @@
    [clojure.string :refer [lower-case]]
    [re-frame.core :refer [dispatch subscribe]]
    [camel-snake-kebab.core :as csk]
-   [cljs-dm-client.components.components :refer [logical-division]]
+   [cljs-dm-client.components.components :refer [idx->accent-class
+                                                 logical-division
+                                                 toggle-container]]
    [cljs-dm-client.components.forms :refer [build-options
                                             number-input-row
                                             text-input-row
@@ -428,62 +430,71 @@
        [:button.action-button {:on-click #(dispatch [::events/open-edit-player-modal nil])}
         "Add Character"]]
       (into [:div]
-            (for [character characters]
+            (for [[idx character] (map-indexed vector characters)]
               (let [character-level (if (some-> character :level (> 0))
                                       (-> character :level utils/level-by-level)
                                       current-party-level)
                     spellbook       (some->> spellbooks
                                              (filter #(= (:character-id %) (:id character)))
                                              first)]
-                [:div.player-card
-                 [:div.player-card-left
-                  [:div.player-header
-                   [:div
-                    [:div.player-name (:name character)]
-                    [:div (str (:race character) ", " (:class character) " (lvl " (:lvl character-level) ")")]]
-                   [stats character]
-                   [:button.edit-button {:on-click #(dispatch [::events/open-edit-player-modal character])}]]
-                  [:hr]
-                  [:div.attribute-row
-                   [attributes character]
-                   [saves character (:proficiency character-level)]]
-                  [:hr]
-                  [:div [:strong "Proficiency Bonus: "] (:proficiency character-level)]
-                  [:div [:strong "Languages: "] (:languages character)]
-                  [:div [:strong "Proficiencies: "] (:proficiencies character)]
-                  [:hr]
-                  [skills character (:proficiency character-level)]
-                  [:hr]
 
-                  [:div [:strong "Inventory"]]
-                  [:div.items
-                   (into [:<>]
-                         (->> character-items
-                              (filter #(= (:id character) (:carried-by-id %)))
-                              (map item-component)))]
+                   [toggle-container {:id           (str "toggle-" (:id character) "-" (-> character :name csk/->PascalCase))
+                                      :header-class (idx->accent-class idx)
+                                      :title        (:name character)
+                                      :desc         (str (:race character) ", " (:class character) " (lvl " (:lvl character-level) ")")
+                                      :edit-fn      nil}
+                    [:div.player-card
+                     [:div.player-card-left
+                      [:div.player-header
+                       [:div
+                        [:div.player-name (:name character)]
+                        [:div (str (:race character) ", " (:class character) " (lvl " (:lvl character-level) ")")]]
+                       [stats character]
+                       [:button.edit-button {:on-click #(dispatch [::events/open-edit-player-modal character])}]]
+                      [:hr]
+                      [:div.attribute-row
+                       [attributes character]
+                       [saves character (:proficiency character-level)]]
+                      [:hr]
+                      [:div [:strong "Proficiency Bonus: "] (:proficiency character-level)]
+                      [:div [:strong "Languages: "] (:languages character)]
+                      [:div [:strong "Proficiencies: "] (:proficiencies character)]
+                      [:hr]
+                      [skills character (:proficiency character-level)]
+                      [:hr]
 
-                  [:hr]
-                  [:div.character-note
-                   (into [:<>]
-                         (some->> notes
-                                  (filter #(and (= (:id character) (:reference-id %))
-                                                (= "MAIN" (-> % :category :string))))
-                                  seq
-                                  build-notes))
-                   [:button.action-link {:on-click #(dispatch [:open-edit-note-modal character "CHARACTER" "MAIN"])}
-                    "Add Note"]]]
+                      [:div [:strong "Inventory"]]
+                      [:div.items
+                       (into [:<>]
+                             (->> character-items
+                                  (filter #(= (:id character) (:carried-by-id %)))
+                                  (map item-component)))]
 
-                 [:div.player-card-right
-                  (into [:<>]
-                        (or (some->> notes
-                                     (filter #(and (= (:id character) (:reference-id %))
-                                                   (= "" (-> % :category :string))))
-                                     seq
-                                     build-notes)
-                            [[:button.action-link {:on-click #(dispatch [:open-edit-note-modal character "CHARACTER" ""])}
-                              "Add Note"]
-                             [:hr]]))
-                  (spell-casting spellbook character)]])))
+                      [:hr]
+                      [:div.character-note
+                       (into [:<>]
+                             (some->> notes
+                                      (filter #(and (= (:id character) (:reference-id %))
+                                                    (= "MAIN" (-> % :category :string))))
+                                      seq
+                                      build-notes))
+                       [:button.action-link {:on-click #(dispatch [:open-edit-note-modal character "CHARACTER" "MAIN"])}
+                        "Add Note"]]]
+
+                     [:div.player-card-right
+                      (into [:<>]
+                            (or (some->> notes
+                                         (filter #(and (= (:id character) (:reference-id %))
+                                                       (= "" (-> % :category :string))))
+                                         seq
+                                         build-notes)
+                                [[:button.action-link {:on-click #(dispatch [:open-edit-note-modal character "CHARACTER" ""])}
+                                  "Add Note"]
+                                 [:hr]]))
+                      (spell-casting spellbook character)]]
+                    ]
+
+                )))
       (when (seq items-as-containers)
         [:<>
          [logical-division {:text "Items With Storage"}]

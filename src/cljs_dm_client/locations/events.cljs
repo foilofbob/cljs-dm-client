@@ -11,17 +11,15 @@
  :locations-page-load
  (utils/page-loader
   [::page-load-dispatcher]
-  [::fetch-locations-success ::fetch-sublocations-success ::fetch-points-of-interest-success :fetch-notes-success]
-  [::fetch-locations-failure ::fetch-sublocations-failure ::fetch-points-of-interest-failure :fetch-notes-failure]))
+  [::fetch-locations-success ::fetch-sublocations-success ::fetch-points-of-interest-success]
+  [::fetch-locations-failure ::fetch-sublocations-failure ::fetch-points-of-interest-failure]))
 
 (reg-event-fx
  ::page-load-dispatcher
  (fn [_ _]
    {:dispatch-n [[::fetch-locations]
                  [::fetch-sublocations]
-                 [::fetch-points-of-interest]
-                 [:fetch-notes "location"]
-                 [:fetch-notes "point_of_interest"]]}))
+                 [::fetch-points-of-interest]]}))
 
 ;; Locations
 (reg-event-fx

@@ -14,6 +14,7 @@
   [::fetch-players-success :fetch-notes-success]
   [::fetch-players-failure :fetch-notes-failure]))
 
+;; This uses the same /players endpoint but fetches additional notes
 (reg-event-fx
  ::page-load-dispatcher
  (fn [_ _]

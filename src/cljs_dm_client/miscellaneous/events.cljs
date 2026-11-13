@@ -11,14 +11,13 @@
  :miscellaneous-page-load
  (utils/page-loader
   [::page-load-dispatcher]
-  [::fetch-categories-success :fetch-notes-success]
-  [::fetch-categories-failure :fetch-notes-failure]))
+  [::fetch-categories-success]
+  [::fetch-categories-failure]))
 
 (reg-event-fx
  ::page-load-dispatcher
  (fn [_ _]
-   {:dispatch-n [[::fetch-categories]
-                 [:fetch-notes "miscellaneous"]]}))
+   {:dispatch-n [[::fetch-categories]]}))
 
 (reg-event-fx
  ::fetch-categories

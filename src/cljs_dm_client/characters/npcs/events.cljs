@@ -14,12 +14,10 @@
   [::page-load-dispatcher]
   [::fetch-npcs-success
    ::events/fetch-items-success
-   :fetch-notes-success
    ::events/fetch-spellbooks-success
    :fetch-spells-success]
   [::fetch-npcs-failure
    ::events/fetch-items-failure
-   :fetch-notes-failure
    ::events/fetch-spellbooks-failure
    :fetch-spells-failure]))
 
@@ -28,7 +26,6 @@
  (fn [_ _]
    {:dispatch-n [[::fetch-npcs]
                  [::events/fetch-items]
-                 [:fetch-notes "character"]
                  [::events/fetch-spellbooks]
                  [:fetch-spells]]}))
 
